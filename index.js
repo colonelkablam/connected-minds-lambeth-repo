@@ -19,8 +19,8 @@ app.set('views', path.join(__dirname, 'views'))
 app.set('view engine', 'ejs')
 
 app.get('/', (req, res) => {
-  console.log(`Rendering 'pages/index' for route '/' - test ENV: ${process.env.TESTENV}`);
-  res.send(`testing app - to render pages/index.ejs - test ENV: ${process.env.TESTENV}`);
+  console.log(`Rendering 'pages/index' for route '/' - test ENV: ${testEnvVariable}`);
+  res.send(`testing app - to render pages/index.ejs - test ENV: ${testEnvVariable}`);
 })
 
 const server = app.listen(port, () => {
