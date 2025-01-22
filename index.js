@@ -1,7 +1,11 @@
 import express from 'express';
 import path from 'path';
 import { fileURLToPath } from 'url';
+import dotenv from 'dotenv';
 
+// load .env variables into a process.env (for local development)
+dotenv.config();
+const testEnvVariable = process.env.TESTENV || 999;
 
 const port = process.env.PORT || 3000
 const app = express()
@@ -15,8 +19,8 @@ app.set('views', path.join(__dirname, 'views'))
 app.set('view engine', 'ejs')
 
 app.get('/', (req, res) => {
-  console.log(`Rendering 'pages/index' for route '/'`);
-  res.send('testing app - to render pages/index.ejs');
+  console.log(`Rendering 'pages/index' for route '/' - test ENV: ${process.env.TESTENV}`);
+  res.send(`testing app - to render pages/index.ejs - test ENV: ${process.env.TESTENV}`);
 })
 
 const server = app.listen(port, () => {
