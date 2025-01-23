@@ -12,6 +12,7 @@ const { Pool } = pg;
 // PostgreSQL connection configuration
 const pool = new Pool({
   connectionString: process.env.DATABASE_URL,
+  ssl: { rejectUnauthorized: false },
   idleTimeoutMillis: 30000, // 30 seconds
 });
 
