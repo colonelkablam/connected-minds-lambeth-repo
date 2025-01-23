@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <%- include('../partials/head.ejs') %>
+</head>
+
+<body>
+    <div class="container">
+      <header>
+        <%- include('../partials/header.ejs', { user }) %>
+      </header>
+
+      <main>
+        <%- include('../partials/search-box.ejs') %>
+        <%- include('../partials/search-filters.ejs') %>
+      </main>
+      
+      <footer>
+        <%- include('../partials/footer.ejs') %>
+      </footer>
+    </div>
+</body>
+
+</html>

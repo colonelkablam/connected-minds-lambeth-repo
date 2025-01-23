@@ -1,0 +1,186 @@
+/* Global Reset */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+
+/* General Reset */
+body {
+  margin: 0;
+  font-family: "Ubuntu", Arial, sans-serif;
+  background-color: #F6F1F1;
+}
+
+/* Container Wrapper */
+.container {
+  max-width: 1000px;
+  margin: 0 auto;
+  padding: 0 1rem; /* Prevent content from touching the edges */
+}
+
+/* Header Styling */
+header {
+  background: #0079FF;
+  color: #fff;
+  padding: 1rem 0; /* Adjust padding to avoid nested .container conflicts */
+  margin: 1rem 0 0 0;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  border-radius: 1rem;
+}
+
+/* Branding Section */
+header .branding h1 {
+  margin: 0 0 0 2rem;
+  font-size: 2.0rem;
+}
+
+/* Navbar Styling */
+.navbar ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  gap: 1.5rem;
+}
+
+.navbar ul li a {
+  color: #AFD3E2;
+  text-decoration: none;
+  font-size: larger;
+  font-weight: 400;
+  transition: color 0.3s;
+}
+
+.navbar ul li a:hover {
+  color: #00DFA2;
+}
+
+.user-log-in {
+  margin: 0 2rem 0 0;
+}
+
+.user-log-in a {
+  font-size: larger;
+  font-weight: 800;
+  text-decoration: none;
+  color: #00DFA2;
+  transition: color 0.3s;
+
+}
+
+.user-log-in a:hover {
+  color: #fff;
+}
+
+/* Main Content Styling */
+main {
+  margin: 2rem 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center; /* Center-aligns content */
+}
+
+/* Search Box Styling */
+.search-box {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 1rem; /* Spacing between input and button */
+}
+
+.search-box form {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 1rem;
+}
+
+/* Search Input Styling */
+.search-box input[type="text"] {
+  width: 400px; /* Long enough for keywords */
+  padding: 0.5rem 1rem;
+  font-size: 1rem;
+  border: 2px solid #AFD3E2;
+  border-radius: 5px;
+  outline: none;
+  transition: border-color 0.3s;
+}
+
+.search-box input[type="text"]:focus {
+  border-color: #19A7CE;
+}
+
+/* Button Styling */
+.search-box button {
+  padding: 0.5rem 1.5rem;
+  font-size: 1rem;
+  font-weight: 600;
+  color: #fff;
+  background-color: #0079FF;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.search-box button:hover {
+  background-color: #005BB5;
+}
+
+/* Filters Container */
+.filters-container {
+  margin-top: 2rem;
+  text-align: center;
+}
+
+.filters-container label {
+  font-size: 1rem;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  color: #0079FF;
+}
+
+.filters-container label input[type="checkbox"] {
+  transform: scale(1.2); /* Make checkbox larger */
+}
+
+/* Filters Panel */
+.filters-panel {
+  margin-top: 1rem;
+  padding: 1rem;
+  background-color: #F6F1F1;
+  border: 1px solid #AFD3E2;
+  border-radius: 5px;
+  text-align: left;
+  max-width: 600px;
+  margin: 1rem auto;
+}
+
+.filters-panel.hidden {
+  display: none;
+}
+
+
+/* Footer Styling */
+footer {
+  text-align: center;
+  margin-top: 2rem;
+  padding: 1rem 0;
+  /*background: #AFD3E2;*/
+  color: #146C94;
+  border-radius: 1rem;
+}
+
+footer p {
+  font-size: medium;
+  font-weight: 800;
+}

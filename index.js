@@ -1,13 +1,15 @@
-import dotenv from 'dotenv';
+import dotenv from 'dotenv';            // to treat .env as process
 dotenv.config();                        // load .env variables into a process.env (for local development)
 
 import express from 'express';
 import pg from 'pg';
-import path from 'path';                // needed for static files
-import { fileURLToPath } from 'url';    // to treat .env as process
+import bodyParser from "body-parser";
+
+import path from 'path';         // needed for static files/ join
+import { fileURLToPath } from 'url';    // needed for static files
 
 const app = express()
-const { Pool } = pg;
+const { Pool } = pg;    // using pool instead of client to manage connections
 
 // PostgreSQL connection configuration
 const pool = new Pool({
@@ -22,11 +24,11 @@ const port = process.env.PORT || 3000;
 const DB_URL = process.env.DATABASE_URL || "db url not loaded from process.env";
 
 // Resolve __dirname for ES modules
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
+const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
 
 // MIDDLEWARE
+app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.static(path.join(__dirname, 'public')));  // static files
 app.set('view engine', 'ejs');                           // Set EJS as the template engine
 app.set('views', path.join(__dirname, 'views'));          // sets the dir for template engine (.render("*.ejs"))
@@ -36,9 +38,16 @@ app.set('views', path.join(__dirname, 'views'));          // sets the dir for te
 
 // landing page
 app.get('/', (req, res) => {
-  console.log(`Rendering 'pages/index' for route '/' - test ENV: ${testEnvVariable}`);
-  res.send(`testing app - to rend pages/index.ejs - test ENV: ${testEnvVariable} - database URL: ${DB_URL}`);
-})
+  const user = null; // Replace with actual user data when logged in
+
+  console.log('Views directory:', path.join(__dirname, 'views'));
+
+  res.render('pages/index', {
+    title: 'Welcome to Connected Minds Lambeth',
+    user,
+  });
+});
+
 
 // `/testdb` route to return the list of tables
 app.get('/testdb', async (req, res) => {

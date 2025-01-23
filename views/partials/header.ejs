@@ -1,0 +1,20 @@
+<div class="branding">
+    <h1>Connected Minds Lambeth</h1>
+  </div>
+  <nav class="navbar">
+    <ul>
+      <li><a href="/">Home</a></li>
+      <li><a href="/activities">About</a></li>
+      <li><a href="/login">Suggestions</a></li>
+    </ul>
+  </nav>
+  <div class="user-log-in">
+    <% if (user) { %>
+      <p>Welcome, <%= user.name %>!</p>
+    <% } else { %>
+      <p><a href="/login">Log in</a></p>
+    <% } %>
+</div>
+
+  
+  
