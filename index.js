@@ -14,8 +14,7 @@ const { Pool } = pg;    // using pool instead of client to manage connections
 // PostgreSQL connection configuration
 const pool = new Pool({
   connectionString: process.env.DATABASE_URL,
-  ssl: { rejectUnauthorized: false },
-  idleTimeoutMillis: 30000, // 30 seconds
+  ssl: process.env.NODE_ENV === 'production' ? { rejectUnauthorized: false } : false,
 });
 
 // handle local vs live deployment
@@ -28,6 +27,7 @@ const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
 // global variables
 const defaultSearchData = {
+  searchText: "",
   filtersEnabled: false, 
   filterDays: [], 
   filterAudience: [],
@@ -37,21 +37,11 @@ const defaultSearchData = {
 
 let searchData = defaultSearchData;
 
+//let user = {name: "Nick"};
+let user = null;
+
 let activities = [
-  {
-    name: 'TEST Yoga Class',
-    date: '2025-01-28',
-    description: 'A relaxing yoga session for all skill levels.',
-    location: 'Community Center',
-    cost: '0',
-  },
-  {
-    name: 'TEST Art Workshop',
-    date: '2025-01-29',
-    description: 'Learn the basics of painting and drawing.',
-    location: 'Art Studio',
-    cost: '10',
-  },
+ 
 ];
 
 // MIDDLEWARE
@@ -65,7 +55,6 @@ app.set('views', path.join(__dirname, 'views'));          // sets the dir for te
 
 // landing page route
 app.get('/', (req, res) => {
-  const user = null; // Replace with actual user data when logged in
 
   searchData = defaultSearchData;
 
@@ -77,64 +66,69 @@ app.get('/', (req, res) => {
 });
 
 // search route
-app.post('/search', (req, res) => {
-
-  console.log("filter days - ", req.body.filterDays);
-
-  // Merge submitted form data with defaults
-  searchData = {
-    ...defaultSearchData,
-    ...req.body,
-    filtersEnabled: req.body.filtersEnabled === 'true', // Convert to boolean
-    filterDays: req.body.filterDays || [], // Use as-is or default to an empty array
-    filterAudience: req.body.filterAudience || [], // Use as-is or default to an empty array
-    filterCost: req.body.filterCost || [], // Use as-is or default to an empty array
-    distance: parseInt(req.body.distance, 10) || 0, // Convert to number
-  };
-
-  console.log('Search Data:', searchData); // Debugging
-
-  // Example filtering logic
-  const filteredActivities = activities.filter(activity => {
-    // Implement filtering logic based on searchData
-    return true; // Placeholder logic
-  });
-
-  // Pass searchData and results to the template
-  res.render('pages/index', {
-    title: 'Search Results',
-    user: null,
-    activities: filteredActivities,
-    searchData,
-  });
-});
-
-
-
-// `/testdb` route to return the list of tables
-app.get('/testdb', async (req, res) => {
+app.post('/search', async (req, res) => {
   try {
-    // Query to get a list of tables
-    const query = `
-      SELECT table_name 
-      FROM information_schema.tables
-      WHERE table_schema = 'public'
-      ORDER BY table_name;
+    // Merge submitted form data with defaults
+    searchData = {
+      ...defaultSearchData,
+      searchText: req.body.searchText || '',
+      filtersEnabled: req.body.filtersEnabled === 'true',
+      filterDays: Array.isArray(req.body.filterDays)
+        ? req.body.filterDays
+        : req.body.filterDays
+        ? [req.body.filterDays]
+        : [],
+      filterAudience: Array.isArray(req.body.filterAudience)
+        ? req.body.filterAudience
+        : req.body.filterAudience
+        ? [req.body.filterAudience]
+        : [],
+      filterCost: Array.isArray(req.body.filterCost)
+        ? req.body.filterCost
+        : req.body.filterCost
+        ? [req.body.filterCost]
+        : [],
+      distance: parseFloat(req.body.distance) || 0,
+    };
+
+    console.log('Search Data:', searchData); // Debugging
+
+    // Query database
+    const searchQuery = `
+      SELECT 
+        a.name, 
+        a.description, 
+        v.postcode AS location, 
+        p.name AS provider_name, 
+        asess.activity_date, 
+        asess.num_spaces_available, 
+        a.cost 
+      FROM activities a
+      JOIN activity_sessions asess ON a.id = asess.activity_id
+      JOIN providers p ON a.provider = p.id
+      JOIN venues v ON a.venue = v.id
+      WHERE a.name ILIKE $1 OR a.description ILIKE $1
+      ORDER BY asess.activity_date ASC;
     `;
 
-    // Execute the query
-    const result = await pool.query(query);
+    const searchValue = `%${searchData.searchText}%`; // Use % for partial matches
+    const { rows } = await pool.query(searchQuery, [searchValue]);
 
-    // Extract table names and send as a response
-    const tables = result.rows.map(row => row.table_name);
-    res.json({ tables });
-  } catch (error) {
-    console.error('Error fetching tables:', error);
-    res.status(500).json({
-      error: 'Failed to fetch tables. Please try again later or contact support.',
+    console.log(rows);
+
+    // Render results
+    res.render('pages/index', {
+      title: 'Search Results',
+      user: user,
+      activities: rows,
+      searchData,
     });
+  } catch (error) {
+    console.error('Error executing search query:', error);
+    res.status(500).send('An error occurred while performing the search.');
   }
 });
+
 
 
 // STARTING SERVER 
