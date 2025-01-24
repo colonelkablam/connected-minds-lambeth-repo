@@ -155,7 +155,6 @@ main {
   transform: scale(1.2); /* Make checkbox larger */
 }
 
-
 /* Filters Panel */
 .filters-panel {
   margin-top: 1rem;
@@ -179,9 +178,20 @@ main {
   color: #0079FF;
 }
 
+/* Container for the checkboxes */
+.filter-checkboxes {
+  display: flex;
+  justify-content: space-between; /* Evenly space the checkboxes */
+  align-items: center; /* Align labels vertically */
+  flex-wrap: wrap; /* Optional: Wrap to the next row if needed for smaller screens */
+  gap: 0.1rem; /* Space between items */
+}
+
 /* Style the checkbox wrapper to look like buttons */
 .filter-checkboxes label {
   display: inline-block;
+  flex: 1; /* Ensure all labels take up equal space */
+  text-align: center; /* Center the text inside each label */
   margin: 0.5rem;
   padding: 0.5rem 1rem;
   border: 2px solid #ccc;
@@ -192,6 +202,7 @@ main {
   cursor: pointer;
   user-select: none;
   transition: all 0.3s ease;
+  max-width: 120px; /* Optional: Set a maximum width for labels */
 }
 
 /* Hide the checkbox input */
@@ -206,7 +217,7 @@ main {
   border-color: #0079ff;
 }
 
-/* Add a hover effect for the label */
+/* Hover effect */
 .filter-checkboxes label:hover {
   background-color: #e0e0e0;
   border-color: #bbb;
