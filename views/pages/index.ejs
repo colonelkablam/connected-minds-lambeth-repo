@@ -11,8 +11,8 @@
       </header>
 
       <main>
-        <%- include('../partials/search-box.ejs') %>
-        <%- include('../partials/search-filters.ejs') %>
+        <%- include('../partials/search-area.ejs', { searchData }) %>
+        <%- include('../partials/found-activities.ejs', { activities }) %>
       </main>
       
       <footer>
