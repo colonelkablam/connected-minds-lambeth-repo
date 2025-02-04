@@ -2,14 +2,17 @@ import dotenv from 'dotenv';            // to treat .env as process
 dotenv.config();                        // load .env variables into a process.env (for local development)
 
 import express from 'express';
+import session from "express-session";  // session support
 import pg from 'pg';
 import bodyParser from "body-parser";
 
-import path from 'path';         // needed for static files/ join
+import path from 'path';                // needed for static files/ join
 import { fileURLToPath } from 'url';    // needed for static files
 
+import authRoutes from "./routes/auth.js";  // Import authentication routes
+
 const app = express()
-const { Pool } = pg;    // using pool instead of client to manage connections
+const { Pool } = pg;                    // using pool instead of client to manage connections
 
 // PostgreSQL connection configuration
 const pool = new Pool({
@@ -36,20 +39,31 @@ const defaultSearchData = {
 };
 
 let searchData = defaultSearchData;
-
-//let user = {name: "Nick"};
 let user = null;
-
-let activities = [
- 
-];
+let activities = [];
 
 // MIDDLEWARE
-app.use(bodyParser.urlencoded({ extended: true }));
+app.use(express.json());                                  // Add this to parse JSON requests
+app.use(bodyParser.urlencoded({ extended: true }));       // For form-encoded requests
 app.use(express.static(path.join(__dirname, 'public')));  // static files
-app.set('view engine', 'ejs');                           // Set EJS as the template engine
+app.set('view engine', 'ejs');                            // Set EJS as the template engine
 app.set('views', path.join(__dirname, 'views'));          // sets the dir for template engine (.render("*.ejs"))
 
+// **Session Middleware**
+app.use(session({
+  secret: process.env.SESSION_SECRET || "supersecretkey",
+  resave: false,
+  saveUninitialized: true
+}));
+
+// **Pass User Session to Views**
+app.use((req, res, next) => {
+  res.locals.user = req.session.user || null;
+  next();
+});
+
+// **Use Auth Routes**
+app.use(authRoutes);
 
 // ROUTE HANDLING
 

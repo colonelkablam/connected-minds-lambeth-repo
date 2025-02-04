@@ -64,13 +64,16 @@ header .branding h1 {
 
 .user-log-in {
   margin: 0 2rem 0 0;
+  padding: 5px;
+  background: #00DFA2;
+  border-radius: 5px;
 }
 
 .user-log-in a {
   font-size: larger;
   font-weight: 800;
   text-decoration: none;
-  color: #00DFA2;
+  color: #ffffff;
   transition: color 0.3s;
 }
 
