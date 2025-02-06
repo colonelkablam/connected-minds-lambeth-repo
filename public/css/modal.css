@@ -1,47 +1,75 @@
-.modal h2 {
-    color: grey;
-}
-
+/* Style the modal box */
 .modal {
     display: none;
     position: fixed;
     z-index: 1000;
     left: 50%;
-    top: 30%;
+    top: 50%;
     transform: translate(-50%, -50%);
     background: white;
-    padding: 10px;
+    padding: 20px;
     border-radius: 8px;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
     width: 300px;
   }
-  
-  .modal-content {
-    position: relative;
+
+  .modal-heading {
     text-align: center;
+    color: #666;
   }
   
-  .close {
+  /* Style labels */
+  .modal label {
+    display: block;  /* Ensures labels are on separate lines */
+    font-size: 14px;
+    color: #666;  /* Grey text for better readability */
+    margin-bottom: 5px;
+  }
+  
+  /* Style input fields */
+  .modal input {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 15px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 16px;
+  }
+  
+  /* Add focus effect for inputs */
+  .modal input:focus {
+    border-color: #00DFA2;
+    outline: none;
+    box-shadow: 0 0 5px rgba(0, 223, 162, 0.5);
+  }
+  
+  /* Style the login button */
+  .modal button {
+    width: 100%;
+    padding: 10px;
+    border: none;
+    background: #333;
+    color: white;
+    cursor: pointer;
+    font-size: 16px;
+    border-radius: 5px;
+    transition: background 0.3s;
+  }
+  
+  .modal button:hover {
+    background: #555;
+  }
+  
+  /* Close button */
+  .modal .close {
     position: absolute;
     top: 5px;
     right: 10px;
     cursor: pointer;
     font-size: 20px;
+    color: #999;
   }
-  
-  input {
-    width: 100%;
-    padding: 8px;
-    margin: 5px 0;
-  }
-  
-  button {
-    width: 100%;
-    padding: 10px;
-    background: #333;
-    color: white;
-    border: none;
-    cursor: pointer;
-    margin-top: 10px;
+  .modal .close:hover {
+    color: black;
   }
   

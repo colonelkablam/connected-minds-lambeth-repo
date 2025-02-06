@@ -9,10 +9,16 @@ import bodyParser from "body-parser";
 import path from 'path';                // needed for static files/ join
 import { fileURLToPath } from 'url';    // needed for static files
 
+// my stuff
 import authRoutes from "./routes/auth.js";  // Import authentication routes
+import formatDate from "./utility.js";  // returns a doy of week and date object
+import addActivityRoutes from "./routes/add-activity.js"; //
+import { isAuthenticated, isAuthorized } from "./middlewares/auth.js";  // Import middleware
+
+
 
 const app = express()
-const { Pool } = pg;                    // using pool instead of client to manage connections
+const { Pool } = pg;     // using pool instead of client to manage connections
 
 // PostgreSQL connection configuration
 const pool = new Pool({
@@ -39,7 +45,6 @@ const defaultSearchData = {
 };
 
 let searchData = defaultSearchData;
-let user = null;
 let activities = [];
 
 // MIDDLEWARE
@@ -58,12 +63,15 @@ app.use(session({
 
 // **Pass User Session to Views**
 app.use((req, res, next) => {
+  console.log("Session data at request:", req.session.user);  // Debugging session
   res.locals.user = req.session.user || null;
   next();
 });
 
-// **Use Auth Routes**
+// **Use Routes**
 app.use(authRoutes);
+app.use(addActivityRoutes);
+
 
 // ROUTE HANDLING
 
@@ -73,7 +81,6 @@ app.get('/', (req, res) => {
   searchData = defaultSearchData;
 
   res.render('pages/index.ejs', {
-    user,
     activities,
     searchData,
   });
@@ -128,12 +135,20 @@ app.post('/search', async (req, res) => {
     const searchValue = `%${searchData.searchText}%`; // Use % for partial matches
     const { rows } = await pool.query(searchQuery, [searchValue]);
 
-    console.log(rows);
+    // Apply date formatting
+    rows.forEach(activity => {
+      if (activity.activity_date) {
+        const formattedDate = formatDate(activity.activity_date);
+        activity.day = formattedDate.day;
+        activity.formattedDate = formattedDate.date;
+      }
+    });
+
+    console.log(rows); // debugging
 
     // Render results
     res.render('pages/index', {
       title: 'Search Results',
-      user: user,
       activities: rows,
       searchData,
     });

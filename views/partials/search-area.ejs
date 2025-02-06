@@ -1,6 +1,6 @@
-<div class="search-box">
+<div class="search-container">
 
-  <form action="/search" method="POST">
+  <form action="/search" method="POST" class="search-box">
     
     <!-- Search Text Input -->
     <div class="search-input">
@@ -15,15 +15,30 @@
 
     <!-- Filters Section -->
     <div class="filters-container">
-      <label>
-        <input
-          type="checkbox"
-          name="filtersEnabled"
-          value="true"
-          <%= searchData.filtersEnabled ? 'checked' : '' %>
-        />
-        Filters Enabled
-      </label>
+
+      <div class="filter-options-box">
+        <span class="filter-item">
+          <input
+            type="checkbox"
+            id="filtersEnabled"
+            name="filtersEnabled"
+            value="true"
+            <%= searchData.filtersEnabled ? 'checked' : '' %>
+          />
+          <label for="filtersEnabled">Filters Enabled</label>
+        </span>
+      
+        <span class="filter-item">
+          <input
+            type="checkbox"
+            id="showFilters"
+            name="showFilters"
+            value="true"
+            <%= searchData.showFilters ? 'checked' : '' %>
+          />
+          <label for="showFilters">Show Filters</label>
+        </span>
+      </div>
 
       <!-- Hideable search filters panel -->
       <div id="filters-panel" class="filters-panel <%= searchData.filtersEnabled ? '' : 'hidden' %>">

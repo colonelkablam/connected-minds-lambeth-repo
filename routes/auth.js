@@ -1,32 +1,56 @@
-import express from "express";
+import express from 'express';
+import pg from 'pg';
+import bcrypt from 'bcrypt';
+
 const router = express.Router();
+// using pool instead of client to manage connections
+const { Pool } = pg;
+const pool = new Pool({
+  connectionString: process.env.DATABASE_URL,
+  ssl: process.env.NODE_ENV === 'production' ? { rejectUnauthorized: false } : false,
+});
 
-// Dummy user database (replace with real database logic)
-const users = [
-  { email: "nick@email.com", password: "1234", name: "Nick Harding" }
-];
-
-// Login Route (Handles POST request from login form)
-router.post("/login", (req, res) => {
+// Handle Login
+router.post('/login', async (req, res) => {
   const { email, password } = req.body;
 
-  console.log("user email:", email, "password:", password);
+  try {
+    const userQuery = 'SELECT * FROM admin_accounts WHERE email = $1';
+    const { rows } = await pool.query(userQuery, [email]);
 
-  // Check if user exists
-  const user = users.find(u => u.email === email && u.password === password);
+    if (rows.length === 0) {
+      return res.status(401).json({ success: false, message: "Invalid email or password" }); // Always return JSON
+    }
 
-  if (user) {
-    req.session.user = { name: user.name, email: user.email };
-    return res.json({ success: true });
-  } else {
-    return res.json({ success: false, message: "Invalid credentials" });
+    const user = rows[0];
+
+    // Check password
+    const isValidPassword = await bcrypt.compare(password, user.password_hash);
+    
+    if (!isValidPassword) {
+      return res.status(401).json({ success: false, message: "Invalid email or password" }); // Always return JSON
+    }
+
+    // Store user in session
+    req.session.user = {
+      id: user.id,
+      username: user.username,
+      email: user.email,
+      role: user.role,
+    };
+
+    res.json({ success: true, message: "Login successful" }); // JSON response
+  } catch (error) {
+    console.error("Login error:", error);
+    res.status(500).json({ success: false, message: "Server error during login" }); // JSON error response
   }
 });
 
-// Logout Route (Handles logout)
-router.post("/logout", (req, res) => {
-  req.session.destroy();
-  res.redirect("/");
+// Handle Logout
+router.post('/logout', (req, res) => {
+  req.session.destroy(() => {
+    res.redirect('/');
+  });
 });
 
 export default router;

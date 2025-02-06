@@ -1,3 +1,6 @@
+# ignore original set-up for supa_user
+scripts/createAdminUser.js
+
 # Logs
 logs
 *.log
