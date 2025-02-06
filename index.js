@@ -1,35 +1,25 @@
 import dotenv from 'dotenv';            // to treat .env as process
 dotenv.config();                        // load .env variables into a process.env (for local development)
-
 import express from 'express';
-import session from "express-session";  // session support
-import pg from 'pg';
+import jwt from 'jsonwebtoken';
 import bodyParser from "body-parser";
-
+import cookieParser from 'cookie-parser';
 import path from 'path';                // needed for static files/ join
 import { fileURLToPath } from 'url';    // needed for static files
 
+
 // my stuff
-import authRoutes from "./routes/auth.js";  // Import authentication routes
-import formatDate from "./utility.js";  // returns a doy of week and date object
-import addActivityRoutes from "./routes/add-activity.js"; //
-import { isAuthenticated, isAuthorized } from "./middlewares/auth.js";  // Import middleware
-
-
-
-const app = express()
-const { Pool } = pg;     // using pool instead of client to manage connections
 
 // PostgreSQL connection configuration
-const pool = new Pool({
-  connectionString: process.env.DATABASE_URL,
-  ssl: process.env.NODE_ENV === 'production' ? { rejectUnauthorized: false } : false,
-});
+import pool from './database/db.js'; // Import shared database connection
+import formatDate from "./utility.js";  // returns a doy of week and date object
+import loginRoutes from './routes/login.js';
+import manageActivity from './routes/manage-activity.js';
+
+const app = express()
 
 // handle local vs live deployment
-const testEnvVariable = process.env.TESTENV || 999;;
 const port = process.env.PORT || 3000;
-const DB_URL = process.env.DATABASE_URL || "db url not loaded from process.env";
 
 // Resolve __dirname for ES modules
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
@@ -50,43 +40,49 @@ let activities = [];
 // MIDDLEWARE
 app.use(express.json());                                  // Add this to parse JSON requests
 app.use(bodyParser.urlencoded({ extended: true }));       // For form-encoded requests
+app.use(cookieParser());                                  // Needed to read JWT cookies
 app.use(express.static(path.join(__dirname, 'public')));  // static files
 app.set('view engine', 'ejs');                            // Set EJS as the template engine
 app.set('views', path.join(__dirname, 'views'));          // sets the dir for template engine (.render("*.ejs"))
 
-// **Session Middleware**
-app.use(session({
-  secret: process.env.SESSION_SECRET || "supersecretkey",
-  resave: false,
-  saveUninitialized: true
-}));
 
-// **Pass User Session to Views**
+// Extract user from JWT in a middleware
 app.use((req, res, next) => {
-  console.log("Session data at request:", req.session.user);  // Debugging session
-  res.locals.user = req.session.user || null;
+  let user = null;
+  const token = req.cookies.token;
+
+  if (token) {
+    try {
+      const decoded = jwt.verify(token, process.env.JWT_SECRET);
+      user = decoded;
+    } catch (error) {
+      console.error("Invalid token:", error);
+    }
+  }
+
+  res.locals.user = user; // Make `user` available in all templates
   next();
 });
-
-// **Use Routes**
-app.use(authRoutes);
-app.use(addActivityRoutes);
 
 
 // ROUTE HANDLING
 
+// Use Routes
+app.use(loginRoutes);
+app.use(manageActivity);
+
 // landing page route
 app.get('/', (req, res) => {
-
   searchData = defaultSearchData;
 
   res.render('pages/index.ejs', {
     activities,
     searchData,
+    user: res.locals.user, // User from JWT
   });
 });
 
-// search route
+// Search Route - Ensure `user` is passed
 app.post('/search', async (req, res) => {
   try {
     // Merge submitted form data with defaults
@@ -144,13 +140,12 @@ app.post('/search', async (req, res) => {
       }
     });
 
-    console.log(rows); // debugging
-
     // Render results
     res.render('pages/index', {
       title: 'Search Results',
       activities: rows,
       searchData,
+      user: res.locals.user, // User from JWT
     });
   } catch (error) {
     console.error('Error executing search query:', error);
@@ -159,12 +154,10 @@ app.post('/search', async (req, res) => {
 });
 
 
-
 // STARTING SERVER 
 const server = app.listen(port, () => {
-  console.log(`Listening on ${port}`);
+  console.log(`Server is running on http://localhost:${port}`);
 });
-
 
 // CLEAN UP
 // Gracefully shut down the server

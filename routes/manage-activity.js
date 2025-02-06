@@ -1,21 +1,16 @@
 import express from 'express';
-import { isAuthenticated, isAuthorized } from '../middlewares/auth.js';
-import pg from 'pg';
+import { isAuthenticated } from '../middlewares/authJWT.js';
+import pool from '../database/db.js'; // Import shared database connection
 
 const router = express.Router();
-const { Pool } = pg;     // using pool instead of client to manage connections
-const pool = new Pool({
-  connectionString: process.env.DATABASE_URL,
-  ssl: process.env.NODE_ENV === 'production' ? { rejectUnauthorized: false } : false,
-});
 
-// Render "Add Activity" Form (only for authorized users)
-router.get('/add-activity', isAuthenticated, isAuthorized, (req, res) => {
-  res.render('pages/add-activity', { user: req.session.user });
+// **Render "Add Activity" Form (only for authorized users)**
+router.get('/manage-activity', isAuthenticated, (req, res) => {
+  res.render('pages/manage-activity', { user: req.user }); // Use req.user from JWT
 });
 
 // Handle "Add Activity" Form Submission
-router.post('/add-activity', isAuthenticated, isAuthorized, async (req, res) => {
+router.post('/add-activity', isAuthenticated, async (req, res) => {
   try {
     const { name, description, venue, provider, cost } = req.body;
 

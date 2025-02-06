@@ -7,7 +7,7 @@
 <body>
     <div class="container">
       <header>
-        <%- include('../partials/header.ejs', { user }) %>
+        <%- include('../partials/header.ejs', { user: user || null }) %>
       </header>
 
       <main>
