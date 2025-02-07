@@ -316,6 +316,54 @@ main {
   margin: 0.5rem 0;
 }
 
+/* Flash Messages - Consistent Size to Prevent Layout Shift */
+#flashMessages {
+  position: fixed;
+  top: 20px; 
+  left: 50%;
+  transform: translateX(-50%);
+  width: 50%;
+  max-width: 400px;
+  text-align: center;
+  z-index: 1000;
+}
+
+/* General Flash Message Styling */
+.flash-message {
+  padding: 15px;
+  border-radius: 8px;
+  font-size: 16px;
+  font-weight: bold;
+  display: inline-block;
+  width: 100%;
+  box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+  animation: fadeIn 0.5s ease-in-out;
+}
+
+/* Success Message - Green */
+.flash-message.success {
+  background-color: #28a745;
+  color: white;
+}
+
+/* Error Message - Red */
+.flash-message.error {
+  background-color: #dc3545; 
+  color: white;
+}
+
+/* Animation for Smooth Appearance */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(-10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* Auto-Hide Animation (Optional) */
+@keyframes fadeOut {
+  from { opacity: 1; }
+  to { opacity: 0; }
+}
+
 
 /* Footer Styling */
 footer {

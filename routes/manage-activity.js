@@ -1,5 +1,5 @@
 import express from 'express';
-import { isAuthenticated } from '../middlewares/authJWT.js';
+import { isAuthenticated } from '../middlewares/auth-JWT.js';
 import pool from '../database/db.js'; // Import shared database connection
 
 const router = express.Router();

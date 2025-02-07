@@ -3,9 +3,10 @@ dotenv.config();
 import express from 'express';
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
+import { addFlashMessage } from '../middlewares/flash-messages.js';
 
-// my stuff
-import pool from '../database/db.js'; // Import shared database connection
+// Import shared database connection
+import pool from '../database/db.js';
 
 const router = express.Router();
 
@@ -18,14 +19,18 @@ router.post('/login', async (req, res) => {
     const { rows } = await pool.query(userQuery, [email]);
 
     if (rows.length === 0) {
-      return res.status(401).json({ success: false, message: "Invalid email or password" });
+      console.log("Login failed: Invalid email.");
+      addFlashMessage(res, "error", "Invalid email or password."); // Flash message for invalid email
+      return res.json({ success: false, message: "Invalid email." });
     }
 
     const user = rows[0];
     const isValidPassword = await bcrypt.compare(password, user.password_hash);
 
     if (!isValidPassword) {
-      return res.status(401).json({ success: false, message: "Invalid email or password" });
+      console.log("Login failed: Incorrect password.");
+      addFlashMessage(res, "error", "Invalid email or password."); // Flash message for invalid password
+      return res.json({ success: false, message: "Invalid password." });
     }
 
     // Generate JWT
@@ -39,28 +44,42 @@ router.post('/login', async (req, res) => {
         role: user.role 
       },
       process.env.JWT_SECRET,
-      { expiresIn: "24h" } // Token expires in 24 hours
+      { expiresIn: "1h" } // Token expires in 1 hour
     );
 
-    // Store token in an HTTP-only cookie (Secure)
+    // Store token in an HTTP-only cookie
     res.cookie("token", token, {
-      httpOnly: true,  // Prevents JavaScript from accessing token (XSS protection)
-      secure: process.env.NODE_ENV === "production", // Use secure cookies in production
+      httpOnly: true,  
+      secure: process.env.NODE_ENV === "production",
       sameSite: "strict",
-      maxAge: 1 * 60 * 60 * 1000 // 1 hour
+      maxAge: 60 * 60 * 1000 // 1 hour
     });
 
-    res.json({ success: true, message: "Login successful", token }); // Send token to client
+    console.log("Login successful for:", user.email);
+    addFlashMessage(res, "success", "Login successful!"); // Success message
+    return res.json({ success: true, message: "Login successful!" });
+
   } catch (error) {
     console.error("Login error:", error);
-    res.status(500).json({ success: false, message: "Server error during login" });
+    addFlashMessage(res, "error", "An error occurred during login.");
+    return res.status(500).json({ success: false, message: "An error occurred during login." });
   }
 });
 
 // **Logout Route - Clears the JWT Cookie**
 router.post('/logout', (req, res) => {
-  res.clearCookie("token"); // Removes JWT cookie
-  res.json({ success: true, message: "Logged out successfully" });
+  console.log(`Logging out...`);
+  res.clearCookie("token");
+
+  // Store flash message in a cookie
+  res.cookie("flash", JSON.stringify({ success: "You have been logged out." }), {
+    httpOnly: false, // Allow frontend access
+    maxAge: 5000 // Flash message disappears after 5 seconds
+  });
+
+  // Send JSON response instead of redirecting
+  return res.json({ success: true });
 });
+
 
 export default router;

@@ -10,6 +10,21 @@
         <%- include('../partials/header.ejs', { user: user || null }) %>
       </header>
 
+      <!-- Flash Messages Wrapper (Always Exists to Prevent Layout Shift) -->
+      <div id="flashMessages">
+        <% if (flash.success) { %>
+          <div class="flash-message success">
+            <%= flash.success %>
+          </div>
+        <% } %>
+        
+        <% if (flash.error) { %>
+          <div class="flash-message error">
+            <%= flash.error %>
+          </div>
+        <% } %>
+      </div>
+
       <main>
         <%- include('../partials/search-area.ejs', { searchData }) %>
         <%- include('../partials/found-activities.ejs', { activities }) %>

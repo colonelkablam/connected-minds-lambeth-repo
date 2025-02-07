@@ -15,12 +15,13 @@ import pool from './database/db.js'; // Import shared database connection
 import formatDate from "./utility.js";  // returns a doy of week and date object
 import loginRoutes from './routes/login.js';
 import manageActivity from './routes/manage-activity.js';
+import { setFlashMessage } from './middlewares/flash-messages.js';
 
+
+// main 'app'
 const app = express()
-
 // handle local vs live deployment
 const port = process.env.PORT || 3000;
-
 // Resolve __dirname for ES modules
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
@@ -42,12 +43,13 @@ app.use(express.json());                                  // Add this to parse J
 app.use(bodyParser.urlencoded({ extended: true }));       // For form-encoded requests
 app.use(cookieParser());                                  // Needed to read JWT cookies
 app.use(express.static(path.join(__dirname, 'public')));  // static files
+
 app.set('view engine', 'ejs');                            // Set EJS as the template engine
 app.set('views', path.join(__dirname, 'views'));          // sets the dir for template engine (.render("*.ejs"))
 
+app.use(setFlashMessage);                                 // Load flash messages from cookies
 
-// Extract user from JWT in a middleware
-app.use((req, res, next) => {
+app.use((req, res, next) => {                             // Extract user from JWT in a middleware
   let user = null;
   const token = req.cookies.token;
 
@@ -79,6 +81,7 @@ app.get('/', (req, res) => {
     activities,
     searchData,
     user: res.locals.user, // User from JWT
+    flash: res.locals.flash // Pass flash messages
   });
 });
 
