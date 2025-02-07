@@ -10,20 +10,13 @@
         <%- include('../partials/header.ejs', { user: user || null }) %>
       </header>
 
-      <!-- Flash Messages Wrapper (Always Exists to Prevent Layout Shift) -->
-      <div id="flashMessages">
-        <% if (flash.success) { %>
-          <div class="flash-message success">
-            <%= flash.success %>
-          </div>
-        <% } %>
-        
-        <% if (flash.error) { %>
-          <div class="flash-message error">
-            <%= flash.error %>
-          </div>
-        <% } %>
-      </div>
+<!-- ✅ Flash Message Container - Always Present to Prevent Page Shift -->
+<div id="flashContainer">
+  <span id="flashMessage" class="<%= flash.success ? 'success' : (flash.error ? 'error' : '') %>">
+    <%= flash.success || flash.error || 'test' %>
+  </span>
+</div>
+
 
       <main>
         <%- include('../partials/search-area.ejs', { searchData }) %>

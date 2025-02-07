@@ -71,11 +71,7 @@ router.post('/logout', (req, res) => {
   console.log(`Logging out...`);
   res.clearCookie("token");
 
-  // Store flash message in a cookie
-  res.cookie("flash", JSON.stringify({ success: "You have been logged out." }), {
-    httpOnly: false, // Allow frontend access
-    maxAge: 5000 // Flash message disappears after 5 seconds
-  });
+  addFlashMessage(res, "success", "You have been logged out.");
 
   // Send JSON response instead of redirecting
   return res.json({ success: true });

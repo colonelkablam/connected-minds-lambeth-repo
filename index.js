@@ -16,7 +16,7 @@ import formatDate from "./utility.js";  // returns a doy of week and date object
 import loginRoutes from './routes/login.js';
 import manageActivity from './routes/manage-activity.js';
 import { setFlashMessage } from './middlewares/flash-messages.js';
-
+import { authenticateUser } from './middlewares/auth-JWT.js';
 
 // main 'app'
 const app = express()
@@ -48,23 +48,7 @@ app.set('view engine', 'ejs');                            // Set EJS as the temp
 app.set('views', path.join(__dirname, 'views'));          // sets the dir for template engine (.render("*.ejs"))
 
 app.use(setFlashMessage);                                 // Load flash messages from cookies
-
-app.use((req, res, next) => {                             // Extract user from JWT in a middleware
-  let user = null;
-  const token = req.cookies.token;
-
-  if (token) {
-    try {
-      const decoded = jwt.verify(token, process.env.JWT_SECRET);
-      user = decoded;
-    } catch (error) {
-      console.error("Invalid token:", error);
-    }
-  }
-
-  res.locals.user = user; // Make `user` available in all templates
-  next();
-});
+app.use(authenticateUser);                                // Apply JWT Authentication Middleware Globally (User Available in Views)
 
 
 // ROUTE HANDLING

@@ -3,16 +3,40 @@ import dotenv from 'dotenv';
 
 dotenv.config(); // Load environment variables
 
+/**
+ * Middleware 1: Extract user from JWT for all views
+ * - Adds `user` to `res.locals` so it's available in templates
+ */
+export function authenticateUser(req, res, next) {
+  const token = req.cookies.token;
+  let user = null;
+
+  if (token) {
+    try {
+      user = jwt.verify(token, process.env.JWT_SECRET);
+    } catch (error) {
+      console.error("Invalid token:", error);
+    }
+  }
+
+  res.locals.user = user; // Makes `user` available in all templates
+  next();
+}
+
+/**
+ * Middleware 2: Protect routes that require authentication
+ * - Rejects requests if no valid token is present
+ * - Attaches `req.user` for backend authentication
+ */
 export function isAuthenticated(req, res, next) {
-  const token = req.cookies.token; // Read JWT from secure cookie
+  const token = req.cookies.token;
 
   if (!token) {
     return res.status(401).json({ success: false, message: "Unauthorized: No token provided" });
   }
 
   try {
-    const decoded = jwt.verify(token, process.env.JWT_SECRET);
-    req.user = decoded; // Attach decoded user info to request
+    req.user = jwt.verify(token, process.env.JWT_SECRET); // Attach user to `req.user`
     next(); // Proceed to the protected route
   } catch (error) {
     return res.status(401).json({ success: false, message: "Unauthorized: Invalid token" });
