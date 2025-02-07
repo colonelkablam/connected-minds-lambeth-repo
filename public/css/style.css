@@ -14,7 +14,7 @@ body {
   background-color: #F6F1F1;
 }
 
-/* Container Wrapper */
+/* Main container Wrapper */
 .container {
   margin: 0 auto;
   padding: 0;
@@ -26,41 +26,31 @@ header {
   color: #fff;
   padding: 2rem 2rem; /* Adjust padding to avoid nested .container conflicts */
   margin: 0 ;
-  display: flex;
   justify-content: space-between;
   align-items: center;
   flex-wrap: wrap;
 }
 
+.top-header-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center; /* Aligns items vertically */
+  width: 100%; /* Ensures full width */
+}
+
 /* Branding Section */
 header .branding h1 {
-  margin: 0 0 0 2rem;
   font-size: 2.0rem;
 }
 
-/* Navbar Styling */
-.navbar ul {
-  list-style: none;
-  margin: 0;
-  padding: 0;
+/* Log in area */
+.user-log-in-container {
   display: flex;
-  gap: 1rem;
+  gap: 2rem;
+  align-items: center;
 }
-
-.navbar ul li a {
-  color: #AFD3E2;
-  text-decoration: none;
-  font-size: larger;
-  font-weight: 400;
-  transition: color 0.3s;
-}
-
-.navbar ul li a:hover {
-  color: #00DFA2;
-}
-
 .user-log-in {
-  margin: 0 2rem 0 0;
+  margin: 0 0 0 0;
   padding: 10px;
   background: #00DFA2;
   border-radius: 2px;
@@ -86,234 +76,41 @@ header .branding h1 {
   transition: color 0.3s;
 }
 
+
+/* Navbar Styling */
+.navbar {
+  display: flex;
+  gap: 2rem;
+  margin-top: 1rem;
+}
+
+.navbar ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  gap: 1rem;
+}
+
+.navbar ul li a {
+  color: #AFD3E2;
+  text-decoration: none;
+  font-size: larger;
+  font-weight: 400;
+  transition: color 0.3s;
+}
+
+.navbar ul li a:hover {
+  color: #00DFA2;
+}
+
+
 /* Main Content Styling */
 main {
   margin: 2rem 0;
   display: flex;
   flex-direction: column;
   align-items: center; /* Center-aligns content */
-}
-
-/* Search Box Styling */
-
-/* Container for search and filters */
-.search-container {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  width: 100%;
-  max-width: 800px; /* Set max width */
-  margin: 0 auto;
-}
-
-/* Search Box */
-.search-box {
-  width: 100%;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-}
-
-/* Search Input */
-.search-input {
-  width: 100%;
-  max-width: 800px; /* Ensures max width */
-  min-width: 300px;
-  display: flex;
-  border: 1px solid #AFD3E2;
-  border-radius: 5px;
-  overflow: hidden;
-}
-
-.search-input input {
-  flex: 1;
-  padding: 10px;
-  font-size: 16px;
-  border: none;
-}
-
-.search-input button {
-  padding: 10px;
-  background-color: #00DFA2;
-  color: white;
-  cursor: pointer;
-  font-size: 16px;
-  min-width: 80px;
-}
-
-.filter-options-box {
-  display: flex;
-  gap: 10px; /* Adds spacing between checkbox groups */
-}
-
-.filter-item {
-  display: flex;
-  align-items: center;
-  gap: 5px; /* Space between checkbox and label */
-  margin-right: 20px;
-}
-
-/* Filters Container */
-.filters-container {
-  width: 100%;
-  max-width: 800px;
-  text-align: center;
-  margin-top: 1rem;
-}
-
-/* Filters Panel */
-.filters-panel {
-  width: 100%;
-  max-width: 800px;
-  padding: 1rem;
-  margin-top: 1rem;
-  background-color: #F6F1F1;
-  border: 1px solid #AFD3E2;
-  border-radius: 5px;
-}
-
-/* Make filters responsive */
-@media (max-width: 600px) {
-  .search-container {
-    max-width: 100%;
-  }
-
-  .search-input {
-    min-width: 100%;
-  }
-
-  .filters-panel {
-    min-width: 100%;
-  }
-}
-
-.filters-container label {
-  font-size: 1rem;
-  cursor: pointer;
-  display: inline-flex;
-  align-items: center;
-  gap: 0.5rem;
-  color: #0079FF;
-}
-
-/* Filter Section */
-.filter-section {
-  margin-bottom: 1.5rem;
-}
-
-.filter-section h4 {
-  text-align: left;
-  margin-bottom: 0.5rem;
-  font-size: 1.2rem;
-  color: #0079FF;
-}
-
-/* Container for the checkboxes */
-.filter-checkboxes {
-  display: flex;
-  /*justify-content:space-between; /* Evenly space the checkboxes */
-  align-items: center; /* Align labels vertically */
-  flex-wrap: wrap; /* Optional: Wrap to the next row if needed for smaller screens */
-  gap: 0rem; /* Space between items */
-}
-
-/* Style the checkbox wrapper to look like buttons */
-.filter-checkboxes label {
-  display: inline-block;
-  flex: 1 1; /* Ensure all labels take up equal space */
-  text-align: center; /* Center the text inside each label */
-  margin: 0.1rem;
-  padding: 0.5rem 0.5rem;
-  border: 2px solid #ccc;
-  border-radius: 5px;
-  background-color: #ffffff;
-  color: #333;
-  font-size: 1rem;
-  cursor: pointer;
-  user-select: none;
-  transition: all 0.3s ease;
-  max-width: 120px; /* Optional: Set a maximum width for labels */
-}
-
-/* Hide the checkbox input */
-.filter-checkboxes input[type="checkbox"] {
-  display: none;
-}
-
-/* Highlight the label when the checkbox is checked */
-.filter-checkboxes input[type="checkbox"]:checked + label {
-  background-color: #0079ff;
-  color: white;
-  border-color: #0079ff;
-}
-
-/* Hover effect */
-.filter-checkboxes label:hover {
-  background-color: #e0e0e0;
-  border-color: #bbb;
-}
-
-/* Highlight checked labels even on hover */
-.filter-checkboxes input[type="checkbox"]:checked + label:hover {
-  background-color: #005bb5;
-  border-color: #005bb5;
-}
-
-
-
-/* Distance Slider */
-.slider-container {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 0.5rem;
-}
-
-#distance-slider {
-  width: 100%;
-}
-
-
-.filters-panel.hidden {
-  display: none;
-}
-
-
-/* Found Activities Styling */
-.found-activities-container {
-  margin-top: 2rem;
-  padding: 1rem;
-  background-color: #F6F1F1;
-  border: 1px solid #AFD3E2;
-  border-radius: 5px;
-  max-width: 800px; /* Match search-container width */
-  width: 100%; /* Ensure it resizes responsively */
-  margin-left: auto;
-  margin-right: auto;
-}
-
-.found-activities-container .activity-list {
-  list-style: none;
-  padding: 0;
-  margin: 0;
-}
-
-.found-activities-container .activity-item {
-  padding: 1rem;
-  margin-bottom: 1rem;
-  background-color: #fff;
-  border: 1px solid #AFD3E2;
-  border-radius: 5px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-}
-
-.found-activities-container .activity-item h3 {
-  margin-top: 0;
-  margin-bottom: 0.5rem;
-}
-
-.found-activities-container .activity-item p {
-  margin: 0.5rem 0;
 }
 
 /* Flash Container - Prevents Layout Shifts */

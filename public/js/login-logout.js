@@ -14,11 +14,14 @@ document.addEventListener("DOMContentLoaded", function () {
     return;
   }
 
+  // Ensure modal starts hidden
+  loginModal.style.display = "none"; // Explicitly hide modal on page load
+
   // Open login modal
   if (loginButton) {
     loginButton.addEventListener("click", function (event) {
       event.preventDefault();
-      loginModal.style.display = "block";
+      loginModal.style.display = "flex"; // Use flex to center it properly
     });
   }
 
@@ -28,9 +31,9 @@ document.addEventListener("DOMContentLoaded", function () {
     errorMessage.textContent = "";
   });
 
-  // Close modal when clicking outside of it
-  window.addEventListener("click", function (event) {
-    if (event.target === loginModal) {
+  // Close modal when clicking outside of modal content
+  loginModal.addEventListener("click", function (event) {
+    if (event.target === loginModal) { // Ensure click is on the modal background
       loginModal.style.display = "none";
       errorMessage.textContent = "";
     }
@@ -43,7 +46,7 @@ document.addEventListener("DOMContentLoaded", function () {
     const email = document.getElementById("email").value;
     const password = document.getElementById("password").value;
 
-    fetch("/login", {
+    fetch(`${window.location.origin}/user-login/login`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ email, password })
@@ -77,18 +80,27 @@ document.addEventListener("DOMContentLoaded", function () {
     });
   });
 
-  // Handle logout via AJAX
-  document.body.addEventListener("click", function (event) {
-    if (event.target && event.target.id === "logoutButton") {
-      event.preventDefault(); // Prevent default behavior
+// Handle logout via AJAX
+document.body.addEventListener("click", function (event) {
+  if (event.target && event.target.id === "logoutButton") {
+      event.preventDefault(); // Prevent default link behavior
 
-      fetch("/logout", { method: "POST" })
-        .then(response => response.json())
-        .then(() => {
+      fetch(`${window.location.origin}/user-login/logout`, { 
+          method: "POST",
+          headers: { "Content-Type": "application/json" }
+      })
+      .then(response => {
+          if (!response.ok) {
+              throw new Error("Logout failed");
+          }
+          return response.json();
+      })
+      .then(() => {
           console.log("Logout successful, redirecting to home page...");
-          window.location.href = "/"; // Redirect to homepage after logout
-        })
-        .catch(error => console.error("Logout Error:", error));
-    }
-  });
+          window.location.href = "/"; // Redirect after logout
+      })
+      .catch(error => console.error("Logout Error:", error));
+  }
+});
+
 });

@@ -14,7 +14,7 @@ import { fileURLToPath } from 'url';    // needed for static files
 import pool from './database/db.js'; // Import shared database connection
 import formatDate from "./utility.js";  // returns a doy of week and date object
 import loginRoutes from './routes/login.js';
-import manageActivity from './routes/manage-activity.js';
+import manageActivity from './routes/add-activity.js';
 import { setFlashMessage } from './middlewares/flash-messages.js';
 import { authenticateUser } from './middlewares/auth-JWT.js';
 
@@ -22,6 +22,8 @@ import { authenticateUser } from './middlewares/auth-JWT.js';
 const app = express()
 // handle local vs live deployment
 const port = process.env.PORT || 3000;
+app.locals.baseUrl = process.env.BASE_URL || ''; // Define base URL globally
+
 // Resolve __dirname for ES modules
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
@@ -54,8 +56,8 @@ app.use(authenticateUser);                                // Apply JWT Authentic
 // ROUTE HANDLING
 
 // Use Routes
-app.use(loginRoutes);
-app.use(manageActivity);
+app.use("/user-login", loginRoutes);
+app.use("/manage-activity", manageActivity);
 
 // landing page route
 app.get('/', (req, res) => {
@@ -69,13 +71,12 @@ app.get('/', (req, res) => {
   });
 });
 
-// Search Route - Ensure `user` is passed
 app.post('/search', async (req, res) => {
   try {
     // Merge submitted form data with defaults
     searchData = {
       ...defaultSearchData,
-      searchText: req.body.searchText || '',
+      searchText: req.body.searchText ? req.body.searchText.trim() : '',
       filtersEnabled: req.body.filtersEnabled === 'true',
       filterDays: Array.isArray(req.body.filterDays)
         ? req.body.filterDays
@@ -92,40 +93,75 @@ app.post('/search', async (req, res) => {
         : req.body.filterCost
         ? [req.body.filterCost]
         : [],
-      distance: parseFloat(req.body.distance) || 0,
     };
 
     console.log('Search Data:', searchData); // Debugging
 
-    // Query database
-    const searchQuery = `
+    // Start building query dynamically
+    let searchQuery = `
       SELECT 
-        a.name, 
+        a.provider_name, 
         a.description, 
+        a.day, 
         v.postcode AS location, 
-        p.name AS provider_name, 
-        asess.activity_date, 
-        asess.num_spaces_available, 
-        a.cost 
-      FROM activities a
-      JOIN activity_sessions asess ON a.id = asess.activity_id
-      JOIN providers p ON a.provider = p.id
-      JOIN venues v ON a.venue = v.id
-      WHERE a.name ILIKE $1 OR a.description ILIKE $1
-      ORDER BY asess.activity_date ASC;
+        a.total_spaces, 
+        a.spaces_remaining, 
+        a.cost, 
+        a.contact_email,
+        a.target_group
+      FROM activities_simple a
+      LEFT JOIN venues v ON a.venue_id = v.id
+      WHERE 1=1 
     `;
 
-    const searchValue = `%${searchData.searchText}%`; // Use % for partial matches
-    const { rows } = await pool.query(searchQuery, [searchValue]);
+    // Query parameters
+    const searchParams = [];
+    let paramIndex = 1;
 
-    // Apply date formatting
-    rows.forEach(activity => {
-      if (activity.activity_date) {
-        const formattedDate = formatDate(activity.activity_date);
-        activity.day = formattedDate.day;
-        activity.formattedDate = formattedDate.date;
+    // Add search text filter
+    if (searchData.searchText) {
+      searchQuery += ` AND (a.provider_name ILIKE $${paramIndex} OR a.description ILIKE $${paramIndex})`;
+      searchParams.push(`%${searchData.searchText}%`);
+      paramIndex++;
+    }
+
+    // Add day filter if enabled
+    if (searchData.filtersEnabled && searchData.filterDays.length > 0) {
+      searchQuery += ` AND a.day = ANY($${paramIndex})`;
+      searchParams.push(searchData.filterDays);
+      paramIndex++;
+    }
+
+    // Add audience filter if enabled
+    if (searchData.filtersEnabled && searchData.filterAudience.length > 0) {
+      searchQuery += ` AND a.target_group = ANY($${paramIndex})`;
+      searchParams.push(searchData.filterAudience);
+      paramIndex++;
+    }
+
+    // Add cost filter if enabled
+    if (searchData.filtersEnabled && searchData.filterCost.length > 0) {
+      const costConditions = [];
+      if (searchData.filterCost.includes("free")) {
+        costConditions.push(`a.cost = 0`);
       }
-    });
+      if (searchData.filterCost.includes("low cost")) {
+        costConditions.push(`a.cost > 0 AND a.cost < 10`);
+      }
+      if (searchData.filterCost.includes("other")) {
+        costConditions.push(`a.cost >= 10`);
+      }
+
+      if (costConditions.length > 0) {
+        searchQuery += ` AND (${costConditions.join(" OR ")})`;
+      }
+    }
+
+    // Order by day for better readability
+    searchQuery += ` ORDER BY a.day ASC;`;
+
+    // Execute query
+    const { rows } = await pool.query(searchQuery, searchParams);
 
     // Render results
     res.render('pages/index', {
@@ -139,6 +175,8 @@ app.post('/search', async (req, res) => {
     res.status(500).send('An error occurred while performing the search.');
   }
 });
+
+
 
 
 // STARTING SERVER 

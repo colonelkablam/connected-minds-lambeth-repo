@@ -5,12 +5,12 @@ import pool from '../database/db.js'; // Import shared database connection
 const router = express.Router();
 
 // **Render "Add Activity" Form (only for authorized users)**
-router.get('/manage-activity', isAuthenticated, (req, res) => {
-  res.render('pages/manage-activity', { user: req.user }); // Use req.user from JWT
+router.get('/add', isAuthenticated, (req, res) => {
+  res.render('pages/add-activity', { user: req.user }); // Use req.user from JWT
 });
 
 // Handle "Add Activity" Form Submission
-router.post('/add-activity', isAuthenticated, async (req, res) => {
+router.post('/add', isAuthenticated, async (req, res) => {
   try {
     const { name, description, venue, provider, cost } = req.body;
 

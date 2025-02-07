@@ -1,75 +1,97 @@
-/* Style the modal box */
+/* Modal Background */
 .modal {
-    display: none;
-    position: fixed;
-    z-index: 1000;
-    left: 50%;
-    top: 20%;
-    transform: translate(-50%, -50%);
-    background: white;
-    padding: 20px;
-    border-radius: 8px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
-    width: 300px;
-  }
+  display: none; /* Initially hidden */
+  position: fixed;
+  z-index: 999; /* Ensure it appears above other elements */
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5); /* Semi-transparent background */
+  
+  /* Center the modal using Flexbox */
+  display: flex;
+  justify-content: center;
+  align-items:center;
+}
 
-  .modal-heading {
-    text-align: center;
-    color: #666;
-  }
-  
-  /* Style labels */
-  .modal label {
-    display: block;  /* Ensures labels are on separate lines */
-    font-size: 14px;
-    color: #666;  /* Grey text for better readability */
-    margin-bottom: 5px;
-  }
-  
-  /* Style input fields */
-  .modal input {
-    width: 100%;
-    padding: 10px;
-    margin-bottom: 15px;
-    border: 1px solid #ccc;
-    border-radius: 5px;
-    font-size: 16px;
-  }
-  
-  /* Add focus effect for inputs */
-  .modal input:focus {
-    border-color: #00DFA2;
-    outline: none;
-    box-shadow: 0 0 5px rgba(0, 223, 162, 0.5);
-  }
-  
-  /* Style the login button */
-  .modal button {
-    width: 100%;
-    padding: 10px;
-    border: none;
-    background: #333;
-    color: white;
-    cursor: pointer;
-    font-size: 16px;
-    border-radius: 5px;
-    transition: background 0.3s;
-  }
-  
-  .modal button:hover {
-    background: #555;
-  }
-  
-  /* Close button */
-  .modal .close {
-    position: absolute;
-    top: 5px;
-    right: 10px;
-    cursor: pointer;
-    font-size: 20px;
-    color: #999;
-  }
-  .modal .close:hover {
-    color: black;
-  }
+/* Modal Content */
+.modal-content {
+  background: white;
+  padding: 20px;
+  border-radius: 5px;
+  width: 400px; /* Adjust width as needed */
+  max-width: 90%; /* Prevents it from being too wide on small screens */
+  box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.3);
+  position: relative;
+  top: -20%;
+}
+
+
+.modal-heading {
+  text-align: center;
+  color: #666;
+}
+
+#loginErrorMessage {
+  color: red;
+  text-align: center;
+  min-height: 20px; /* Adjust height based on expected message size */
+  display: block; /* Ensures it always takes up space */
+}
+
+/* Style labels */
+.modal label {
+  display: block;  /* Ensures labels are on separate lines */
+  font-size: 14px;
+  color: #666;  /* Grey text for better readability */
+  margin-bottom: 5px;
+}
+
+/* Style input fields */
+.modal input {
+  width: 100%;
+  padding: 10px;
+  margin-bottom: 15px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  font-size: 16px;
+}
+
+/* Add focus effect for inputs */
+.modal input:focus {
+  border-color: #00DFA2;
+  outline: none;
+  box-shadow: 0 0 5px rgba(0, 223, 162, 0.5);
+}
+
+/* Style the login button */
+.modal button {
+  width: 100%;
+  padding: 10px;
+  border: none;
+  background: #333;
+  color: white;
+  cursor: pointer;
+  font-size: 16px;
+  border-radius: 5px;
+  transition: background 0.3s;
+}
+
+.modal button:hover {
+  background: #555;
+}
+
+/* Close button */
+.modal .close {
+  position: absolute;
+  top: 5px;
+  right: 10px;
+  cursor: pointer;
+  font-size: 20px;
+  color: #999;
+}
+.modal .close:hover {
+  color: black;
+}
   

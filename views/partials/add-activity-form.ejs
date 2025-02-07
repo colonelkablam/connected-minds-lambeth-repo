@@ -1,8 +1,6 @@
-<%- include('../partials/header') %>
-
 <h2>Add New Activity</h2>
 
-<form action="/add-activity" method="POST">
+<form action="/manage-activity/add" method="POST">
   <label for="name">Activity Name:</label>
   <input type="text" id="name" name="name" required>
 
@@ -20,5 +18,3 @@
 
   <button type="submit">Add Activity</button>
 </form>
-
-<%- include('../partials/footer') %>

@@ -1,26 +1,48 @@
 document.addEventListener('DOMContentLoaded', () => {
-  // Toggle Filters Panel Visibility
-  const filtersEnabledCheckbox = document.querySelector('input[name="filtersEnabled"]');
-  const filtersPanel = document.getElementById('filters-panel');
+  console.log("Filters.js loaded!");
 
-  filtersEnabledCheckbox.addEventListener('change', () => {
-    if (filtersEnabledCheckbox.checked) {
-      filtersPanel.classList.remove('hidden');
-    } else {
-      filtersPanel.classList.add('hidden');
-    }
-  });
-
-  // Ensure the filters panel is hidden by default if the checkbox is unchecked
-  if (!filtersEnabledCheckbox.checked) {
-    filtersPanel.classList.add('hidden');
+  // Only run if the current route is "/"
+  if (window.location.pathname !== "/" || window.location.pathname !== "/search") {
+    console.warn("Not on the home page, skipping filters setup.");
+    return;
   }
 
-  // Handle Distance Slider Label
-  const distanceSlider = document.getElementById('distance-slider');
-  const distanceLabel = distanceSlider.nextElementSibling;
+  // Setup Filters Panel
+  function setupFiltersPanel() {
+    const filtersEnabledCheckbox = document.querySelector('input[name="filtersEnabled"]');
+    const filtersPanel = document.getElementById('filters-panel');
 
-  distanceSlider.addEventListener('input', () => {
-    distanceLabel.textContent = `${distanceSlider.value} miles`;
-  });
+    if (!filtersEnabledCheckbox || !filtersPanel) {
+      console.warn("Filters elements not found, skipping filters setup.");
+      return;
+    }
+
+    filtersEnabledCheckbox.addEventListener('change', () => {
+      filtersPanel.classList.toggle('hidden', !filtersEnabledCheckbox.checked);
+    });
+
+    // Ensure the filters panel is hidden by default if unchecked
+    if (!filtersEnabledCheckbox.checked) {
+      filtersPanel.classList.add('hidden');
+    }
+  }
+
+  // Setup Distance Slider
+  function setupDistanceSlider() {
+    const distanceSlider = document.getElementById('distance-slider');
+    if (!distanceSlider) {
+      console.warn("Distance slider not found, skipping setup.");
+      return;
+    }
+
+    const distanceLabel = distanceSlider.nextElementSibling;
+    distanceSlider.addEventListener('input', () => {
+      distanceLabel.textContent = `${distanceSlider.value} miles`;
+    });
+  }
+
+  // Run Setup Functions
+  setupFiltersPanel();
+  setupDistanceSlider();
 });
+
