@@ -1,6 +1,6 @@
 /* Modal Background */
 .modal {
-  display: none; /* Initially hidden */
+  display: none !important; /* Initially hidden */
   position: fixed;
   z-index: 999; /* Ensure it appears above other elements */
   left: 0;
@@ -93,5 +93,9 @@
 }
 .modal .close:hover {
   color: black;
+}
+
+.modal.show {
+  display: flex !important; /* Only shows when explicitly triggered */
 }
   

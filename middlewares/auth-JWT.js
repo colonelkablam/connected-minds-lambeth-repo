@@ -9,18 +9,21 @@ dotenv.config(); // Load environment variables
  */
 export function authenticateUser(req, res, next) {
   const token = req.cookies.token;
-  let user = null;
 
-  if (token) {
-    try {
-      user = jwt.verify(token, process.env.JWT_SECRET);
-    } catch (error) {
-      console.error("Invalid token:", error);
-    }
+  if (!token) {
+    res.locals.user = null; // Ensure this is explicitly set, prevents modal flickering
+    return next();
   }
 
-  res.locals.user = user; // Makes `user` available in all templates
-  next();
+  jwt.verify(token, process.env.JWT_SECRET, (err, decoded) => {
+    if (err) {
+      res.locals.user = null; // Explicitly set to null instead of undefined
+      return next();
+    }
+
+    res.locals.user = decoded; // Attach user data
+    next();
+  });
 }
 
 /**

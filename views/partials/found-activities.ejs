@@ -1,19 +1,21 @@
 <div class="found-activities-container">
-    <% if (activities && activities.length > 0) { %>
-      <ul class="activity-list">
-        <% activities.forEach(activity => { %>
-          <li class="activity-item">
-            <h3><%= activity.name %></h3>
-            <p><%= activity.description %></p>
-            <p><strong>Day:</strong> <%= activity.day %></p>
-            <p><strong>Date:</strong> <%= activity.formattedDate %></p>     
-            <p><strong>Location:</strong> <%= activity.location %></p>
-            <p><strong>Cost:</strong> <%= activity.cost %></p>
-          </li>
-        <% }); %>
-      </ul>
-    <% } else { %>
-      <p>No activities found matching your search.</p>
-    <% } %>
-  </div>
+  <% if (activities && activities.length > 0) { %>
+    <ul class="activity-list">
+      <% activities.forEach(activity => { %>
+        <li class="activity-item">
+          <h3><%= activity.title %></h3>
+          <p><%= activity.description %></p>
+          <p><strong>Day:</strong> <%= activity.day %></p>
+          <p><strong>Date:</strong> <%= activity.formattedDate %></p>     
+          <p><strong>Location:</strong> <%= activity.location %></p>
+          <p><strong>Cost:</strong> <%= activity.cost %></p>
+        </li>
+      <% }); %>
+    </ul>
+  <% } else { %>
+    <p>No activities found matching your search.</p>
+  <% } %>
+</div>
+    
+
   

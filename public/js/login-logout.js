@@ -21,20 +21,20 @@ document.addEventListener("DOMContentLoaded", function () {
   if (loginButton) {
     loginButton.addEventListener("click", function (event) {
       event.preventDefault();
-      loginModal.style.display = "flex"; // Use flex to center it properly
+      loginModal.classList.add("show");
     });
   }
 
   // Close modal when "X" button is clicked
   closeModal.addEventListener("click", function () {
-    loginModal.style.display = "none";
+    loginModal.classList.remove("show");
     errorMessage.textContent = "";
   });
 
   // Close modal when clicking outside of modal content
   loginModal.addEventListener("click", function (event) {
     if (event.target === loginModal) { // Ensure click is on the modal background
-      loginModal.style.display = "none";
+      loginModal.classList.remove("show"); 
       errorMessage.textContent = "";
     }
   });
@@ -57,7 +57,7 @@ document.addEventListener("DOMContentLoaded", function () {
         console.log("Login successful, closing modal...");
         
         // Hide modal before reloading the page
-        loginModal.style.display = "none";
+        loginModal.classList.remove("show");
 
         // Show a success message dynamically
         if (flashContainer) {

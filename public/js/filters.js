@@ -1,11 +1,5 @@
 document.addEventListener('DOMContentLoaded', () => {
-  console.log("Filters.js loaded!");
-
-  // Only run if the current route is "/"
-  if (window.location.pathname !== "/" || window.location.pathname !== "/search") {
-    console.warn("Not on the home page, skipping filters setup.");
-    return;
-  }
+  console.log("Loading filters.js");
 
   // Setup Filters Panel
   function setupFiltersPanel() {

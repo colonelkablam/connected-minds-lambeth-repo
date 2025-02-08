@@ -1,6 +1,6 @@
 <div class="search-container">
 
-  <form action="/search" method="POST" class="search-box">
+  <form action="/search" method="POST" class="search-form">
     
     <!-- Search Text Input -->
     <div class="search-input">
@@ -26,17 +26,6 @@
             <%= searchData.filtersEnabled ? 'checked' : '' %>
           />
           <label for="filtersEnabled">Filters Enabled</label>
-        </span>
-      
-        <span class="filter-item">
-          <input
-            type="checkbox"
-            id="showFilters"
-            name="showFilters"
-            value="true"
-            <%= searchData.showFilters ? 'checked' : '' %>
-          />
-          <label for="showFilters">Show Filters</label>
         </span>
       </div>
 
@@ -64,7 +53,7 @@
         <div class="filter-section">
           <h4>Audience</h4>
           <div class="filter-checkboxes">
-            <% ['Children', 'Adults', 'Families', 'Everyone'].forEach(audience => { %>
+            <% ['Children', 'Youth', 'Adults', 'Families', 'Everyone'].forEach(audience => { %>
                 <input
                   type="checkbox"
                   id="audience-<%= audience.toLowerCase() %>"

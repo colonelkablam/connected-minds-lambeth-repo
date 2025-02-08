@@ -11,7 +11,7 @@
   }
   
   /* Search Box */
-  .search-box {
+  .search-form {
     width: 100%;
     display: flex;
     flex-direction: column;

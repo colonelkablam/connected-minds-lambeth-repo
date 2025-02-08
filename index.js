@@ -101,6 +101,7 @@ app.post('/search', async (req, res) => {
     let searchQuery = `
       SELECT 
         a.provider_name, 
+        a.title,
         a.description, 
         a.day, 
         v.postcode AS location, 
@@ -127,14 +128,17 @@ app.post('/search', async (req, res) => {
 
     // Add day filter if enabled
     if (searchData.filtersEnabled && searchData.filterDays.length > 0) {
-      searchQuery += ` AND a.day = ANY($${paramIndex})`;
-      searchParams.push(searchData.filterDays);
+      // Convert each abbreviation into a wildcard search (e.g., 'mon%' for 'Monday')
+      const partialDays = searchData.filterDays.map(day => `${day}%`);
+
+      searchQuery += ` AND a.day ILIKE ANY($${paramIndex})`;
+      searchParams.push(partialDays);
       paramIndex++;
     }
 
     // Add audience filter if enabled
     if (searchData.filtersEnabled && searchData.filterAudience.length > 0) {
-      searchQuery += ` AND a.target_group = ANY($${paramIndex})`;
+      searchQuery += ` AND a.target_group ILIKE ANY($${paramIndex})`;
       searchParams.push(searchData.filterAudience);
       paramIndex++;
     }
@@ -169,6 +173,7 @@ app.post('/search', async (req, res) => {
       activities: rows,
       searchData,
       user: res.locals.user, // User from JWT
+      flash: res.locals.flash // Pass flash messages
     });
   } catch (error) {
     console.error('Error executing search query:', error);
