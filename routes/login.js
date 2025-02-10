@@ -33,6 +33,10 @@ router.post('/login', async (req, res) => {
       return res.json({ success: false, message: "Invalid password." });
     }
 
+    // Update last_login timestamp
+    const updateQuery = 'UPDATE admin_accounts SET last_login = NOW() WHERE id = $1';
+    await pool.query(updateQuery, [user.id]);
+
     // Generate JWT
     const token = jwt.sign(
       { 

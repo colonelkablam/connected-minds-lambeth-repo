@@ -49,6 +49,14 @@ header .branding h1 {
   gap: 2rem;
   align-items: center;
 }
+
+.user-welcome {
+  font-size: larger;
+  font-weight: 800;
+  text-decoration: none;
+  color: #ffffff;
+}
+
 .user-log-in {
   margin: 0 0 0 0;
   padding: 10px;
@@ -107,7 +115,7 @@ header .branding h1 {
 
 /* Main Content Styling */
 main {
-  margin: 2rem 0;
+  margin: 1rem 0;
   display: flex;
   flex-direction: column;
   align-items: center; /* Center-aligns content */
@@ -142,7 +150,6 @@ main {
 #flashMessage.error {
   color: #dc3545;
 }
-
 
 /* Footer Styling */
 footer {

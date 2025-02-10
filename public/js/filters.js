@@ -1,5 +1,5 @@
 document.addEventListener('DOMContentLoaded', () => {
-  console.log("Loading filters.js");
+  console.log("DOM fully loaded, loading search filters...");
 
   // Setup Filters Panel
   function setupFiltersPanel() {

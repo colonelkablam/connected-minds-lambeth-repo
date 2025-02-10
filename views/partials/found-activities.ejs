@@ -1,21 +1,20 @@
 <div class="found-activities-container">
-  <% if (activities && activities.length > 0) { %>
-    <ul class="activity-list">
-      <% activities.forEach(activity => { %>
-        <li class="activity-item">
-          <h3><%= activity.title %></h3>
-          <p><%= activity.description %></p>
-          <p><strong>Day:</strong> <%= activity.day %></p>
-          <p><strong>Date:</strong> <%= activity.formattedDate %></p>     
-          <p><strong>Location:</strong> <%= activity.location %></p>
-          <p><strong>Cost:</strong> <%= activity.cost %></p>
-        </li>
-      <% }); %>
-    </ul>
-  <% } else { %>
-    <p>No activities found matching your search.</p>
-  <% } %>
-</div>
-    
+  <div class="tabs">
+    <button class="tab-btn active" id="days-tab" onclick="showTab('days')">Days</button>
+    <button class="tab-btn" id="pinned-tab" onclick="showTab('pinned')">Pinned</button>
+  </div>
 
-  
+  <!-- Search Results Container (Days Tab) -->
+  <div id="days-container">
+    <ul class="activity-list" id="search-results">
+      <p>Search for activities...</p>
+    </ul>
+  </div>
+
+  <!-- Pinned Activities Container (Initially Hidden) -->
+  <div id="pinned-container" style="display: none;">
+    <ul class="activity-list" id="pinned-activities">
+      <p>No pinned activities.</p>
+    </ul>
+  </div>
+</div>

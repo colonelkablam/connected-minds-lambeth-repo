@@ -1,5 +1,7 @@
 document.addEventListener("DOMContentLoaded", function () {
   const flashMessage = document.getElementById("flashMessage");
+  console.log("DOM fully loaded, getting flash message element...")
+
 
   // Show message if already in the DOM
   if (flashMessage.textContent.trim() !== "") {

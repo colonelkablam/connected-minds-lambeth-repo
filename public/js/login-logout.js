@@ -1,5 +1,5 @@
 document.addEventListener("DOMContentLoaded", function () {
-  console.log("DOM fully loaded, checking elements...");
+  console.log("DOM fully loaded, checking elements and adding log-in/log-out listeners...");
 
   // **LOGIN ELEMENTS**
   const loginButton = document.getElementById("loginButton");
@@ -80,27 +80,32 @@ document.addEventListener("DOMContentLoaded", function () {
     });
   });
 
-// Handle logout via AJAX
-document.body.addEventListener("click", function (event) {
-  if (event.target && event.target.id === "logoutButton") {
-      event.preventDefault(); // Prevent default link behavior
+  const userLogInContainer = document.querySelector(".user-log-in-container");
 
-      fetch(`${window.location.origin}/user-login/logout`, { 
+  if (userLogInContainer) {
+    userLogInContainer.addEventListener("click", function (event) {
+      if (event.target && event.target.id === "logoutButton") {
+        event.preventDefault(); // Prevent default link behavior
+
+        console.log("Logout button clicked...");
+
+        fetch(`${window.location.origin}/user-login/logout`, {
           method: "POST",
           headers: { "Content-Type": "application/json" }
-      })
-      .then(response => {
+        })
+        .then(response => {
           if (!response.ok) {
-              throw new Error("Logout failed");
+            throw new Error("Logout failed");
           }
           return response.json();
-      })
-      .then(() => {
+        })
+        .then(() => {
           console.log("Logout successful, redirecting to home page...");
           window.location.href = "/"; // Redirect after logout
-      })
-      .catch(error => console.error("Logout Error:", error));
+        })
+        .catch(error => console.error("Logout Error:", error));
+      }
+    });
   }
-});
 
 });
