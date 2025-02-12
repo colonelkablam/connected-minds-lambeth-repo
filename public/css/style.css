@@ -57,6 +57,10 @@ header .branding h1 {
   color: #ffffff;
 }
 
+.user-welcome .user-name {
+  color: #00DFA2;
+}
+
 .user-log-in {
   margin: 0 0 0 0;
   padding: 10px;

@@ -1,11 +1,12 @@
 /* Container for Form */
 .add-activity-container {
-    width: 80%;
-    margin: 30px auto;
+    width: 100%;
+    margin: 0;
     background: white;
     padding: 20px;
     border-radius: 8px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    max-width: 800px;
 }
 
 /* Form Headings */
@@ -29,6 +30,14 @@ input, textarea {
     border: 1px solid #ccc;
     border-radius: 5px;
     font-size: 16px;
+}
+
+input.smaller {
+    max-width: 400px;
+}
+
+input.even-smaller {
+    max-width: 130px;
 }
 
 /* Textarea Styling */
@@ -66,3 +75,50 @@ button:hover {
         width: 95%;
     }
 }
+
+/* Style Dropdowns to Match Other Inputs */
+select {
+    width: 120px;
+    padding: 10px;
+    margin-bottom: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 16px;
+    background-color: white;
+    appearance: none; /* Removes default browser styling */
+    cursor: pointer;
+}
+
+/* Ensure Dropdowns and Inputs Look Similar */
+input, textarea, select {
+    font-family: inherit;
+}
+
+/* Add Some Styling for Focus State */
+input:focus, textarea:focus, select:focus {
+    border-color: #007bff;
+    outline: none;
+    box-shadow: 0 0 5px rgba(0, 123, 255, 0.3);
+}
+
+/* Adjust Arrow Styling for Select Dropdowns */
+select {
+    background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%23333'><path d='M7 10l5 5 5-5z'/></svg>");
+    background-repeat: no-repeat;
+    background-position: right 10px center;
+    background-size: 20px;
+    padding-right: 30px; /* Space for dropdown arrow */
+}
+
+/* Adjust Select Dropdown for Mobile */
+@media (max-width: 768px) {
+    select {
+        font-size: 14px;
+        padding: 8px;
+    }
+}
+
+#postcode {
+    transition: border 0.3s ease-in-out;
+  }
+

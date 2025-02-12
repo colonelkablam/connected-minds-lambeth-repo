@@ -8,7 +8,7 @@
   <!-- Login Button -->
   <div class="user-log-in-container">
   <% if (user) { %>
-    <p class="user-welcome">logged in as <%= user.username %></p>
+    <p class="user-welcome">logged in as : <span class="user-name"><%= user.username %> - <%= user.role%></span></p>
   
     <a href="#" id="logoutButton" class="user-log-in">Log Out</a>
   <% } else { %>
@@ -24,7 +24,7 @@
     <% if (user.role === 'supa_admin') { %>
       <a href="<%= baseUrl %>/manage-users/add">Add User</a>
       <% } %>
-    <% if (user.role === 'supa_admin') { %>
+    <% if (user.role === 'supa_admin' || user.role === 'admin') { %>
       <a href="<%= baseUrl %>/manage-activity/add">Add Activity</a>
       <% } %>
   <% } %>

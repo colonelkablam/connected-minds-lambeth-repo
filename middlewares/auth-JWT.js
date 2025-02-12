@@ -45,3 +45,12 @@ export function isAuthenticated(req, res, next) {
     return res.status(401).json({ success: false, message: "Unauthorized: Invalid token" });
   }
 }
+
+export function authoriseRoles(...allowedRoles) {
+  return (req, res, next) => {
+    if (!req.user || !allowedRoles.includes(req.user.role)) {
+      return res.status(403).json({ success: false, message: "Forbidden: Access denied" });
+    }
+    next();
+  };
+}
