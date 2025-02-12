@@ -69,7 +69,7 @@
   .filters-panel {
     width: 100%;
     max-width: 800px;
-    padding: 1rem;
+    padding: 0.5rem;
     margin-top: 1rem;
     background-color: #F6F1F1;
     border: 1px solid #AFD3E2;
@@ -102,7 +102,11 @@
   
   /* Filter Section */
   .filter-section {
-    margin-bottom: 1.5rem;
+    margin-bottom: 1rem;
+  }
+
+  .filter-section:last-child {
+    margin-bottom: 0rem;
   }
   
   .filter-section h4 {
@@ -112,32 +116,38 @@
     color: #0079FF;
   }
   
-  /* Container for the checkboxes */
-  .filter-checkboxes {
-    display: flex;
-    /*justify-content:space-between; /* Evenly space the checkboxes */
-    align-items: center; /* Align labels vertically */
-    flex-wrap: wrap; /* Optional: Wrap to the next row if needed for smaller screens */
-    gap: 0rem; /* Space between items */
-  }
-  
-  /* Style the checkbox wrapper to look like buttons */
-  .filter-checkboxes label {
-    display: inline-block;
-    flex: 1 1; /* Ensure all labels take up equal space */
-    text-align: center; /* Center the text inside each label */
-    margin: 0.1rem;
-    padding: 0.5rem 0.5rem;
-    border: 2px solid #ccc;
-    border-radius: 5px;
-    background-color: #ffffff;
-    color: #333;
-    font-size: 1rem;
-    cursor: pointer;
-    user-select: none;
-    transition: all 0.3s ease;
-    max-width: 120px; /* Optional: Set a maximum width for labels */
-  }
+/* Container for the checkboxes */
+.filter-checkboxes {
+  display: flex;
+  align-items: center; /* Align labels vertically */
+  flex-wrap: wrap; /* Allow items to wrap when necessary */
+  gap: 0.6rem; /* Space between items */
+  justify-content: left; /* Center checkboxes when wrapping */
+  margin-left: 2%;
+
+}
+
+/* Style the checkbox wrapper to look like buttons */
+.filter-checkboxes label {
+  display: flex; /* Ensures consistent size with flex-grow */
+  flex: 1 1 auto; /* Grow when space allows, shrink when needed */
+  justify-content: center;
+  align-items: center;
+  text-align: center; /* Center text */
+  padding: 0.5rem 1rem;
+  border: 2px solid #ccc;
+  border-radius: 5px;
+  background-color: #ffffff;
+  color: #333;
+  font-size: 1rem;
+  cursor: pointer;
+  user-select: none;
+  transition: all 0.3s ease;
+  min-width: 100px; /* ✅ Ensures a minimum size */
+  max-width: 100px; /* ✅ Optional: Prevents labels from getting too large */
+  white-space: nowrap; /* ✅ Prevents text from breaking inside */
+}
+
   
   /* Hide the checkbox input */
   .filter-checkboxes input[type="checkbox"] {

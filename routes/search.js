@@ -8,7 +8,7 @@ router.post('/search', async (req, res) => {
   try {
     // Merge submitted form data with defaults
     const searchData = {
-      searchText: req.body.searchText ? req.body.searchText.trim() : '',
+      searchText: req.body.searchText ? req.body.searchText.match(/\b\w+\b/g) || [] : [],
       filtersEnabled: req.body.filtersEnabled === 'true',
       filterDays: Array.isArray(req.body.filterDays)
         ? req.body.filterDays
@@ -38,6 +38,8 @@ router.post('/search', async (req, res) => {
       a.title,
       a.description, 
       a.day,
+      a.start_time,
+      a.stop_time,
       a.address_id,
       addr.street_1,
       addr.street_2,
@@ -47,7 +49,8 @@ router.post('/search', async (req, res) => {
       a.spaces_remaining, 
       a.cost, 
       a.contact_email,
-      a.target_group
+      a.target_group,
+      a.age_range
       FROM activities_simple a
       LEFT JOIN addresses addr ON a.address_id = addr.id
       WHERE 1=1 
@@ -58,23 +61,24 @@ router.post('/search', async (req, res) => {
     let paramIndex = 1;
 
     // Add search text filter
-    if (searchData.searchText) {
-      searchQuery += ` AND (a.provider_name ILIKE $${paramIndex} OR a.description ILIKE $${paramIndex})`;
-      searchParams.push(`%${searchData.searchText}%`);
+    if (searchData.searchText.length !== 0) {
+      const searchTerms = searchData.searchText.map(word => `%${word}%`); // Add wildcards for partial matching
+      searchQuery += ` AND (a.provider_name ILIKE ANY($${paramIndex}::text[]) OR a.description ILIKE ANY($${paramIndex}::text[]) OR a.title ILIKE ANY($${paramIndex}::text[]))`;
+      searchParams.push(searchTerms);
       paramIndex++;
     }
 
     // Add day filter if enabled
     if (searchData.filtersEnabled && searchData.filterDays.length > 0) {
       const partialDays = searchData.filterDays.map(day => `${day}%`);
-      searchQuery += ` AND a.day ILIKE ANY($${paramIndex})`;
+      searchQuery += ` AND a.day ILIKE ANY($${paramIndex}::text[])`;
       searchParams.push(partialDays);
       paramIndex++;
     }
 
     // Add audience filter if enabled
     if (searchData.filtersEnabled && searchData.filterAudience.length > 0) {
-      searchQuery += ` AND a.target_group ILIKE ANY($${paramIndex})`;
+      searchQuery += ` AND a.target_group ILIKE ANY($${paramIndex}::text[])`;
       searchParams.push(searchData.filterAudience);
       paramIndex++;
     }

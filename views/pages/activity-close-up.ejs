@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <%- include('../partials/head.ejs') %>
+    <link rel="stylesheet" href="/css/activity-close-up.css">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+    <script src="https://unpkg.com/leaflet/dist/leaflet.js" defer></script>
+    <script src="/js/activity-close-up.js" defer></script>
+    <script src="/js/pinned.js" defer></script>
+
+</head>
+
+<body>
+    <div class="container">
+      <header>
+        <%- include('../partials/header.ejs', { user: user || null }) %>
+      </header>
+
+      <!-- Flash Message Container - Always Present to Prevent Page Shift -->
+      <div id="flashContainer">
+        <span id="flashMessage" class="<%= flash.success ? 'success' : (flash.error ? 'error' : '') %>">
+          <%= flash.success || flash.error || '' %>
+        </span>
+      </div>
+
+      <main>
+        <div class="single-activity-container">
+          <div class="heading-box">
+            <span class="icon" onclick="window.history.back()">⬅️</span>
+            <h1 class="title" id="activity-title"></h1>
+            <span class="icon">🖨️</span>
+          </div>
+            <div id="map-container">
+              <div id="activity-map"></div>
+            </div>
+            <p class="activity-description-box"><span id="activity-description"></span></p>
+            
+            <div class="details-container">
+              <p><strong>Provider:</strong> <span id="provider-name"></span></p>
+              <p><strong>Website:</strong> <a id="provider-website" href="#" target="_blank">Not given</a></p>
+              <p><strong>Day:</strong> <span id="day"></span></p>
+              <p><strong>Time:</strong> <span id="time"></span></p>
+              <p><strong>Target Audience:</strong> <span id="target-audience"></span></p>
+              <p><strong>Location:</strong> <span id="location"></span></p>
+              <p><strong>Contact:</strong> <a id="contact-email" href="mailto:">Not given</a></p>
+              <p><strong>Spaces Available:</strong> <span id="spaces"></span></p>
+              <p><strong>Cost:</strong> <span id="cost"></span></p>
+            </div>
+        </div>
+
+      </main>
+      
+      <footer>
+        <%- include('../partials/footer.ejs') %>
+      </footer>
+    </div>
+</body>
+
+</html>

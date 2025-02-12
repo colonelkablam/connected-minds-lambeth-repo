@@ -1,95 +1,121 @@
 document.addEventListener("DOMContentLoaded", () => {
-    fetchPinnedActivities();
-    console.log("DOM fully loaded, fetching pinned activities...")
-
+  console.log("DOM fully loaded, fetching pinned activities...");
+  refreshPinnedActivityCards(); // Initial fetch of pinned activities
+  updatePinnedCount();
 });
-  
-// Toggle between "Days" and "Pinned" tabs
+
+// **Tab Switching: Show Correct Content & Refresh Pins If Needed**
 function showTab(tab) {
-    document.getElementById("days-container").style.display = tab === "days" ? "block" : "none";
-    document.getElementById("pinned-container").style.display = tab === "pinned" ? "block" : "none";
-  
-    document.getElementById("days-tab").classList.toggle("active", tab === "days");
-    document.getElementById("pinned-tab").classList.toggle("active", tab === "pinned");
-  
-    if (tab === "pinned") {
-        fetchPinnedActivities(); // Fetch fresh pinned activities every time
-    }
+  document.getElementById("days-container").style.display = tab === "days" ? "block" : "none";
+  document.getElementById("pinned-container").style.display = tab === "pinned" ? "block" : "none";
+
+  document.getElementById("days-tab").classList.toggle("active", tab === "days");
+  document.getElementById("pinned-tab").classList.toggle("active", tab === "pinned");
+
+  if (tab === "pinned") {
+    refreshPinnedActivityCards(); // Refresh pinned list when switching to pinned tab
+  } else {
+    refreshSearchResultPins(); // Ensure "Days" tab reflects correct pin states
   }
-  
-// Toggle pin and store in localStorage persistently
+}
+
+// **Toggle Pinning for an Activity**
 function togglePin(button) {
   const activityId = button.getAttribute("data-id");
-  let pinned = JSON.parse(localStorage.getItem("pinnedActivities")) || [];
+  let pinned = JSON.parse(sessionStorage.getItem("pinnedActivities")) || [];
 
   if (pinned.includes(activityId)) {
-    // If already pinned, remove it
-    pinned = pinned.filter(id => id !== activityId);
-    button.classList.remove("pinned");
+      // Remove from pinned
+      pinned = pinned.filter(id => id !== activityId);
+      button.classList.remove("pinned");
   } else {
-    // If not pinned, add it
-    pinned.push(activityId);
-    button.classList.add("pinned");
+      // Add to pinned
+      pinned.push(activityId);
+      button.classList.add("pinned");
   }
 
-  // Update localStorage
-  localStorage.setItem("pinnedActivities", JSON.stringify(pinned));
+  // Save updated pinned list
+  sessionStorage.setItem("pinnedActivities", JSON.stringify(pinned));
 
-  // Fetch updated pinned activities
-  fetchPinnedActivities();
+  // Refresh pinned view immediately to reflect changes
+  //refreshSearchResultPins();   // Update pin status in "Days" view // no need for this?!
+  refreshPinnedActivityCards();  // Refresh the pinned tab (remove unpinned items)
+  updatePinnedCount();
 
-  refreshSearchResults();
 }
 
-function refreshSearchResults() {
+function clearPins() {
+  sessionStorage.setItem("pinnedActivities", JSON.stringify([]));
+  refreshPinnedActivityCards();
+  refreshSearchResultPins();
+  updatePinnedCount();
+}
+
+function updatePinnedCount() {
+  const pinned = JSON.parse(sessionStorage.getItem("pinnedActivities")) || [];
+  const countElement = document.getElementById("pinned-numbers");
+
+  if (countElement) {
+      countElement.textContent = pinned.length; // Update count
+
+      // Hide if no pinned activities
+      countElement.style.display = pinned.length === 0 ? "none" : "flex";
+  }
+}
+
+// **Refresh Search Results UI (Updates Pins in "Days" View)**
+function refreshSearchResultPins() {
   const searchResultsContainer = document.getElementById("search-results");
-  if (!searchResultsContainer) return;
+  if (!searchResultsContainer) {
+    console.log("No search results container found.");
+    return;
+  }
 
-  // Get all activity cards in search results
-  const activityCards = searchResultsContainer.querySelectorAll(".activity-card");
+  const pinned = JSON.parse(sessionStorage.getItem("pinnedActivities")) || [];
 
-  activityCards.forEach((card) => {
-    const activityId = card.getAttribute("data-id");
-    const pinButton = card.querySelector(".pin-btn");
-    const pinned = JSON.parse(localStorage.getItem("pinnedActivities")) || [];
+  // Update pin button states in the "Days" view
+  document.querySelectorAll(".activity-card").forEach((card) => {
+      const activityId = card.getAttribute("data-id");
+      const pinButton = card.querySelector(".pin-btn");
 
-    // update pin button status
-    if (pinned.includes(activityId)) {
-      pinButton.classList.add("pinned");
-    } else {
-      pinButton.classList.remove("pinned");
-    }
+      if (pinButton) {
+          pinButton.classList.toggle("pinned", pinned.includes(activityId));
+      }
   });
 }
-  
-//  Fetch pinned activities from database with error handling
-function fetchPinnedActivities() {
 
+// **Fetch and Display Pinned Activities**
+function refreshPinnedActivityCards() {
   const pinnedContainer = document.getElementById("pinned-activities");
 
   if (!pinnedContainer) {
-    console.warn("'pinned-activities' container not found in the DOM.");
-    return; // Exit function to prevent errors
+      console.warn("'pinned-activities' container not found in the DOM.");
+      return;
   }
 
-    const pinned = JSON.parse(localStorage.getItem("pinnedActivities")) || [];
-    pinnedContainer.innerHTML = "";
-  
-    if (pinned.length === 0) {
+  const scrollY = window.scrollY;
+
+  const pinned = JSON.parse(sessionStorage.getItem("pinnedActivities")) || [];
+  pinnedContainer.innerHTML = "";
+
+  if (pinned.length === 0) {
       pinnedContainer.innerHTML = "<p>No pinned activities.</p>";
       return;
-    }
-  
-    fetch(`${window.location.origin}/get-pinned-activities?ids=${pinned.join(",")}`)
+  }
+
+  // Fetch pinned activities from the backend
+  fetch(`${window.location.origin}/get-pinned-activities?ids=${pinned.join(",")}`)
       .then(response => response.json())
       .then(data => {
-        data.forEach((activity) => {
-          const activityElement = createActivityCard(activity, true);
-          pinnedContainer.appendChild(activityElement);
-        });
+          pinnedContainer.innerHTML = ""; // Clear before appending
+
+          data.forEach((activity) => {
+              const activityElement = createActivityCard(activity);
+              pinnedContainer.appendChild(activityElement);
+          });
+          
+          setTimeout(() => window.scrollTo(0, scrollY), 0); // Restore scroll position after DOM update
+
       })
       .catch(error => console.error("Error fetching pinned activities:", error));
 }
-  
-  
-  

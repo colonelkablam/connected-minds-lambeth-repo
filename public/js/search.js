@@ -1,7 +1,22 @@
 document.addEventListener("DOMContentLoaded", () => {
   attachSearchHandler(); // Attach event listener when the page loads
-  console.log("DOM fully loaded, attaching search handler...")
+  setupFilterToggle(); // Handle filters visibility
 });
+
+// **Handles the visibility of the filters panel**
+function setupFilterToggle() {
+  const filtersCheckbox = document.getElementById("filtersEnabled");
+  const filtersPanel = document.getElementById("filters-panel");
+
+  if (!filtersCheckbox || !filtersPanel) return;
+
+  const toggleFiltersPanel = () => {
+      filtersPanel.classList.toggle("hidden", !filtersCheckbox.checked);
+  };
+
+  filtersCheckbox.addEventListener("change", toggleFiltersPanel);
+  toggleFiltersPanel(); // Set initial state
+}
 
 function attachSearchHandler() {
   const searchForm = document.getElementById("search-form");
@@ -30,7 +45,7 @@ function attachSearchHandler() {
             searchResultsContainer.innerHTML = "<p>No activities found.</p>";
           } else {
             data.found_activities.forEach((activity) => {
-              const activityElement = createActivityCard(activity, false);
+              const activityElement = createActivityCard(activity);
               searchResultsContainer.appendChild(activityElement);
             });
           }

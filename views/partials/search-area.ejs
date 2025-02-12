@@ -30,7 +30,7 @@
       </div>
 
       <!-- Hideable search filters panel -->
-      <div id="filters-panel" class="filters-panel <%= searchData.filtersEnabled ? '' : 'hidden' %>">
+      <div id="filters-panel" class="filters-panel hidden">
 
         <!-- Day of the Week -->
         <div class="filter-section">
@@ -84,7 +84,7 @@
         </div>
 
         <!-- Distance Slider -->
-        <div class="filter-section">
+        <!-- <div class="filter-section">
           <h4>Distance</h4>
           <div class="slider-container">
             <input
@@ -98,7 +98,7 @@
             />
             <label for="distance-slider"><%= searchData.distance %> miles</label>
           </div>
-        </div>
+        </div> -->
       </div>
     </div>
   </form>

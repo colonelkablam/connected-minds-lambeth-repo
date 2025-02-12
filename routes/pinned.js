@@ -26,6 +26,8 @@ router.get('/get-pinned-activities', async (req, res) => {
       a.title,
       a.description, 
       a.day,
+      a.start_time,
+      a.stop_time,
       a.address_id,
       addr.street_1,
       addr.street_2,
@@ -35,7 +37,8 @@ router.get('/get-pinned-activities', async (req, res) => {
       a.spaces_remaining, 
       a.cost, 
       a.contact_email,
-      a.target_group
+      a.target_group,
+      a.age_range
       FROM activities_simple a
       LEFT JOIN addresses addr ON a.address_id = addr.id
       WHERE a.id = ANY($1)`;

@@ -15,6 +15,7 @@ import loginRoutes from './routes/login.js';
 import manageActivity from './routes/manage-activities.js';
 import searchRoutes from './routes/search.js';
 import pinnedRoutes from './routes/pinned.js';
+import singleActivityRoutes from './routes/activity.js';
 import { setFlashMessage } from './middlewares/flash-messages.js';
 import { authenticateUser } from './middlewares/auth-JWT.js';
 
@@ -29,7 +30,7 @@ const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
 // global variables
 const defaultSearchData = {
-  searchText: "",
+  searchText: [],
   filtersEnabled: false, 
   filterDays: [], 
   filterAudience: [],
@@ -60,6 +61,8 @@ app.use("/user-login", loginRoutes);
 app.use("/manage-activity", manageActivity);
 app.use("/", searchRoutes);
 app.use("/", pinnedRoutes);
+app.use("/", singleActivityRoutes);
+
 
 // landing page route
 app.get('/', (req, res) => {
@@ -73,7 +76,10 @@ app.get('/', (req, res) => {
   });
 });
 
-
+// Serve the activity details page
+app.get("/activity", async (req, res) => {
+  res.render('pages/activity-close-up.ejs'); // Render activity.ejs
+});
 
 // STARTING SERVER 
 const server = app.listen(port, () => {
