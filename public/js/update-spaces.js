@@ -14,8 +14,11 @@ function updateSpaces(activityId, action) {
       if (data.success) {
         // Update the UI with the new number of available spaces
         const spacesElement = document.getElementById(`spaces-${activityId}`);
-        spacesElement.textContent = `${data.spaces_remaining} / ${data.total_spaces}`;
+        spacesElement.textContent = data.spaces_remaining === 0 ? `${data.spaces_remaining} / ${data.total_spaces}` + " FULL" : `${data.spaces_remaining} / ${data.total_spaces}`;
         spacesElement.className = data.availability_class;
+
+        refreshPinnedActivityCards();
+
       } else {
         alert("Error: " + data.message);
       }

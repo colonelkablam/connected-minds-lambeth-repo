@@ -24,7 +24,7 @@ body {
 header {
   background: #0079FF;
   color: #fff;
-  padding: 2rem 2rem; /* Adjust padding to avoid nested .container conflicts */
+  padding: 1rem 2rem; /* Adjust padding to avoid nested .container conflicts */
   margin: 0 ;
   justify-content: space-between;
   align-items: center;
@@ -66,6 +66,9 @@ header .branding h1 {
   padding: 10px;
   background: #00DFA2;
   border-radius: 2px;
+  min-width: 80px;
+  text-align: center;
+
 }
 
 .user-log-in a {
@@ -86,6 +89,24 @@ header .branding h1 {
   text-decoration: none;
   color: #00DFA2;
   transition: color 0.3s;
+  justify-items: center;
+}
+
+@media screen and (max-width: 650px) {
+
+  header {
+    padding: 0.5rem;
+  }
+  .top-header-container {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .user-log-in-container {
+    order: -1; /* Moves it to the top */
+    justify-content: space-between;
+    width: 100%;
+  }
 }
 
 

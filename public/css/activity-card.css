@@ -22,32 +22,32 @@
 
 .tab-btn.clear-pins {
   margin-left: auto;
-  background: #ff000071;
+  background: #ff0000b7;
   transition: background 0.2s ease-in-out;
   color: white;
   font-weight: bold;
 }
 
 #pinned-numbers {
-  background: red; /* Red background */
-  color: white; /* White text */
+  background: rgb(255, 71, 71);
+  color: white;
   font-size: 12px;
   font-weight: bold;
-  width: 18px;
+  width: 20px;
   height: 18px;
-  border-radius: 50%; /* Makes it a circle */
-  display: flex; /* Ensures proper alignment */
+  border-radius: 50%;
+  display: flex;
   align-items: center;
   justify-content: center;
   position: absolute;
-  top: -5px; /* Adjust vertically */
-  right: -5px; /* Adjust horizontally */
-  box-shadow: 0 0 5px rgba(0, 0, 0, 0.2); /* Optional: Adds subtle shadow */
+  top: -7px;
+  right: -7px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0);
 }
 
 .tab-btn.clear-pins:hover {
   margin-left: auto;
-  background: #ff0000be;
+  background: #ff000065;
 }
 
 .activity-list {
@@ -122,10 +122,16 @@
   opacity: 100%;
 }
 
+.activity-card .edit-buttons-box {
+  display: flex;
+  justify-content: space-between;
+  padding-top: 0.5rem;
+}
+
 /* General Button Styles */
 .activity-card .btn {
-  padding: 4px 4px;
-  font-size: 12px;
+  padding: 6px 6px;
+  font-size: 14px;
   font-weight: 400;
   border: none;
   border-radius: 6px;
@@ -136,9 +142,10 @@
 /* Enroll Button */
 
 .activity-card .btn.enroll-btn {
-  background-color: #28a745; /* Green */
+  background-color: #28a745;
   color: white;
-  margin-left: 0.5rem;
+  margin-left: 1.5rem;
+  margin-right: 0.5rem;
 }
 
 .activity-card .btn.enroll-btn:hover {
@@ -146,15 +153,26 @@
   transform: scale(1.05);
 }
 
-/* Disenroll Button */
+/* Unenroll Button */
 .activity-card .btn.unenroll-btn {
-  background-color: #dc3545; /* Red */
+  background-color: #dc3545;
   color: white;
-
 }
 
 .activity-card .btn.unenroll-btn:hover {
   background-color: #c82333;
+  transform: scale(1.05);
+}
+
+/* Edit Details Button */
+.activity-card .btn.edit-btn {
+  background-color: #007bff;
+  margin-right: 1rem;
+  color: white;
+}
+
+.activity-card .btn.edit-btn:hover {
+  background-color: #4aa1ff;
   transform: scale(1.05);
 }
 

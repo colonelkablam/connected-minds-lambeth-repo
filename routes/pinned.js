@@ -38,7 +38,8 @@ router.get('/get-pinned-activities', async (req, res) => {
       a.cost, 
       a.contact_email,
       a.target_group,
-      a.age_range
+      a.age_lower,
+      a.age_upper
       FROM activities_simple a
       LEFT JOIN addresses addr ON a.address_id = addr.id
       WHERE a.id = ANY($1)`;

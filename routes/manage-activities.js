@@ -28,7 +28,6 @@ router.post('/add', isAuthenticated, authoriseRoles('admin', 'supa_admin'), asyn
         const formattedStartTime = start_time ? `${start_time}:00` : null;
         const formattedStopTime = stop_time ? `${stop_time}:00` : null;
         
-
         // record who added 
         const added_by_id = req.user.id;
 
@@ -55,9 +54,9 @@ router.post('/add', isAuthenticated, authoriseRoles('admin', 'supa_admin'), asyn
         await pool.query(activityQuery, activityValues);
 
         res.redirect('/'); // Redirect to home page or activities list after submission
-    } catch (err) {
-        console.error(err);
-        res.status(500).send('Server Error');
+    } catch (error) {
+        console.error("Error adding activity:", error);
+        res.status(500).json({ success: false, message: "Internal server error" });
     }
 });
 

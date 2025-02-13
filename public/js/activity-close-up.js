@@ -14,12 +14,20 @@ document.addEventListener("DOMContentLoaded", () => {
         return JSON.parse(text); // Convert to JSON
       })
       .then(activity => {
-        //console.log("Parsed JSON:", activity); // Debug successful parsing
-  
         document.getElementById("activity-title").innerText = activity.title;
         document.getElementById("activity-description").innerText = activity.description;
-
         document.getElementById("provider-name").innerText = activity.provider_name;
+
+        let availabilityClass = "text-green";
+        let percentage = activity.total_spaces > 0 ? (activity.spaces_remaining / activity.total_spaces) * 100 : 0;
+      
+        if (activity.spaces_remaining === 0) {
+          availabilityClass = "text-red";
+        } else if (percentage <= 33) {
+          availabilityClass = "text-red";
+        } else if (percentage <= 66) {
+          availabilityClass = "text-amber";
+        }
         
         const websiteLink = document.getElementById("provider-website");
         if (activity.website) {
@@ -36,7 +44,7 @@ document.addEventListener("DOMContentLoaded", () => {
           : "Not given";
 
         document.getElementById("target-audience").innerText = activity.target_group 
-          ? `${activity.target_group}: ${activity.age_lower ? `${activity.age_lower} to ${activity.age_upper}` : 'Age range TBC'}` 
+          ? `${activity.target_group}: ${activity.age_lower ? `ages ${activity.age_lower} to ${activity.age_upper}` : 'Age range TBC'}` 
           : "Not given";
 
         document.getElementById("location").innerText = activity.postcode 
@@ -51,9 +59,14 @@ document.addEventListener("DOMContentLoaded", () => {
           contactEmail.innerText = "Not given";
         }
 
-        document.getElementById("spaces").innerText = activity.spaces_remaining === 0 
-          ? "FULL" 
+        const spaces = document.getElementById("spaces");
+
+        spaces.innerText = activity.spaces_remaining === 0 
+          ? `${activity.spaces_remaining} / ${activity.total_spaces}` + " FULL" 
           : `${activity.spaces_remaining} / ${activity.total_spaces}`;
+
+        spaces.className = ""; // Reset classes (optional if no other classes exist)
+        spaces.classList.add(availabilityClass)
 
         document.getElementById("cost").innerText = activity.cost == 0 
           ? "FREE" 
