@@ -3,6 +3,9 @@ function createActivityCard(activity) {
   li.classList.add("activity-card");
   li.setAttribute("data-id", activity.id);
 
+  li.setAttribute("data-id", activity.id);
+  li.setAttribute("data-spaces", activity.spaces_remaining);
+
   // Check if the activity is pinned (from localStorage)
   const pinnedActivities = JSON.parse(sessionStorage.getItem("pinnedActivities")) || [];
   const isPinned = pinnedActivities.includes(activity.id.toString());
@@ -37,12 +40,16 @@ function createActivityCard(activity) {
         ${activity.address_id ? `${activity.street_1}${activity.street_2 ? ", " + activity.street_2 : ''}, ${activity.city}, ${activity.postcode}` : "Not given"}
       </p>
       <p><strong>Contact:</strong> ${activity.contact_email ? `${activity.contact_email}` : 'Not given'} </p>
+      <p><strong>Cost:</strong> ${activity.cost == 0 ? "FREE" : "£" + Number(activity.cost).toFixed(2)}</p>
       <p><strong>Spaces Available:</strong> 
-        <span class="${availabilityClass}">
+        <span class="${availabilityClass}" id="spaces-${activity.id}">
           ${activity.spaces_remaining === 0 ? "FULL" : activity.spaces_remaining + " / " + activity.total_spaces}
         </span>
+        ${userRole === "supa_admin" || userRole === "admin" ? `
+          <button class="btn enroll-btn" data-id="${activity.id}" onclick="updateSpaces(${activity.id}, 'increase')">Enroll</button>
+          <button class="btn unenroll-btn" data-id="${activity.id}" onclick="updateSpaces(${activity.id}, 'decrease')">Unenroll</button>
+        ` : ""}
       </p>
-      <p><strong>Cost:</strong> ${activity.cost == 0 ? "FREE" : "£" + Number(activity.cost).toFixed(2)}</p>
     </div>
 
   `;

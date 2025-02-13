@@ -13,7 +13,7 @@ router.get('/add', isAuthenticated, (req, res) => {
 router.post('/add', isAuthenticated, authoriseRoles('admin', 'supa_admin'), async (req, res) => {
     try {
         const {
-            title, provider_name, description, day, total_spaces, spaces_remaining,
+            title, provider_name, description, day, start_time, stop_time, total_spaces, spaces_remaining,
             cost, contact_email, target_group, age_range, website, street_1, street_2, city, postcode
         } = req.body;
 
@@ -25,6 +25,8 @@ router.post('/add', isAuthenticated, authoriseRoles('admin', 'supa_admin'), asyn
         const formattedStreet1 = street_1.trim() === "" ? null : street_1;
         const formattedStreet2 = street_2.trim() === "" ? null : street_2;
         const formattedCity = city.trim() === "" ? null : city;
+        const formattedStartTime = start_time ? `${start_time}:00` : null;
+        const formattedStopTime = stop_time ? `${stop_time}:00` : null;
 
         // record who added 
         const added_by_id = req.user.id;
@@ -41,12 +43,12 @@ router.post('/add', isAuthenticated, authoriseRoles('admin', 'supa_admin'), asyn
         // Insert into activities table
         const activityQuery = `
             INSERT INTO activities_simple 
-            (title, provider_name, description, day, total_spaces, spaces_remaining, cost, 
+            (title, provider_name, description, day, start_time, stop_time, total_spaces, spaces_remaining, cost, 
             contact_email, target_group, age_range, website, address_id, added_by_id) 
-            VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13)
+            VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15)
         `;
         const activityValues = [
-            title, provider_name, description, day, total_spaces, spaces_remaining, cost,
+            title, provider_name, description, day, formattedStartTime, formattedStopTime, total_spaces, spaces_remaining, cost,
             formattedEmail, target_group, age_range, formattedWebsite, address_id, added_by_id
         ];
         await pool.query(activityQuery, activityValues);

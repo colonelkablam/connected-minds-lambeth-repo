@@ -29,6 +29,17 @@
         <option value="Saturday">Saturday</option>
         <option value="Sunday">Sunday</option>
       </select>
+
+      <label for="times">Time:</label>
+      <div class="time-container">
+        <select name="start_time" id="start_time" required>
+          <option value="">Start</option>
+        </select>
+        <span> to </span>
+        <select name="stop_time" id="stop_time" required>
+          <option value="">Finish</option>
+        </select>
+      </div>
   
       <!-- Dropdown for Target Group -->
       <label for="target_group">Target Group:</label>
@@ -45,11 +56,11 @@
       <label for="age_range">Age Range:</label>
       <div class="age-range-container">
         <select name="age_start" id="age_start" required>
-          <option value="">Start</option>
+          <option value="">From</option>
         </select>
         <span> to </span>
         <select name="age_end" id="age_end" required>
-          <option value="">End</option>
+          <option value="">To</option>
         </select>
       </div>
 
@@ -82,7 +93,7 @@
       <input class="smaller" type="text" name="city" required>
   
       <label for="postcode">Postcode:</label>
-      <input class="even-smaller" type="text" name="postcode" id="postcode">
+      <input class="even-smaller" type="text" name="postcode" id="postcode" required>
   
       <button type="submit">Add Activity</button>
     </form>
@@ -98,6 +109,8 @@
     const ageRangeInput = document.getElementById("age_range");
     const costInput = document.getElementById("cost");
     const postcodeInput = document.getElementById("postcode");
+    const startTimeDropdown = document.getElementById("start_time");
+    const stopTimeDropdown = document.getElementById("stop_time");
     const form = document.getElementById("activity-form");
   
     /** Populate total spaces dropdown (1 to 100) */
@@ -125,6 +138,39 @@
       }
     }
     populateAgeDropdowns();
+
+    /** Generate times from 06:00 to 22:00 in 15-minute intervals */
+    function generateTimeOptions() {
+      const times = [];
+      for (let hour = 6; hour <= 22; hour++) {
+        for (let minutes of ["00", "05", "10", "15", "20", "25", "30", "35", "45", "50", "55"]) {
+          if (hour === 22 && minutes !== "00") break; // Ensure last time is 22:00
+          times.push(`${hour.toString().padStart(2, "0")}:${minutes}`);
+        }
+      }
+      return times;
+    }
+
+    /** Populate start time dropdown */
+    const timeOptions = generateTimeOptions();
+    timeOptions.forEach(time => {
+      startTimeDropdown.appendChild(new Option(time, time));
+    });
+
+    /** Update stop time options based on selected start time */
+    startTimeDropdown.addEventListener("change", function () {
+      stopTimeDropdown.innerHTML = '<option value="">Finish</option>'; // Reset stop time options
+      const selectedStartTime = startTimeDropdown.value;
+
+      if (!selectedStartTime) return;
+
+      // Only add times that are later than the selected start time
+      timeOptions.forEach(time => {
+        if (time > selectedStartTime) {
+          stopTimeDropdown.appendChild(new Option(time, time));
+        }
+      });
+    });
   
     /** Dynamically update end age options based on start age selection */
     ageStartDropdown.addEventListener("change", function () {
@@ -165,6 +211,18 @@
       this.value = formatted;
       validatePostcode(formatted);
     });
+
+    /** Ensure start time is not greater than stop time */
+    function validateTimeRange() {
+      const startTime = startTimeDropdown.value;
+      const stopTime = stopTimeDropdown.value;
+
+      if (startTime && stopTime && stopTime <= startTime) {
+        alert("Finish time must be later than start time.");
+        return false;
+      }
+      return true;
+    }
   
     /** ✅ Check postcode validity using Postcodes.io API */
     async function validatePostcode(postcode) {
@@ -199,6 +257,8 @@
       const postcodeValue = postcodeInput.value.trim();
       const costRegex = /^\d+(\.\d{1,2})?$/;
     
+      if (!validateTimeRange()) return;
+
       if (!validateAgeRange()) return;
       
       if (spacesRemaining > totalSpaces) {
