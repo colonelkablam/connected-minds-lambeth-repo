@@ -2,8 +2,6 @@ function createActivityCard(activity) {
   const li = document.createElement("li");
   li.classList.add("activity-card");
   li.setAttribute("data-id", activity.id);
-
-  li.setAttribute("data-id", activity.id);
   li.setAttribute("data-spaces", activity.spaces_remaining);
 
   // Check if the activity is pinned (from localStorage)
@@ -46,8 +44,8 @@ function createActivityCard(activity) {
           ${activity.spaces_remaining === 0 ? "FULL" : activity.spaces_remaining + " / " + activity.total_spaces}
         </span>
         ${userRole === "supa_admin" || userRole === "admin" ? `
-          <button class="btn enroll-btn" data-id="${activity.id}" onclick="updateSpaces(${activity.id}, 'increase')">Enroll</button>
-          <button class="btn unenroll-btn" data-id="${activity.id}" onclick="updateSpaces(${activity.id}, 'decrease')">Unenroll</button>
+          <button type="button" class="btn enroll-btn" data-id="${activity.id}" onclick="updateSpaces(${activity.id}, 'increase')">Enroll</button>
+          <button type="button" class="btn unenroll-btn" data-id="${activity.id}" onclick="updateSpaces(${activity.id}, 'decrease')">Disenroll</button>
         ` : ""}
       </p>
     </div>

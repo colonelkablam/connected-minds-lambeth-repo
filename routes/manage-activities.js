@@ -60,4 +60,54 @@ router.post('/add', isAuthenticated, authoriseRoles('admin', 'supa_admin'), asyn
     }
 });
 
+router.patch('/change-enrollment', isAuthenticated, authoriseRoles('admin', 'supa_admin'),  async (req, res) => {
+    const { activity_id, action } = req.body;
+  
+    try {
+      // Get current activity details
+      const activity = await pool.query("SELECT spaces_remaining, total_spaces FROM activities_simple WHERE id = $1", [activity_id]);
+  
+      if (!activity.rows.length) {
+        return res.status(404).json({ success: false, message: "Activity not found" });
+      }
+  
+      let spaces_remaining = activity.rows[0].spaces_remaining;
+  
+      // Handle enrollment logic
+      if (action === "increase" && spaces_remaining < activity.rows[0].total_spaces) {
+        spaces_remaining++;
+      } else if (action === "decrease" && spaces_remaining > 0) {
+        spaces_remaining--;
+      } else {
+        return res.json({ success: false, message: "Invalid operation" });
+      }
+  
+      // Update the database
+      await pool.query("UPDATE activities_simple SET spaces_remaining = $1 WHERE id = $2", [spaces_remaining, activity_id]);
+  
+      // Determine the new availability class
+      let availabilityClass = "text-green";
+      let percentage = (spaces_remaining / activity.rows[0].total_spaces) * 100;
+      if (spaces_remaining === 0) {
+        availabilityClass = "text-red";
+      } else if (percentage <= 33) {
+        availabilityClass = "text-red";
+      } else if (percentage <= 66) {
+        availabilityClass = "text-amber";
+      }
+  
+      // Respond to the frontend
+      res.json({ 
+        success: true, 
+        spaces_remaining, 
+        total_spaces: activity.rows[0].total_spaces, 
+        availability_class: availabilityClass 
+      });
+  
+    } catch (error) {
+      console.error("Error updating activity spaces:", error);
+      res.status(500).json({ success: false, message: "Internal server error" });
+    }
+  });
+
 export default router;

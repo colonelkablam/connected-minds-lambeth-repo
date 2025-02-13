@@ -125,6 +125,43 @@
   opacity: 100%;
 }
 
+
+/* General Button Styles */
+.activity-card .btn {
+  padding: 4px 4px;
+  font-size: 12px;
+  font-weight: 400;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.2s ease-in-out;
+}
+
+/* Enroll Button */
+
+.activity-card .btn.enroll-btn {
+  background-color: #28a745; /* Green */
+  color: white;
+  margin-left: 0.5rem;
+}
+
+.activity-card .btn.enroll-btn:hover {
+  background-color: #218838;
+  transform: scale(1.05);
+}
+
+/* Disenroll Button */
+.activity-card .btn.unenroll-btn {
+  background-color: #dc3545; /* Red */
+  color: white;
+
+}
+
+.activity-card .btn.unenroll-btn:hover {
+  background-color: #c82333;
+  transform: scale(1.05);
+}
+
 .text-green { color: green; font-weight: bold; }
 .text-amber { color: orange; font-weight: bold; }
 .text-red { color: red; font-weight: bold; }

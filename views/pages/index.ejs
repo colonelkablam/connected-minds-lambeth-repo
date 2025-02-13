@@ -7,6 +7,8 @@
     <script src="/js/pinned.js" defer></script>
     <script src="/js/search.js" defer></script>
     <script src="/js/activity-card.js" defer></script>
+    <script src="/js/update-spaces.js" defer></script>
+
 </head>
 
 <body>
@@ -31,6 +33,9 @@
         <%- include('../partials/footer.ejs') %>
       </footer>
     </div>
+    <script>
+      const userRole = "<%= user ? user.role : 'guest' %>"; 
+    </script>
 </body>
 
 </html>
