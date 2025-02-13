@@ -14,7 +14,7 @@ router.post('/add', isAuthenticated, authoriseRoles('admin', 'supa_admin'), asyn
     try {
         const {
             title, provider_name, description, day, start_time, stop_time, total_spaces, spaces_remaining,
-            cost, contact_email, target_group, age_range, website, street_1, street_2, city, postcode
+            cost, contact_email, target_group, age_lower, age_upper, website, street_1, street_2, city, postcode
         } = req.body;
 
         console.log(req.body);
@@ -27,6 +27,7 @@ router.post('/add', isAuthenticated, authoriseRoles('admin', 'supa_admin'), asyn
         const formattedCity = city.trim() === "" ? null : city;
         const formattedStartTime = start_time ? `${start_time}:00` : null;
         const formattedStopTime = stop_time ? `${stop_time}:00` : null;
+        
 
         // record who added 
         const added_by_id = req.user.id;
@@ -44,12 +45,12 @@ router.post('/add', isAuthenticated, authoriseRoles('admin', 'supa_admin'), asyn
         const activityQuery = `
             INSERT INTO activities_simple 
             (title, provider_name, description, day, start_time, stop_time, total_spaces, spaces_remaining, cost, 
-            contact_email, target_group, age_range, website, address_id, added_by_id) 
-            VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15)
+            contact_email, target_group, age_lower, age_upper, website, address_id, added_by_id) 
+            VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15. $16)
         `;
         const activityValues = [
             title, provider_name, description, day, formattedStartTime, formattedStopTime, total_spaces, spaces_remaining, cost,
-            formattedEmail, target_group, age_range, formattedWebsite, address_id, added_by_id
+            formattedEmail, target_group, age_lower, age_upper, formattedWebsite, address_id, added_by_id
         ];
         await pool.query(activityQuery, activityValues);
 

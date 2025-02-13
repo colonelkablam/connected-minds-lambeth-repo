@@ -36,7 +36,7 @@ document.addEventListener("DOMContentLoaded", () => {
           : "Not given";
 
         document.getElementById("target-audience").innerText = activity.target_group 
-          ? `${activity.target_group} ${activity.age_range ? `(${activity.age_range})` : ''}` 
+          ? `${activity.target_group}: ${activity.age_lower ? `${activity.age_lower} to ${activity.age_upper}` : 'Age range TBC'}` 
           : "Not given";
 
         document.getElementById("location").innerText = activity.postcode 

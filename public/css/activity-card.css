@@ -45,8 +45,6 @@
   box-shadow: 0 0 5px rgba(0, 0, 0, 0.2); /* Optional: Adds subtle shadow */
 }
 
-
-
 .tab-btn.clear-pins:hover {
   margin-left: auto;
   background: #ff0000be;
@@ -110,7 +108,6 @@
   font-size: x-large;
   cursor: pointer;
   transition: transform 0.2s ease-in-out;
-
 }
 
 .activity-header-box .icon:hover {
@@ -124,7 +121,6 @@
 .activity-header-box .pin-btn.pinned {
   opacity: 100%;
 }
-
 
 /* General Button Styles */
 .activity-card .btn {

@@ -58,7 +58,7 @@ app.use(authenticateUser);                                // Apply JWT Authentic
 
 // Use Routes
 app.use("/user-login", loginRoutes);
-app.use("/manage-activity", manageActivity);
+app.use("/manage-activity", manageActivity); // add activity(push) and change-enrollment(patch) and render page to add activity
 app.use("/", searchRoutes);
 app.use("/", pinnedRoutes);
 app.use("/", singleActivityRoutes);

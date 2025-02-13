@@ -33,7 +33,7 @@ function createActivityCard(activity) {
       <p><strong>Website:</strong> ${activity.website ? `${activity.website}` : 'Not given'} </p>
       <p><strong>Day:</strong> ${activity.day}</p>
       <p><strong>Time:</strong> ${activity.start_time ? `${activity.start_time.slice(0, 5)} to ${activity.stop_time.slice(0, 5)}` : 'Not given'}</p>
-      <p><strong>Target Audience:</strong> ${activity.target_group}: ${activity.age_range ? `${activity.age_range}` : ''}</p>
+      <p><strong>Target Audience:</strong> ${activity.target_group}: ${activity.age_lower ? `${activity.age_lower} to ${activity.age_upper}` : 'age range TBC'}</p>
       <p><strong>Location:</strong> 
         ${activity.address_id ? `${activity.street_1}${activity.street_2 ? ", " + activity.street_2 : ''}, ${activity.city}, ${activity.postcode}` : "Not given"}
       </p>
@@ -45,7 +45,7 @@ function createActivityCard(activity) {
         </span>
         ${userRole === "supa_admin" || userRole === "admin" ? `
           <button type="button" class="btn enroll-btn" data-id="${activity.id}" onclick="updateSpaces(${activity.id}, 'increase')">Enroll</button>
-          <button type="button" class="btn unenroll-btn" data-id="${activity.id}" onclick="updateSpaces(${activity.id}, 'decrease')">Disenroll</button>
+          <button type="button" class="btn unenroll-btn" data-id="${activity.id}" onclick="updateSpaces(${activity.id}, 'decrease')">Unenroll</button>
         ` : ""}
       </p>
     </div>

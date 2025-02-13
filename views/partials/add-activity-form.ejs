@@ -32,11 +32,11 @@
 
       <label for="times">Time:</label>
       <div class="time-container">
-        <select name="start_time" id="start_time" required>
+        <select name="start_time" id="start_time">
           <option value="">Start</option>
         </select>
         <span> to </span>
-        <select name="stop_time" id="stop_time" required>
+        <select name="stop_time" id="stop_time">
           <option value="">Finish</option>
         </select>
       </div>
@@ -53,20 +53,18 @@
         <option value="Other">Other</option>
       </select>
   
+      <!-- Dropdowns for Age Range -->
       <label for="age_range">Age Range:</label>
       <div class="age-range-container">
-        <select name="age_start" id="age_start" required>
-          <option value="">From</option>
+        <select name="age_lower" id="age_lower">
+          <option value="">Lower</option>
         </select>
         <span> to </span>
-        <select name="age_end" id="age_end" required>
-          <option value="">To</option>
+        <select name="age_upper" id="age_upper">
+          <option value="">Upper</option>
         </select>
       </div>
 
-      <!-- Hidden input to store final joined age range -->
-      <input type="hidden" name="age_range" id="age_range">
-  
       <!-- Dropdown for Total Spaces -->
       <label for="total_spaces">Total Spaces:</label>
       <select name="total_spaces" id="total_spaces" required>
@@ -104,9 +102,8 @@
   document.addEventListener("DOMContentLoaded", function () {
     const totalSpacesDropdown = document.getElementById("total_spaces");
     const spacesRemainingDropdown = document.getElementById("spaces_remaining");
-    const ageStartDropdown = document.getElementById("age_start");
-    const ageEndDropdown = document.getElementById("age_end");
-    const ageRangeInput = document.getElementById("age_range");
+    const ageStartDropdown = document.getElementById("age_lower");
+    const ageEndDropdown = document.getElementById("age_upper");
     const costInput = document.getElementById("cost");
     const postcodeInput = document.getElementById("postcode");
     const startTimeDropdown = document.getElementById("start_time");
@@ -128,17 +125,15 @@
         }
       }
     }
+
     totalSpacesDropdown.addEventListener("change", updateSpacesRemaining);
   
     /** Populate age dropdowns (0 to 30) */
-    function populateAgeDropdowns() {
-      for (let i = 0; i <= 30; i++) {
-        ageStartDropdown.appendChild(new Option(i, i));
-        ageEndDropdown.appendChild(new Option(i, i));
-      }
+    for (let i = 0; i <= 30; i++) {
+      ageStartDropdown.appendChild(new Option(i, i));
+      ageEndDropdown.appendChild(new Option(i, i));
     }
-    populateAgeDropdowns();
-
+  
     /** Generate times from 06:00 to 22:00 in 15-minute intervals */
     function generateTimeOptions() {
       const times = [];
@@ -153,6 +148,7 @@
 
     /** Populate start time dropdown */
     const timeOptions = generateTimeOptions();
+
     timeOptions.forEach(time => {
       startTimeDropdown.appendChild(new Option(time, time));
     });
@@ -224,7 +220,7 @@
       return true;
     }
   
-    /** ✅ Check postcode validity using Postcodes.io API */
+    /** Check postcode validity using Postcodes.io API */
     async function validatePostcode(postcode) {
       const cleanPostcode = postcode.replace(/\s+/g, "").toUpperCase(); // Remove spaces for API request
       if (cleanPostcode.length < 5) {
@@ -247,7 +243,7 @@
       }
     }
   
-    /** ✅ Form Submission: Validate before submitting */
+    /** Form Submission: Validate before submitting */
     form.addEventListener("submit", async function (event) {
       event.preventDefault(); // Stop form submission until validation is complete
     
@@ -281,11 +277,8 @@
         alert("Invalid UK postcode. Please check and try again.");
         return;
       }
-    
-      // Save formatted age range
-      ageRangeInput.value = `${ageStartDropdown.value}-${ageEndDropdown.value}`;
-    
-      // ✅ If everything is valid, submit the form
+        
+      // If everything is valid, submit the form
       form.submit();
     });
   });

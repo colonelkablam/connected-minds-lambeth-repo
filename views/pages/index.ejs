@@ -26,7 +26,7 @@
 
       <main>
         <%- include('../partials/search-area.ejs', { searchData }) %>
-        <%- include('../partials/found-activities.ejs', { searchData }) %>
+        <%- include('../partials/found-activities.ejs', { searchData, user: user || null }) %>
       </main>
       
       <footer>
