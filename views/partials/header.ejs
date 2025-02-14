@@ -8,10 +8,10 @@
   <!-- Login Button -->
   <div class="user-log-in-container">
   <% if (user) { %>
-    <p class="user-welcome">logged in as : <span class="user-name"><%= user.username %> - <%= user.role%></span></p>
-  
+    <p class="user-welcome">logged in as : <span class="user-name"><%= user.username %> - <%= user.role %></span></p>
     <a href="#" id="logoutButton" class="user-log-in">Log Out</a>
   <% } else { %>
+    <p class="user-welcome">logged in as : <span class="user-name">guest</span></p>
     <a href="#" id="loginButton" class="user-log-in">Log in</a>
   <% } %>
   </div>

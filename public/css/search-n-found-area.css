@@ -20,20 +20,21 @@
   
   /* Search Input */
   .search-input {
-    width: 100%;
-    max-width: 800px; /* Ensures max width */
+    width: 90%;
+    max-width: 800px;
     min-width: 300px;
     display: flex;
-    border: 1px solid #AFD3E2;
-    border-radius: 5px;
-    overflow: hidden;
+
   }
   
   .search-input input {
-    flex: 1;
+    border: 2px solid #AFD3E2;
+    border-radius: 5px;
+    overflow: hidden;
     padding: 10px;
     font-size: 16px;
-    border: none;
+    margin-right: 1rem;
+    flex: 1;
   }
   
   .search-input button {
@@ -74,7 +75,7 @@
     max-width: 800px;
     padding: 0.5rem;
     margin-top: 1rem;
-    background-color: #F6F1F1;
+    background-color: #e2e2e2;
     border: 1px solid #AFD3E2;
     border-radius: 5px;
   }

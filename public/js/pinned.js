@@ -15,7 +15,7 @@ function showTab(tab) {
   if (tab === "pinned") {
     refreshPinnedActivityCards(); // Refresh pinned list when switching to pinned tab
   } else {
-    refreshSearchResultPins(); // Ensure "Days" tab reflects correct pin states
+    refreshSearchResultPins(); // Ensure "Cards" tab reflects correct pin states
   }
 }
 
@@ -104,7 +104,9 @@ function refreshPinnedActivityCards() {
   }
 
   // Fetch pinned activities from the backend
-  fetch(`${window.location.origin}/get-pinned-activities?ids=${pinned.join(",")}`)
+  console.log(requestUrl);
+
+  fetch(`${window.location.origin}/search/api/get-pinned?ids=${pinned.join(",")}`)
       .then(response => response.json())
       .then(data => {
           pinnedContainer.innerHTML = ""; // Clear before appending

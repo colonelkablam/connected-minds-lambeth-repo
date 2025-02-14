@@ -25,9 +25,19 @@ function createActivityCard(activity) {
     websiteLink = "#";
   }
 
+  let locationString = "Not given";
+
+  if (activity.id) {
+    locationString = 
+      (activity.street_1 ? activity.street_1 + ", " : "") + 
+      (activity.street_2 ? activity.street_2 + ", " : "") + 
+      (activity.city ? activity.city + " " : "") + 
+      (activity.postcode ? activity.postcode : "");
+  }
+
   li.innerHTML = `
     <div class="activity-header-box">
-      <button class="icon" onclick="window.location.href = '/activity?id=${activity.id}'">🗺️</button>
+      <button class="icon" onclick="window.location.href = '/activity/${activity.id}'">🗺️</button>
       <h3>${activity.title}</h3>
       <button class="icon pin-btn ${isPinned ? 'pinned' : ''}" data-id="${activity.id}" onclick="togglePin(this)">📌</button>
     </div>
@@ -36,28 +46,28 @@ function createActivityCard(activity) {
     </div>
     <div class="details-box">
       <p><strong>Provider:</strong> ${activity.provider_name}</p>
-      <p><strong>Website: </strong><a href="${websiteLink}">${activity.website ? `${activity.website}` : 'Not given'} </a></p>
-      <p><strong>Day:</strong> <span class="text-green">${activity.day}</span></p>
-      <p><strong>Time:</strong> ${activity.start_time ? `${activity.start_time.slice(0, 5)} to ${activity.stop_time.slice(0, 5)}` : 'Not given'}</p>
-      <p><strong>Target Audience:</strong> ${activity.target_group}: ${activity.age_lower ? `ages ${activity.age_lower} to ${activity.age_upper}` : 'age range TBC'}</p>
-      <p><strong>Location:</strong> 
-        ${activity.address_id ? `${activity.street_1}${activity.street_2 ? ", " + activity.street_2 : ''}, ${activity.city}, ${activity.postcode}` : "Not given"}
-      </p>
-      <p><strong>Contact:</strong> ${activity.contact_email ? `${activity.contact_email}` : 'Not given'} </p>
-      <p><strong>Cost:</strong> ${activity.cost == 0 ? "FREE" : "£" + Number(activity.cost).toFixed(2)}</p>
-      <p><strong>Spaces Available:</strong> 
-        <span class="${availabilityClass}" id="spaces-${activity.id}">
-          ${activity.spaces_remaining === 0 ? activity.spaces_remaining + " / " + activity.total_spaces + " FULL" : activity.spaces_remaining + " / " + activity.total_spaces}
-        </span>
-      </p>
+      <p><strong>Website:</strong> <a href="${websiteLink}">${activity.website ? `${activity.website}` : 'Not given'} </a></p>
+      <p><strong>Participating Schools:</strong> ${activity.participating_schools ? `${activity.participating_schools}` : 'n/a'} </p>
+      <span class="lower-info">
+        <p><strong>Location:</strong> ${locationString}</p>
+        <p><strong>Target Audience:</strong> <span class="text-green">${activity.target_group}: ${activity.age_lower && activity.age_upper ? `ages ${activity.age_lower} to ${activity.age_upper}` : 'age range TBC'}</span></p>
+        <p><strong>Day:</strong> <span class="text-green">${activity.day}</span></p>
+        <p><strong>Time:</strong> <span class="text-green">${activity.start_time && activity.stop_time? `${activity.start_time.slice(0, 5)} to ${activity.stop_time.slice(0, 5)}` : 'TBC'}</span></p>
+        <p><strong>Contact:</strong> ${activity.contact_email ? `${activity.contact_email}` : 'Not given'} </p>
+        <p><strong>Cost:</strong> ${activity.cost == 0 ? "FREE" : "£" + Number(activity.cost).toFixed(2)}</p>
+        <p><strong>Spaces Available:</strong> 
+          <span class="${availabilityClass}" id="spaces-${activity.id}">
+            ${activity.spaces_remaining + " / " + activity.total_spaces}
+          </span>
+        </p>
+      </span>
       <div class="edit-buttons-box">
           ${userRole === "supa_admin" || userRole === "admin" ? `
           <span>
             <button type="button" class="btn enroll-btn" data-id="${activity.id}" onclick="updateSpaces(${activity.id}, 'decrease')">Enroll</button>
             <button type="button" class="btn unenroll-btn" data-id="${activity.id}" onclick="updateSpaces(${activity.id}, 'increase')">Unenroll</button>
           </span>
-          <button type="button" class="btn edit-btn" data-id="${activity.id}">Edit Details</button>
-
+          <button type="button" class="btn edit-btn" onclick="window.location.href = '/manage-activity/update?id=${activity.id}'">Edit Details</button>
         ` : ""}
       </div>
     </div>

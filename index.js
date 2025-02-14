@@ -14,8 +14,7 @@ import pool from './database/db.js'; // Import shared database connection
 import loginRoutes from './routes/login.js';
 import manageActivity from './routes/manage-activities.js';
 import searchRoutes from './routes/search.js';
-import pinnedRoutes from './routes/pinned.js';
-import singleActivityRoutes from './routes/activity.js';
+import activityDetailRoutes from './routes/activity-details.js';
 import { setFlashMessage } from './middlewares/flash-messages.js';
 import { authenticateUser } from './middlewares/auth-JWT.js';
 
@@ -59,9 +58,8 @@ app.use(authenticateUser);                                // Apply JWT Authentic
 // Use Routes
 app.use("/user-login", loginRoutes);
 app.use("/manage-activity", manageActivity); // add activity(push) and change-enrollment(patch) and render page to add activity
-app.use("/", searchRoutes);
-app.use("/", pinnedRoutes);
-app.use("/", singleActivityRoutes);
+app.use("/search", searchRoutes); //api for get search results, get pinned activities
+app.use("/activity", activityDetailRoutes);
 
 
 // landing page route

@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <%- include('../partials/head.ejs') %>
+    <link rel="stylesheet" href="/css/add-activity-form.css">
+</head>
+
+<body>
+    <div class="container">
+      <header>
+        <%- include('../partials/header.ejs', { user: user || null }) %>
+      </header>
+
+      <!-- Flash Message Container - Always Present to Prevent Page Shift -->
+      <div id="flashContainer">
+        <span id="flashMessage" class="<%= flash.success ? 'success' : (flash.error ? 'error' : '') %>">
+          <%= flash.success || flash.error || '' %>
+        </span>
+      </div>
+
+      <main>
+        <%- include('../partials/edit-activity-form.ejs') %>
+      </main>
+      
+      <footer>
+        <%- include('../partials/footer.ejs') %>
+      </footer>
+    </div>
+</body>

@@ -4,7 +4,7 @@ import pool from '../database/db.js'; // Import the database connection
 const router = express.Router();
 
 // Search Route - Handles activity search with filters
-router.post('/search', async (req, res) => {
+router.post('/api/get-searched', async (req, res) => {
   try {
     // Merge submitted form data with defaults
     const searchData = {
@@ -34,6 +34,7 @@ router.post('/search', async (req, res) => {
       SELECT 
       a.id,
       a.website,
+      a.participating_schools,
       a.provider_name, 
       a.title,
       a.description, 
@@ -64,7 +65,10 @@ router.post('/search', async (req, res) => {
     // Add search text filter
     if (searchData.searchText.length !== 0) {
       const searchTerms = searchData.searchText.map(word => `%${word}%`); // Add wildcards for partial matching
-      searchQuery += ` AND (a.provider_name ILIKE ANY($${paramIndex}::text[]) OR a.description ILIKE ANY($${paramIndex}::text[]) OR a.title ILIKE ANY($${paramIndex}::text[]))`;
+      searchQuery += ` AND (a.provider_name ILIKE ANY($${paramIndex}::text[]) 
+                        OR a.description ILIKE ANY($${paramIndex}::text[]) 
+                        OR a.title ILIKE ANY($${paramIndex}::text[])) 
+                        OR a.participating_schools ILIKE ANY($${paramIndex}::text[]) `;
       searchParams.push(searchTerms);
       paramIndex++;
     }
@@ -114,6 +118,56 @@ router.post('/search', async (req, res) => {
   } catch (error) {
     console.error('Error executing search query:', error);
     res.status(500).json({ success: false, message: 'An error occurred while performing the search.' });
+  }
+});
+
+// Fetch pinned activities by IDs
+router.get('/api/get-pinned', async (req, res) => {
+  const { ids } = req.query;
+  
+  if (!ids) {
+    return res.json([]); // No IDs provided, return empty array
+  }
+
+  try {
+    const idArray = ids.split(",").map(id => parseInt(id, 10)).filter(id => !isNaN(id));
+
+    if (idArray.length === 0) {
+      return res.json([]);
+    }
+
+    const query = `      
+      SELECT 
+      a.id,
+      a.website,
+      a.provider_name, 
+      a.title,
+      a.description, 
+      a.day,
+      a.start_time,
+      a.stop_time,
+      a.address_id,
+      addr.street_1,
+      addr.street_2,
+      addr.city,
+      addr.postcode, -- Use this for mapping
+      a.total_spaces, 
+      a.spaces_remaining, 
+      a.cost, 
+      a.contact_email,
+      a.target_group,
+      a.age_lower,
+      a.age_upper
+      FROM activities_simple a
+      LEFT JOIN addresses addr ON a.address_id = addr.id
+      WHERE a.id = ANY($1)`;
+    
+    const { rows } = await pool.query(query, [idArray]);
+
+    res.json(rows);
+  } catch (error) {
+    console.error("Error fetching pinned activities:", error);
+    res.status(500).json({ error: "Failed to fetch pinned activities" });
   }
 });
 

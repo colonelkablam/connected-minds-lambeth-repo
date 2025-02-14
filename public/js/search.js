@@ -30,10 +30,10 @@ function attachSearchHandler() {
       const searchParams = new URLSearchParams(formData);
 
       try {
-        const response = await fetch(`${window.location.origin}/search`, {
+        const response = await fetch(`${window.location.origin}/search/api/get-searched`, {
           method: "POST",
-          headers: { "Content-Type": "application/x-www-form-urlencoded" },
-          body: searchParams.toString(),
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(searchParams),
         });
 
         const data = await response.json();

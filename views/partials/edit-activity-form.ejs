@@ -1,104 +1,81 @@
 <div class="add-activity-container">
-    <h2>Add Activity</h2>
-    <form action="/manage-activity/add" method="POST" id="add-activity-form">
-  
+    <h2>Edit Activity</h2>
+    <form action="/manage-activity/update" method="POST" id="edit-activity-form">
+      
+      <input type="hidden" name="id" value="<%= activity.id %>">
+
       <label for="title">Activity Title:</label>
-      <input type="text" name="title" required>
-  
+      <input type="text" name="title" required value="<%= activity.title %>">
+
       <label for="provider_name">Provider Name:</label>
-      <input type="text" name="provider_name" required>
-  
+      <input type="text" name="provider_name" required value="<%= activity.provider_name %>">
+
       <label for="website">Provider Website:</label>
-      <input class="smaller" type="url" name="website">
+      <input class="smaller" type="url" name="website" value="<%= activity.website || '' %>">
 
       <label for="participating_schools">Participating Schools:</label>
-      <input type="text" name="participating_schools">
-  
+      <input type="text" name="participating_schools" value="<%= activity.participating_schools || '' %>">
+
       <label for="description">Description:</label>
-      <textarea name="description" required></textarea>
+      <textarea name="description" required><%= activity.description %></textarea>
 
       <label for="contact_email">Contact Email:</label>
-      <input class="smaller" type="email" name="contact_email">
-  
-      <!-- Dropdown for Day of the Week -->
+      <input class="smaller" type="email" name="contact_email" value="<%= activity.contact_email || '' %>">
+
       <label for="day">Day of Week:</label>
       <select name="day" required>
         <option value="">Select</option>
-        <option value="Monday">Monday</option>
-        <option value="Tuesday">Tuesday</option>
-        <option value="Wednesday">Wednesday</option>
-        <option value="Thursday">Thursday</option>
-        <option value="Friday">Friday</option>
-        <option value="Saturday">Saturday</option>
-        <option value="Sunday">Sunday</option>
+        <% ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"].forEach(day => { %>
+          <option value="<%= day %>" <%= activity.day === day ? 'selected' : '' %>><%= day %></option>
+        <% }) %>
       </select>
 
-      <label for="times">Time:</label>
-      <div class="time-container">
-        <select name="start_time" id="start_time">
-          <option value="">Start</option>
-        </select>
-        <span> to </span>
-        <select name="stop_time" id="stop_time">
-          <option value="">Finish</option>
-        </select>
-      </div>
-  
-      <!-- Dropdown for Target Group -->
+      <label for="start_time">Start Time:</label>
+      <input type="time" name="start_time" value="<%= activity.start_time.slice(0,5) %>">
+
+      <label for="stop_time">Stop Time:</label>
+      <input type="time" name="stop_time" value="<%= activity.stop_time.slice(0,5) %>">
+
       <label for="target_group">Target Group:</label>
       <select name="target_group" required>
         <option value="">Select</option>
-        <option value="Children">Children</option>
-        <option value="Youth">Youth</option>
-        <option value="Adults">Adults</option>
-        <option value="Everyone">Everyone</option>
-        <option value="Families">Families</option>
-        <option value="Other">Other</option>
+        <% ["Children", "Youth", "Adults", "Everyone", "Families", "Other"].forEach(group => { %>
+          <option value="<%= group %>" <%= activity.target_group === group ? 'selected' : '' %>><%= group %></option>
+        <% }) %>
       </select>
-  
-      <!-- Dropdowns for Age Range -->
-      <label for="age_range">Age Range:</label>
-      <div class="age-range-container">
-        <select name="age_lower" id="age_lower">
-          <option value="">Lower</option>
-        </select>
-        <span> to </span>
-        <select name="age_upper" id="age_upper">
-          <option value="">Upper</option>
-        </select>
-      </div>
 
-      <!-- Dropdown for Total Spaces -->
+      <label for="age_lower">Age Lower:</label>
+      <input type="number" name="age_lower" value="<%= activity.age_lower %>">
+
+      <label for="age_upper">Age Upper:</label>
+      <input type="number" name="age_upper" value="<%= activity.age_upper %>">
+
       <label for="total_spaces">Total Spaces:</label>
-      <select name="total_spaces" id="total_spaces" required>
-        <option value="">Select</option>
-      </select>
-  
-      <!-- Dropdown for Spaces Remaining -->
+      <input type="number" name="total_spaces" required value="<%= activity.total_spaces %>">
+
       <label for="spaces_remaining">Spaces Remaining:</label>
-      <select name="spaces_remaining" id="spaces_remaining" required>
-        <option value="">Select</option>
-      </select>
-  
-      <label for="cost">Cost(£):</label>
-      <input class="even-smaller" type="text" name="cost" id="cost" required placeholder="0.00">
-  
+      <input type="number" name="spaces_remaining" required value="<%= activity.spaces_remaining %>">
+
+      <label for="cost">Cost (£):</label>
+      <input class="even-smaller" type="text" name="cost" required value="<%= Number(activity.cost).toFixed(2) %>">
+
       <h3>Address Details</h3>
       <label for="street_1">Street Address / Building Name:</label>
-      <input type="text" name="street_1" required>
-  
+      <input type="text" name="street_1" required value="<%= activity.street_1 || '' %>">
+
       <label for="street_2">Street Address 2:</label>
-      <input type="text" name="street_2">
-  
+      <input type="text" name="street_2" value="<%= activity.street_2 || '' %>">
+
       <label for="city">City:</label>
-      <input class="smaller" type="text" name="city">
-  
+      <input class="smaller" type="text" name="city" value="<%= activity.city || '' %>">
+
       <label for="postcode">Postcode:</label>
-      <input class="even-smaller" type="text" name="postcode" id="postcode" required>
-  
-      <button type="submit">Add Activity</button>
+      <input class="even-smaller" type="text" name="postcode" required value="<%= activity.postcode || '' %>">
+
+      <button type="submit">Update Activity</button>
     </form>
 </div>
+
 
 <script>
 
