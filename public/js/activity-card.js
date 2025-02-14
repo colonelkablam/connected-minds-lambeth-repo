@@ -67,7 +67,7 @@ function createActivityCard(activity) {
             <button type="button" class="btn enroll-btn" data-id="${activity.id}" onclick="updateSpaces(${activity.id}, 'decrease')">Enroll</button>
             <button type="button" class="btn unenroll-btn" data-id="${activity.id}" onclick="updateSpaces(${activity.id}, 'increase')">Unenroll</button>
           </span>
-          <button type="button" class="btn edit-btn" onclick="window.location.href = '/manage-activity/update?id=${activity.id}'">Edit Details</button>
+          <button type="button" class="btn edit-btn" onclick="window.location.href = '/manage-activity/update/${activity.id}'">Edit Details</button>
         ` : ""}
       </div>
     </div>
