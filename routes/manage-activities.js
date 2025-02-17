@@ -126,11 +126,27 @@ router.get('/update/:id', isAuthenticated, authoriseRoles('admin', 'supa_admin')
 
     const query = `      
     SELECT 
-      a.id, a.website, a.provider_name, a.participating_schools,
-      a.title, a.description, a.day, a.start_time, a.stop_time,
-      a.address_id, addr.street_1, addr.street_2, addr.city, addr.postcode,
-      a.total_spaces, a.spaces_remaining, a.cost, a.contact_email,
-      a.target_group, a.age_lower, a.age_upper
+      a.id, 
+      a.website, 
+      a.provider_name, 
+      a.participating_schools,
+      a.title, 
+      a.description, 
+      a.day, 
+      a.start_time, 
+      a.stop_time,
+      a.address_id, 
+      addr.street_1, 
+      addr.street_2, 
+      addr.city, 
+      addr.postcode,
+      a.total_spaces, 
+      a.spaces_remaining, 
+      a.cost, 
+      a.contact_email,
+      a.target_group, 
+      a.age_lower, 
+      a.age_upper
     FROM activities_simple a
     LEFT JOIN addresses addr ON a.address_id = addr.id
     WHERE a.id = $1`;
@@ -175,7 +191,10 @@ router.post('/update', isAuthenticated, authoriseRoles('admin', 'supa_admin'), a
       return res.status(404).send("Activity not found.");
     }
 
-    res.redirect(`/manage-activity/activity?id=${id}`); // Redirect back to the edit page
+    //res.redirect(`/manage-activity/activity?id=${id}`); // Redirect back to the edit page
+
+    res.redirect(`/activity/${id}`);
+
 
   } catch (error) {
     console.error("Error updating activity:", error);

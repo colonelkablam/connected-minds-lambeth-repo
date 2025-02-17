@@ -1,6 +1,6 @@
 <div class="add-activity-container">
     <h2>Edit Activity</h2>
-    <form action="/manage-activity/update" method="POST" id="edit-activity-form">
+    <form action="/manage-activity/update" method="POST" id="update-activity-form">
       
       <input type="hidden" name="id" value="<%= activity.id %>">
 
@@ -23,18 +23,20 @@
       <input class="smaller" type="email" name="contact_email" value="<%= activity.contact_email || '' %>">
 
       <label for="day">Day of Week:</label>
-      <select name="day" required>
+      <select class="even-smaller" name="day" required>
         <option value="">Select</option>
         <% ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"].forEach(day => { %>
           <option value="<%= day %>" <%= activity.day === day ? 'selected' : '' %>><%= day %></option>
         <% }) %>
       </select>
 
-      <label for="start_time">Start Time:</label>
-      <input type="time" name="start_time" value="<%= activity.start_time.slice(0,5) %>">
+      <label for="times">Times:</label>
+      <div class="time-container">
+        <input class="even-smaller" type="time" name="start_time" id="start_time" value="<%= activity.start_time.slice(0,5) %>">
+        <span> to </span>
+        <input class="even-smaller" type="time" name="stop_time" id="stop_time" value="<%= activity.stop_time.slice(0,5) %>">
 
-      <label for="stop_time">Stop Time:</label>
-      <input type="time" name="stop_time" value="<%= activity.stop_time.slice(0,5) %>">
+      </div>
 
       <label for="target_group">Target Group:</label>
       <select name="target_group" required>
@@ -86,67 +88,35 @@
     const ageEndDropdown = document.getElementById("age_upper");
     const costInput = document.getElementById("cost");
     const postcodeInput = document.getElementById("postcode");
-    const startTimeDropdown = document.getElementById("start_time");
-    const stopTimeDropdown = document.getElementById("stop_time");
-    const form = document.getElementById("add-activity-form");
+    const startTimeInput = document.getElementById("start_time");
+    const stopTimeInput = document.getElementById("stop_time");
+    const form = document.getElementById("update-activity-form");
   
-    /** Populate total spaces dropdown (1 to 100) */
-    for (let i = 1; i <= 100; i++) {
-      totalSpacesDropdown.appendChild(new Option(i, i));
+
+    if (!startTimeInput || !stopTimeInput) {
+        console.error("Start time or stop time input not found.");
+        return;
     }
-  
-    /** Update spaces remaining dropdown dynamically */
-    function updateSpacesRemaining() {
-      spacesRemainingDropdown.innerHTML = '';
-      const totalSpaces = parseInt(totalSpacesDropdown.value, 10);
-      if (!isNaN(totalSpaces)) {
-        for (let i = totalSpaces; i >= 0; i--) {
-          spacesRemainingDropdown.appendChild(new Option(i, i));
+
+    startTimeInput.addEventListener("input", function () {
+        if (!startTimeInput.value) return;
+        if (!stopTimeInput.value || stopTimeInput.value < startTimeInput.value) {
+            stopTimeInput.value = startTimeInput.value;
         }
-      }
-    }
+        console.log("start time value:", startTimeInput.value)
 
-    totalSpacesDropdown.addEventListener("change", updateSpacesRemaining);
-  
-    /** Populate age dropdowns (0 to 30) */
-    for (let i = 0; i <= 30; i++) {
-      ageStartDropdown.appendChild(new Option(i, i));
-      ageEndDropdown.appendChild(new Option(i, i));
-    }
-  
-    /** Generate times from 06:00 to 22:00 in 15-minute intervals */
-    function generateTimeOptions() {
-      const times = [];
-      for (let hour = 6; hour <= 22; hour++) {
-        for (let minutes of ["00", "05", "10", "15", "20", "25", "30", "35", "45", "50", "55"]) {
-          if (hour === 22 && minutes !== "00") break; // Ensure last time is 22:00
-          times.push(`${hour.toString().padStart(2, "0")}:${minutes}`);
-        }
-      }
-      return times;
-    }
-
-    /** Populate start time dropdown */
-    const timeOptions = generateTimeOptions();
-
-    timeOptions.forEach(time => {
-      startTimeDropdown.appendChild(new Option(time, time));
     });
 
-    /** Update stop time options based on selected start time */
-    startTimeDropdown.addEventListener("change", function () {
-      stopTimeDropdown.innerHTML = ''; // Reset stop time options
-      const selectedStartTime = startTimeDropdown.value;
-
-      if (!selectedStartTime) return;
-
-      // Only add times that are later than the selected start time
-      timeOptions.forEach(time => {
-        if (time > selectedStartTime) {
-          stopTimeDropdown.appendChild(new Option(time, time));
+    stopTimeInput.addEventListener("input", function () {
+        if (!stopTimeInput.value) return;
+        if (!startTimeInput.value || startTimeInput.value > stopTimeInput.value) {
+            startTimeInput.value = stopTimeInput.value;
         }
-      });
+        console.log("stop time value:", stopTimeInput.value, typeof(stopTimeInput.value))
     });
+
+    
+        
   
     /** Dynamically update end age options based on start age selection */
     ageStartDropdown.addEventListener("change", function () {
@@ -190,10 +160,10 @@
 
     /** Ensure start time is not greater than stop time */
     function validateTimeRange() {
-      const startTime = startTimeDropdown.value;
-      const stopTime = stopTimeDropdown.value;
+      const startTime = startTimeImput.value;
+      const stopTime = stopTimeImput.value;
 
-      if (startTime && stopTime && stopTime <= startTime) {
+      if (startTime && stopTime && stopTime < startTime) {
         alert("Finish time must be later than start time.");
         return false;
       }

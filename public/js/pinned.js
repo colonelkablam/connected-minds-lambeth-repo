@@ -104,8 +104,6 @@ function refreshPinnedActivityCards() {
   }
 
   // Fetch pinned activities from the backend
-  console.log(requestUrl);
-
   fetch(`${window.location.origin}/search/api/get-pinned?ids=${pinned.join(",")}`)
       .then(response => response.json())
       .then(data => {

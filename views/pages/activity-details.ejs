@@ -24,7 +24,7 @@
       <main>
         <div class="single-activity-container">
           <div class="heading-box">
-            <span class="icon" onclick="window.history.back()">⬅️</span>
+            <span class="icon" onclick="navigateToHome()">⬅️</span>
             <h1 class="title" id="activity-title"></h1>
             <span class="icon">🖨️</span>
           </div>
@@ -53,7 +53,16 @@
       <footer>
         <%- include('../partials/footer.ejs') %>
       </footer>
+
+
     </div>
+
+    <script>
+      function navigateToHome() {
+          history.pushState({}, '', '/'); // Change the URL without reloading
+          // You can add logic here to update the page content dynamically
+      }
+      </script>
 
     <!-- <script>
 
