@@ -24,7 +24,7 @@
       <main>
         <div class="single-activity-container">
           <div class="heading-box">
-            <span class="icon" onclick="navigateToHome()">⬅️</span>
+            <span class="icon" onclick="window.history.back()">⬅️</span>
             <h1 class="title" id="activity-title"></h1>
             <span class="icon">🖨️</span>
           </div>
@@ -54,103 +54,8 @@
         <%- include('../partials/footer.ejs') %>
       </footer>
 
-
     </div>
 
-    <script>
-      function navigateToHome() {
-          history.pushState({}, '', '/'); // Change the URL without reloading
-          // You can add logic here to update the page content dynamically
-      }
-      </script>
-
-    <!-- <script>
-
-      // embed the activity object safely
-      const activity =  JSON.stringify(activity) %>;
-
-      document.getElementById("activity-title").innerText = activity.title;
-      document.getElementById("activity-description").innerText = activity.description;
-      document.getElementById("provider-name").innerText = activity.provider_name;
-      let availabilityClass = "text-green";
-      let percentage = activity.total_spaces > 0 ? (activity.spaces_remaining / activity.total_spaces) * 100 : 0;
-    
-      if (activity.spaces_remaining === 0) {
-        availabilityClass = "text-red";
-      } else if (percentage <= 33) {
-        availabilityClass = "text-red";
-      } else if (percentage <= 66) {
-        availabilityClass = "text-amber";
-      }
-      
-      const websiteLink = document.getElementById("provider-website");
-      if (activity.website) {
-        websiteLink.href = activity.website;
-        websiteLink.innerText = activity.website;
-      } else {
-        websiteLink.innerText = "Not given";
-      }
-
-      document.getElementById("day").innerText = activity.day;
-      document.getElementById("time").innerText = activity.start_time && activity.stop_time
-        ? `${activity.start_time.slice(0, 5)} to ${activity.stop_time.slice(0, 5)}` 
-        : "Not given";
-      document.getElementById("target-audience").innerText = activity.target_group 
-        ? `${activity.target_group}: ${activity.age_lower && activity.age_upper ? `ages ${activity.age_lower} to ${activity.age_upper}` : 'Age range TBC'}` 
-        : "Not given";
-      let locationString = "Not given";
-      if (activity.id) {
-        locationString = 
-          (activity.street_1 ? activity.street_1 + ", " : "") + 
-          (activity.street_2 ? activity.street_2 + ", " : "") + 
-          (activity.city ? activity.city + " " : "") + 
-          (activity.postcode ? activity.postcode : "");
-      }
-      document.getElementById("location").innerText = locationString;
-      document.getElementById("participating-schools").innerText = activity.participating_schools ? activity.participating_schools : ' n/a';
-      const contactEmail = document.getElementById("contact-email");
-      if (activity.contact_email) {
-        contactEmail.innerText = activity.contact_email;
-      } else {
-        contactEmail.innerText = "Not given";
-      }
-      // handle formatting spaces left
-      const spaces = document.getElementById("spaces");
-      spaces.innerText = `${activity.spaces_remaining} / ${activity.total_spaces}`;
-      spaces.className = "";
-      spaces.classList.add(availabilityClass)
-      document.getElementById("cost").innerText = activity.cost == 0 
-        ? "FREE" 
-        : `£${Number(activity.cost).toFixed(2)}`;
-        function initialiseMap(postcode) {
-      fetch(`https://nominatim.openstreetmap.org/search?format=json&q=${postcode}, UK`)
-        .then(response => response.json())
-        .then(data => {
-          if (data.length > 0) {
-            const { lat, lon } = data[0];
-          
-            const map = L.map("activity-map").setView([lat, lon], 14);
-            L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
-              attribution: "&copy; OpenStreetMap contributors"
-            }).addTo(map);
-          
-            L.marker([lat, lon]).addTo(map)
-              .bindPopup(`Location: ${postcode}`)
-              .openPopup();
-          } else {
-            document.getElementById("activity-map").innerHTML = "<p>Location not found</p>";
-          }
-        })
-        .catch(error => {
-          console.error("Error fetching location:", error);
-          document.getElementById("activity-map").innerHTML = "<p>Error loading map</p>";
-        });
-      }
-      if (activity.postcode) {
-        initialiseMap(activity.postcode);
-      }
-
-    </script> -->
 </body>
 
 </html>

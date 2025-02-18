@@ -1,5 +1,8 @@
+<% console.log("Activity inside partial:", activity); %>
+
+
 <div class="add-activity-container">
-    <h2>Edit Activity</h2>
+    <h2><%= title %></h2>
     <form action="/manage-activity/update" method="POST" id="update-activity-form">
       
       <input type="hidden" name="id" value="<%= activity.id %>">
@@ -113,10 +116,7 @@
             startTimeInput.value = stopTimeInput.value;
         }
         console.log("stop time value:", stopTimeInput.value, typeof(stopTimeInput.value))
-    });
-
-    
-        
+    });      
   
     /** Dynamically update end age options based on start age selection */
     ageStartDropdown.addEventListener("change", function () {

@@ -27,13 +27,28 @@ function attachSearchHandler() {
       event.preventDefault(); // Prevent full page reload
 
       const formData = new FormData(searchForm);
-      const searchParams = new URLSearchParams(formData);
+      const searchObject = {};
+
+      // Convert FormData into a proper JSON object
+      formData.forEach((value, key) => {
+        if (searchObject[key]) {
+          // Ensure existing values are stored as an array
+          if (!Array.isArray(searchObject[key])) {
+            searchObject[key] = [searchObject[key]];
+          }
+          searchObject[key].push(value); // Append new value
+        } else {
+          searchObject[key] = value;
+        }
+      });
+
+      //console.log("Search params:", searchObject); // Debugging
 
       try {
         const response = await fetch(`${window.location.origin}/search/api/get-searched`, {
           method: "POST",
           headers: { "Content-Type": "application/json" },
-          body: JSON.stringify(searchParams),
+          body: JSON.stringify(searchObject),
         });
 
         const data = await response.json();

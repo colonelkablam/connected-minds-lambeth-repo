@@ -27,7 +27,7 @@ router.post('/api/get-searched', async (req, res) => {
         : [],
     };
 
-    // console.log('Search Data:', searchData); // Debugging
+    console.log('Search Data:', searchData); // Debugging
 
     // Start building query dynamically
     let searchQuery = `
@@ -65,49 +65,60 @@ router.post('/api/get-searched', async (req, res) => {
     // Add search text filter
     if (searchData.searchText.length !== 0) {
       const searchTerms = searchData.searchText.map(word => `%${word}%`); // Add wildcards for partial matching
-      searchQuery += ` AND (a.provider_name ILIKE ANY($${paramIndex}::text[]) 
+      searchQuery += ` AND ((a.provider_name ILIKE ANY($${paramIndex}::text[]) 
                         OR a.description ILIKE ANY($${paramIndex}::text[]) 
                         OR a.title ILIKE ANY($${paramIndex}::text[])) 
-                        OR a.participating_schools ILIKE ANY($${paramIndex}::text[]) `;
+                        OR a.participating_schools ILIKE ANY($${paramIndex}::text[])) `;
       searchParams.push(searchTerms);
       paramIndex++;
     }
 
-    // Add day filter if enabled
-    if (searchData.filtersEnabled && searchData.filterDays.length > 0) {
-      const partialDays = searchData.filterDays.map(day => `${day}%`);
-      searchQuery += ` AND a.day ILIKE ANY($${paramIndex}::text[])`;
-      searchParams.push(partialDays);
-      paramIndex++;
-    }
-
-    // Add audience filter if enabled
-    if (searchData.filtersEnabled && searchData.filterAudience.length > 0) {
-      searchQuery += ` AND a.target_group ILIKE ANY($${paramIndex}::text[])`;
-      searchParams.push(searchData.filterAudience);
-      paramIndex++;
-    }
-
-    // Add cost filter if enabled
-    if (searchData.filtersEnabled && searchData.filterCost.length > 0) {
-      const costConditions = [];
-      if (searchData.filterCost.includes("free")) {
-        costConditions.push(`a.cost = 0`);
-      }
-      if (searchData.filterCost.includes("low cost")) {
-        costConditions.push(`a.cost > 0 AND a.cost < 10`);
-      }
-      if (searchData.filterCost.includes("other")) {
-        costConditions.push(`a.cost >= 10`);
+    if (searchData.filtersEnabled) { // if filters checkbox checked
+      // Add day filter if enabled
+      if (searchData.filtersEnabled && searchData.filterDays.length > 0) {
+        const partialDays = searchData.filterDays.map(day => `${day}%`);
+        searchQuery += ` AND a.day ILIKE ANY($${paramIndex}::text[])`;
+        searchParams.push(partialDays);
+        paramIndex++;
       }
 
-      if (costConditions.length > 0) {
-        searchQuery += ` AND (${costConditions.join(" OR ")})`;
+      // Add audience filter if enabled
+      if (searchData.filtersEnabled && searchData.filterAudience.length > 0) {
+        searchQuery += ` AND a.target_group ILIKE ANY($${paramIndex}::text[])`;
+        searchParams.push(searchData.filterAudience);
+        paramIndex++;
+      }
+
+      // Add cost filter if enabled
+      if (searchData.filtersEnabled && searchData.filterCost.length > 0) {
+        const costConditions = [];
+        if (searchData.filterCost.includes("free")) {
+          costConditions.push(`a.cost = 0`);
+        }
+        if (searchData.filterCost.includes("low cost")) {
+          costConditions.push(`a.cost > 0 AND a.cost < 10`);
+        }
+        if (searchData.filterCost.includes("other")) {
+          costConditions.push(`a.cost >= 10`);
+        }
+        if (costConditions.length > 0) {
+          searchQuery += ` AND (${costConditions.join(" OR ")})`;
+        }
       }
     }
 
     // Order by day for better readability
-    searchQuery += ` ORDER BY a.day ASC;`;
+    searchQuery += `
+      ORDER BY CASE 
+        WHEN LOWER(a.day) = 'monday' THEN 1
+        WHEN LOWER(a.day) = 'tuesday' THEN 2
+        WHEN LOWER(a.day) = 'wednesday' THEN 3
+        WHEN LOWER(a.day) = 'thursday' THEN 4
+        WHEN LOWER(a.day) = 'friday' THEN 5
+        WHEN LOWER(a.day) = 'saturday' THEN 6
+        WHEN LOWER(a.day) = 'sunday' THEN 7
+      END;
+    `;
 
     // Execute query
     const { rows } = await pool.query(searchQuery, searchParams);

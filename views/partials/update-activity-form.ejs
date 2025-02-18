@@ -1,0 +1,369 @@
+<% console.log(locals.activity ? activity : "no activity data") %>
+
+<div class="update-activity-container">
+    <h2><%= title %></h2>
+    <form action="/manage-activity/add" method="POST" id="update-activity-form">
+  
+      <label for="title">Activity Title:</label>
+      <input 
+        type="text" 
+        name="title"
+        id="title"
+        value="<%= locals.activity ? activity.title : "" %>" 
+        required
+      >
+  
+      <label for="provider_name">Provider Name:</label>
+      <input 
+        type="text" 
+        name="provider_name"
+        id="provider_name"
+        value="<%= locals.activity ? activity.provider_name : "" %>" 
+        required
+      >
+  
+      <label for="website">Provider Website:</label>
+      <input 
+        class="smaller" 
+        type="url" 
+        name="website"
+        id="website"
+        value="<%= locals.activity ? activity.website : "" %>" 
+
+      >
+
+      <label for="participating_schools">Participating Schools:</label>
+      <input 
+        type="text" 
+        name="participating_schools"
+        id="participating_schools"
+        value="<%= locals.activity ? activity.participating_schools : "" %>" 
+
+      >
+  
+      <label for="description">Description:</label>
+      <textarea 
+        name="description"
+        id="description" 
+        required
+      ><%= locals.activity ? activity.description : "" %></textarea>
+
+      <label for="contact_email">Contact Email:</label>
+      <input 
+        class="smaller" 
+        type="email" 
+        name="contact_email"
+        id="contact_email"
+        value="<%= locals.activity? activity.contact_email : "" %>"
+      >
+  
+      <!-- Dropdown for Day of the Week -->
+      <label for="day">Day of Week:</label>
+      <select 
+        name="day"
+        id="day"
+        required
+      >
+        <option value="">Select</option>
+        <% ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"].forEach(day => { %>
+          <option value="<%= day %>" <%= locals.activity && activity.day === day ? "selected" : "" %>><%= day %></option>
+        <% }) %>
+      </select>
+
+      <!-- Dropdown for Times -->
+      <label for="times">Times:</label>
+      <div class="time-container">
+        <!-- Start Time Dropdown -->
+        <select class="even-smaller" name="start_time" id="start_time">
+          <option value="">TBC</option>
+          <% for (let h = 6; h <= 22; h++) { %>
+            <% for (let m = 0; m < 60; m += 5) { %>
+              <% let time = `${String(h).padStart(2, '0')}:${String(m).padStart(2, '0')}`; %>
+              <option value="<%= time %>" <%= locals.activity && activity.start_time && activity.start_time.slice(0,5) === time ? 'selected' : '' %>><%= time %></option>
+            <% } %>
+          <% } %>
+        </select>
+      
+        <span> to </span>
+      
+        <!-- Stop Time Dropdown -->
+        <select class="even-smaller" name="stop_time" id="stop_time">
+          <% if (locals.activity && activity.start_time) { %>
+            <% for (let h = parseInt(activity.start_time.slice(0,2), 10); h <= 22; h++) { %>
+              <% for (let m = parseInt(activity.start_time.slice(4,5), 10); m < 60; m += 5) { %>
+                <% let time = `${String(h).padStart(2, '0')}:${String(m).padStart(2, '0')}`; %>
+                <option value="<%= time %>" <%= activity.stop_time && activity.stop_time.slice(0,5) === time ? 'selected' : '' %>><%= time %></option>
+              <% } %>
+            <% } %>
+          <% } %>
+        </select>
+      </div>
+  
+      <!-- Dropdown for Target Group -->
+      <label for="target_group">Target Group:</label>
+      <select 
+        name="target_group"
+        id="target_group" 
+        required
+      >
+        <option value="">Select</option>
+        <% ["Children", "Youth", "Adults", "Everyone", "Families", "Other"].forEach(group => { %>
+          <option value="<%= group %>" <%= locals.activity && activity.target_group === group ? "selected" : "" %>><%= group %></option>
+        <% }) %>
+      </select>
+
+  
+      <!-- Dropdowns for Age Range -->
+      <label for="age_range">Age Range:</label>
+      <div class="age-range-container">
+        <!-- Lower Age -->
+        <select
+          name="age_lower"
+          id="age_lower"
+        >
+          <option value="">TBC</option>
+          <% for (let i = 1; i <= 110; i++) { %>
+            <option value="<%= i %>" <%= locals.activity && activity.age_lower == i ? "selected" : "" %>><%= i %></option>
+          <% } %>
+        </select>
+      
+        <span> to </span>
+      
+        <!-- Upper Age -->
+        <select 
+          name="age_upper"
+          id="age_upper"
+        >
+          <% if (locals.activity && activity.age_lower) { %>
+            <% for (let i = locals.activity.age_lower; i <= 110; i++) { %>
+              <option value="<%= i %>" <%= activity.age_upper && activity.age_upper == i ? "selected" : "" %>><%= i %></option>
+            <% } %>
+          <% } else { %>
+            <option value="" selected></option>
+          <% } %>
+        </select>
+      </div>
+
+      <!-- Dropdown for Total Spaces -->
+      <!-- Total Spaces -->
+      <label for="total_spaces">Total Spaces:</label>
+      <select 
+        name="total_spaces" 
+        id="total_spaces"
+      >
+        <option value="">TBC</option>
+        <% for (let i = 1; i <= 50; i++) { %>
+          <option value="<%= i %>" <%= locals.activity && activity.total_spaces == i ? "selected" : "" %>><%= i %></option>
+        <% } %>
+      </select>
+        
+      <!-- Spaces Remaining -->
+      <label for="spaces_remaining">Remaining Spaces:</label>
+      <select 
+        name="spaces_remaining"
+        id="spaces_remaining"
+      >
+        <% if (locals.activity && activity.total_spaces) { %>
+          <% for (let i = activity.total_spaces; i >= 0; i--) { %>
+            <option value="<%= i %>" <%= activity.spaces_remaining && activity.spaces_remaining == i ? "selected" : "" %>><%= i %></option>
+          <% } %>
+          <% } else { %>
+            <option value="" selected></option>
+          <% } %>      
+      </select>
+  
+      <label for="cost">Cost(£):</label>
+      <input 
+        class="even-smaller" 
+        type="text" 
+        name="cost" 
+        id="cost" 
+        placeholder="0.00"
+        value="<%= locals.activity ? locals.activity.cost : "" %>"
+        required 
+      >
+  
+      <h3>Address Details</h3>
+      <label for="street_1">Street Address / Building Name:</label>
+      <input 
+        type="text" 
+        name="street_1"
+        id="street_1" 
+        required
+      >
+  
+      <label for="street_2">Street Address 2:</label>
+      <input 
+        type="text"
+        name="street_2"
+        id="street_2"
+      >
+  
+      <label for="city">City:</label>
+      <input 
+        class="smaller"
+        type="text"
+        name="city"
+        id="city"
+      >
+  
+      <label for="postcode">Postcode:</label>
+      <input 
+        class="even-smaller" 
+        type="text" 
+        name="postcode" 
+        id="postcode" 
+        required
+      >
+  
+      <button type="submit"><%= title %></button>
+    </form>
+</div>
+
+<script>
+
+  document.addEventListener("DOMContentLoaded", function () {
+    const totalSpacesDropdown = document.getElementById("total_spaces");
+    const spacesRemainingDropdown = document.getElementById("spaces_remaining");
+    const ageLowerDropdown = document.getElementById("age_lower");
+    const ageUpperDropdown = document.getElementById("age_upper");
+    const costInput = document.getElementById("cost");
+    const postcodeInput = document.getElementById("postcode");
+    const startTimeDropdown = document.getElementById("start_time");
+    const stopTimeDropdown = document.getElementById("stop_time");
+    const form = document.getElementById("update-activity-form");
+  
+
+    // Handle time input validation
+
+    startTimeDropdown.addEventListener("change", function () {
+
+        const startTime = startTimeDropdown.value;
+        stopTimeDropdown.innerHTML = ""; // Reset options
+
+        if (!startTime) return; // If no start time selected, keep empty stop times
+
+        // Generate stop time options (only times after start time)
+        const [startH, startM] = startTime.split(":").map(Number);
+        for (let h = startH; h <= 22; h++) {
+            for (let m = (h === startH ? startM + 5 : 0); m < 60; m += 5) {
+                let time = `${String(h).padStart(2, '0')}:${String(m).padStart(2, '0')}`;
+                let option = new Option(time, time);
+                stopTimeDropdown.appendChild(option);
+            }
+        }
+    });
+
+  
+    // Handle age range input validation
+
+    ageLowerDropdown.addEventListener("change", function () {
+        const lowerAge = parseInt(ageLowerDropdown.value, 10);
+        const upperAge = parseInt(ageUpperDropdown.value, 10);
+
+        if (isNaN(lowerAge)) {
+          ageUpperDropdown.innerHTML = '<option value="" selected></option>';
+        } else {  // Only proceed if lowerAge is valid
+            if (upperAge < lowerAge) {
+                ageUpperDropdown.value = lowerAge;
+            }
+            // Clear and update the remaining spaces dropdown options
+            ageUpperDropdown.innerHTML = "";
+            for (let i = lowerAge; i <= 110; i++) {
+                let option = new Option(i, i);
+                ageUpperDropdown.appendChild(option);
+            }
+        }
+    });
+  
+      
+    // Handle spaces range input validation
+
+    totalSpacesDropdown.addEventListener("change", function () {
+        const totalSpaces = parseInt(totalSpacesDropdown.value, 10);
+
+        if (isNaN(totalSpaces)) {
+          spacesRemainingDropdown.innerHTML = '<option value="" selected></option>';
+
+        } else {
+            // Set remaining spaces to the new total value
+            spacesRemainingDropdown.value = totalSpaces;
+
+            // Clear and update the remaining spaces dropdown options
+            spacesRemainingDropdown.innerHTML = "";
+            for (let i = totalSpaces; i >= 0; i--) {
+                let option = new Option(i, i);
+                spacesRemainingDropdown.appendChild(option);
+            }
+        }
+    });
+  
+    
+    // Enforce valid number(10,2) format in cost input 
+
+    costInput.addEventListener("input", function () {
+      this.value = this.value
+        .replace(/[^0-9.]/g, "") // Remove invalid characters
+        .replace(/(\..*?)\..*/g, "$1") // Ensure only one decimal
+        .replace(/^(\d*\.\d{2}).*$/, "$1"); // Limit to 2 decimal places
+    });
+  
+    // Auto-uppercase and format UK postcode  - this is for during input
+    postcodeInput.addEventListener("input", function () {
+      let formattedPostcode = this.value.toUpperCase().trim();
+    
+      // Automatically insert space if missing (e.g., SW1A1AA → SW1A 1AA)
+      const formatted = formattedPostcode.replace(/^([A-Z]{1,2}\d[A-Z\d]?) ?(\d[A-Z]{2})$/, "$1 $2");
+    
+      this.value = formatted;
+      validatePostcode(formatted);
+    });
+
+  
+    // Check postcode validity using Postcodes.io API before submitting form
+    async function validatePostcode(postcode) {
+      const cleanPostcode = postcode.replace(/\s+/g, "").toUpperCase(); // Remove spaces for API request
+      if (cleanPostcode.length < 5) {
+        postcodeInput.style.border = "2px solid red";
+        return;
+      }
+    
+      try {
+        const response = await fetch(`https://api.postcodes.io/postcodes/${cleanPostcode}/validate`);
+        const data = await response.json();
+        
+        if (data.result) {
+          postcodeInput.style.border = "2px solid green"; // ✅ Valid
+        } else {
+          postcodeInput.style.border = "2px solid red"; // ❌ Invalid
+        }
+      } catch (error) {
+        console.error("Error checking postcode:", error);
+        postcodeInput.style.border = "2px solid red"; // ❌ Assume invalid on API failure
+      }
+    }
+  
+    /** Form Submission: Validate before submitting */
+    form.addEventListener("submit", async function (event) {
+      event.preventDefault(); // Stop form submission until validation is complete
+
+      const postcodeValue = postcodeInput.value.trim();
+    
+      // Final API validation before submission
+      const isValid = await fetch(`https://api.postcodes.io/postcodes/${postcodeValue.replace(/\s+/g, "").toUpperCase()}/validate`)
+        .then(res => res.json())
+        .then(data => data.result)
+        .catch(() => false);
+    
+      if (!isValid) {
+        alert("Invalid UK postcode. Please check and try again.");
+        return;
+      }
+        
+      // If everything is valid, submit the form
+      form.submit();
+    });
+  });
+
+</script>
+  

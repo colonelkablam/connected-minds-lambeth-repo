@@ -25,8 +25,8 @@
       </div>
 
       <main>
-        <%- include('../partials/search-area.ejs', { searchData }) %>
-        <%- include('../partials/found-activities.ejs', { searchData, user: user || null }) %>
+        <%- include('../partials/search-area.ejs') %>
+        <%- include('../partials/found-activities.ejs', { user: user || null }) %>
       </main>
       
       <footer>

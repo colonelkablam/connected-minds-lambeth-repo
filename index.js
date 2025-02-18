@@ -27,19 +27,6 @@ app.locals.baseUrl = process.env.BASE_URL || ''; // Define base URL globally
 // Resolve __dirname for ES modules
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
-// global variables
-const defaultSearchData = {
-  searchText: [],
-  filtersEnabled: false, 
-  filterDays: [], 
-  filterAudience: [],
-  filterCost: [],
-  distance: 999, 
-};
-
-let searchData = defaultSearchData;
-let activities = [];
-
 // MIDDLEWARE
 app.use(express.json());                                  // Add this to parse JSON requests
 app.use(bodyParser.urlencoded({ extended: true }));       // For form-encoded requests
@@ -64,11 +51,8 @@ app.use("/activity", activityDetailRoutes);
 
 // landing page route
 app.get('/', (req, res) => {
-  searchData = defaultSearchData;
 
   res.render('pages/index.ejs', {
-    activities,
-    searchData,
     user: res.locals.user, // User from JWT
     flash: res.locals.flash // Pass flash messages
   });

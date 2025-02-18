@@ -13,24 +13,32 @@ router.get('/add', isAuthenticated, authoriseRoles('admin', 'supa_admin'), (req,
 router.post('/add', isAuthenticated, authoriseRoles('admin', 'supa_admin'), async (req, res) => {
     try {
         const {
-            title, provider_name, description, participating_schools, day, start_time, stop_time, total_spaces, spaces_remaining,
-            cost, contact_email, target_group, age_lower, age_upper, website, street_1, street_2, city, postcode
+            title, provider_name, description, participating_schools, day, start_time, stop_time, total_spaces, spaces_remaining, cost, contact_email, target_group, age_lower, age_upper, website, street_1, street_2, city, postcode
         } = req.body;
 
         console.log(req.body);
 
-        // Convert empty fields to NULL
+        // Convert empty fields to NULL or number value
+        // strings
+        const formattedTitle = title.trim() === "" ? null : title;
+        const formattedProviderName = provider_name.trim() === "" ? null : provider_name;
+        const formattedDescription = description.trim() === "" ? null : description;
         const formattedWebsite = website.trim() === "" ? null : website;
         const formattedEmail = contact_email.trim() === "" ? null : contact_email;
         const formattedParticipatingSchools = participating_schools.trim() === "" ? null : participating_schools;
+        const formattedStartTime = start_time ? `${start_time}:00` : null;
+        const formattedStopTime = stop_time ? `${stop_time}:00` : null;
+        // numbers - need to handle NaN
+        const formattedTotalSpaces = total_spaces.trim() === "" || isNaN(total_spaces) ? null : parseInt(total_spaces, 10);
+        const formattedSpacesRemaining = spaces_remaining.trim() === "" || isNaN(spaces_remaining) ? null : parseInt(spaces_remaining, 10);
+        const formattedAgeLower = age_lower.trim() === "" || isNaN(age_lower) ? null : parseInt(age_lower, 10);
+        const formattedAgeUpper = age_upper.trim() === "" || isNaN(age_upper) ? null : parseInt(age_upper, 10);
+        const formattedCost = cost.trim() === "" || isNaN(cost) ? null : parseFloat(parseFloat(cost).toFixed(2));
+        // address strings
         const formattedStreet1 = street_1.trim() === "" ? null : street_1;
         const formattedStreet2 = street_2.trim() === "" ? null : street_2;
         const formattedCity = city.trim() === "" ? null : city;
-        const formattedStartTime = start_time ? `${start_time}:00` : null;
-        const formattedStopTime = stop_time ? `${stop_time}:00` : null;
-        const formattedAgeLower = age_lower === "" ? null : age_lower;
-        const formattedAgeUpper = age_upper === "" ? null : age_upper;
-
+        const formattedPostcode = postcode.trim() === "" ? null : postcode;
 
         
         // record who added 
@@ -41,7 +49,7 @@ router.post('/add', isAuthenticated, authoriseRoles('admin', 'supa_admin'), asyn
             INSERT INTO addresses (street_1, street_2, city, postcode) 
             VALUES ($1, $2, $3, $4) RETURNING id
         `;
-        const addressValues = [formattedStreet1, formattedStreet2, formattedCity, postcode];
+        const addressValues = [formattedStreet1, formattedStreet2, formattedCity, formattedPostcode];
         const addressResult = await pool.query(addressQuery, addressValues);
         const address_id = addressResult.rows[0].id;
 
@@ -53,8 +61,7 @@ router.post('/add', isAuthenticated, authoriseRoles('admin', 'supa_admin'), asyn
             VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15, $16, $17)
         `;
         const activityValues = [
-            title, provider_name, description, formattedParticipatingSchools, day, formattedStartTime, formattedStopTime, total_spaces, spaces_remaining, cost,
-            formattedEmail, target_group, formattedAgeLower, formattedAgeUpper, formattedWebsite, address_id, added_by_id
+          formattedTitle, formattedProviderName, formattedDescription, formattedParticipatingSchools, day, formattedStartTime, formattedStopTime, formattedTotalSpaces, formattedSpacesRemaining, formattedCost, formattedEmail, target_group, formattedAgeLower, formattedAgeUpper, formattedWebsite, address_id, added_by_id
         ];
         await pool.query(activityQuery, activityValues);
 

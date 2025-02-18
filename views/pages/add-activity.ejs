@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <%- include('../partials/head.ejs') %>
-    <link rel="stylesheet" href="/css/add-activity-form.css">
+    <link rel="stylesheet" href="/css/update-activity-form.css">
 </head>
 
 <body>
@@ -19,13 +19,15 @@
       </div>
 
       <main>
-        <%- include('../partials/add-activity-form.ejs') %>
+        <%- include('../partials/update-activity-form.ejs', {  title: "Add Activity" } ) %> <!-- No activity passed as new activity being made -->
       </main>
       
       <footer>
         <%- include('../partials/footer.ejs') %>
       </footer>
+
     </div>
+
 </body>
 
 </html>
