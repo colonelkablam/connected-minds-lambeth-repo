@@ -46,7 +46,7 @@
     background-color: #F0F0F0;
 }
   
-.details-container {
+#details-container {
     display: flex;
     flex-direction: column;    
     width: 100%;
@@ -54,13 +54,20 @@
     margin-left: 1rem;
 }
 
-.details-container p {
+#details-container p {
     color: rgb(90, 90, 90);
 }
 
-.details-container strong {
+#details-container strong {
     color: rgb(0, 0, 0);
 }
+
+#details-container .lower-info {
+    display: flex;
+    flex-direction: column;
+    gap: 0.2rem;
+    margin: 0.5rem 0 0 0rem;
+  }
   
 #map-container {
     width: 100%;

@@ -15,38 +15,6 @@ document.addEventListener("DOMContentLoaded", async () => {
         const activity = await response.json();
 
         document.getElementById("activity-title").innerText = activity.title;
-        document.getElementById("activity-description").innerText = activity.description;
-        document.getElementById("provider-name").innerText = activity.provider_name;
-
-        let availabilityClass = "text-green";
-        let percentage = activity.total_spaces > 0 ? (activity.spaces_remaining / activity.total_spaces) * 100 : 0;
-
-        if (activity.spaces_remaining === 0) {
-            availabilityClass = "text-red";
-        } else if (percentage <= 33) {
-            availabilityClass = "text-red";
-        } else if (percentage <= 66) {
-            availabilityClass = "text-amber";
-        }
-
-        // Handle website link
-        const websiteLink = document.getElementById("provider-website");
-        if (activity.website) {
-            websiteLink.href = activity.website;
-            websiteLink.innerText = activity.website;
-        } else {
-            websiteLink.innerText = "Not given";
-        }
-
-        document.getElementById("day").innerText = activity.day;
-        document.getElementById("time").innerText = activity.start_time && activity.stop_time
-            ? `${activity.start_time.slice(0, 5)} to ${activity.stop_time.slice(0, 5)}`
-            : "Not given";
-
-        document.getElementById("location").innerText = 
-            `${activity.street_1 || ''}, ${activity.city || ''}, ${activity.postcode || ''}`;
-
-        document.getElementById("cost").innerText = activity.cost == 0 ? "FREE" : `£${Number(activity.cost).toFixed(2)}`;
 
         // Initialize Map
         function initialiseMap(postcode) {
@@ -73,6 +41,12 @@ document.addEventListener("DOMContentLoaded", async () => {
         if (activity.postcode) {
             initialiseMap(activity.postcode);
         }
+
+        // add to single view description
+        document.getElementById("activity-description").innerText = activity.description;
+
+        // get details box content
+        document.getElementById("details-container").innerHTML = formatActivityDetails(activity);
 
     } catch (error) {
         console.error("Error fetching activity details:", error);

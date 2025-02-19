@@ -6,6 +6,8 @@
     <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
     <script src="https://unpkg.com/leaflet/dist/leaflet.js" defer></script>
     <script src="/js/activity-details.js" defer></script>
+    <script src="/js/format-activity-details.js" defer></script>
+
 </head>
 
 <body>
@@ -33,7 +35,7 @@
             </div>
             <p class="activity-description-box"><span id="activity-description"></span></p>
             
-            <div class="details-container">
+            <div id="details-container">
               <p><strong>Provider:</strong> <span id="provider-name"></span></p>
               <p><strong>Website:</strong> <a id="provider-website" target="_blank"></a></p>
               <p><strong>Participating Schools:</strong> <span id="participating-schools"></span></p>

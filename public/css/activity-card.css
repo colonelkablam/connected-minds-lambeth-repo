@@ -119,7 +119,7 @@
   text-align: center;
 }
 
-.activity-header-box .icon {
+ .icon {
   background: none;
   border: none;
   font-size: x-large;
@@ -127,7 +127,7 @@
   transition: transform 0.2s ease-in-out;
 }
 
-.activity-header-box .icon:hover {
+ .icon:hover {
   transform: scale(1.2);
 }
 
