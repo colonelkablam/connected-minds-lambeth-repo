@@ -1,9 +1,12 @@
 <% console.log(locals.activity ? activity : "no activity data") %>
 
 <div class="update-activity-container">
-    <h2><%= title %></h2>
-    <form action="/manage-activity/add" method="POST" id="update-activity-form">
-  
+    <h2><%= locals.activity ? "Update Activity" : "Add Activity" %></h2>
+    <form 
+      action="<%= locals.activity ? `/manage-activity/update/${activity.id}` : '/manage-activity/add' %>" 
+      method="<%= locals.activity ? 'POST' : 'POST' %>" 
+      id="update-activity-form"
+    >  
       <label for="title">Activity Title:</label>
       <input 
         type="text" 
@@ -188,7 +191,8 @@
       <input 
         type="text" 
         name="street_1"
-        id="street_1" 
+        id="street_1"
+        value="<%= locals.activity ? locals.activity.street_1 : "" %>" 
         required
       >
   
@@ -197,6 +201,7 @@
         type="text"
         name="street_2"
         id="street_2"
+        value="<%= locals.activity ? locals.activity.street_2 : "" %>"
       >
   
       <label for="city">City:</label>
@@ -205,6 +210,7 @@
         type="text"
         name="city"
         id="city"
+        value="<%= locals.activity ? locals.activity.city : "" %>"
       >
   
       <label for="postcode">Postcode:</label>
@@ -213,10 +219,15 @@
         type="text" 
         name="postcode" 
         id="postcode" 
+        value="<%= locals.activity ? locals.activity.postcode : "" %>"
         required
       >
   
-      <button type="submit"><%= title %></button>
+      <div class="submit-update-button-box">
+        <button class="submit" type="submit"><%= locals.activity ? "Update Activity" : "Add Activity" %></button>
+        <button class="cancel" onclick="window.history.back()">Cancel</button>
+      </div>
+
     </form>
 </div>
 

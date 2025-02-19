@@ -10,8 +10,10 @@ function createActivityCard(activity) {
 
   let availabilityClass = "text-green";
   let percentage = activity.total_spaces > 0 ? (activity.spaces_remaining / activity.total_spaces) * 100 : 0;
-
-  if (activity.spaces_remaining === 0) {
+  
+  if (activity.spaces_remaining === null || activity.total_spaces === null) {
+    availabilityClass = "text-amber";
+  } else if (activity.spaces_remaining === 0) {
     availabilityClass = "text-red";
   } else if (percentage <= 33) {
     availabilityClass = "text-red";
@@ -57,7 +59,7 @@ function createActivityCard(activity) {
         <p><strong>Cost:</strong> ${activity.cost == 0 ? "FREE" : "£" + Number(activity.cost).toFixed(2)}</p>
         <p><strong>Spaces Available:</strong> 
           <span class="${availabilityClass}" id="spaces-${activity.id}">
-            ${activity.spaces_remaining + " / " + activity.total_spaces}
+            ${!activity.total_spaces || !activity.spaces_remaining ? "TBC" : activity.spaces_remaining + " / " + activity.total_spaces}
           </span>
         </p>
       </span>

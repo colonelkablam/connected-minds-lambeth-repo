@@ -1,10 +1,14 @@
 import express from 'express';
-import { isAuthenticated, authoriseRoles  } from '../middlewares/auth-JWT.js';
+import { isAuthenticated, authoriseRoles } from '../middlewares/auth-JWT.js';
+import { addFlashMessage } from '../middlewares/flash-messages.js';
+import { formatActivityData } from '../middlewares/format-data.js';
 import pool from '../database/db.js'; // Import shared database connection
+import { getAddressId } from "../database/activityQueries.js";
 
 const router = express.Router();
 
 router.get('/add', isAuthenticated, authoriseRoles('admin', 'supa_admin'), (req, res) => {
+    addFlashMessage(res, "success", "Add new activity"); // Success message
     res.render('./pages/add-activity.ejs'); // Make sure add-activity.ejs is in the views folder
 });
 
@@ -13,34 +17,27 @@ router.get('/add', isAuthenticated, authoriseRoles('admin', 'supa_admin'), (req,
 router.post('/add', isAuthenticated, authoriseRoles('admin', 'supa_admin'), async (req, res) => {
     try {
         const {
-            title, provider_name, description, participating_schools, day, start_time, stop_time, total_spaces, spaces_remaining, cost, contact_email, target_group, age_lower, age_upper, website, street_1, street_2, city, postcode
+            title, 
+            provider_name, 
+            description, 
+            participating_schools, 
+            day, 
+            start_time, 
+            stop_time, 
+            total_spaces, 
+            spaces_remaining, 
+            cost, 
+            contact_email, 
+            target_group, 
+            age_lower, 
+            age_upper, 
+            website, 
+            street_1, street_2, city, postcode
         } = req.body;
 
-        console.log(req.body);
+        // Format input data
+        const formattedData = formatActivityData(req.body);
 
-        // Convert empty fields to NULL or number value
-        // strings
-        const formattedTitle = title.trim() === "" ? null : title;
-        const formattedProviderName = provider_name.trim() === "" ? null : provider_name;
-        const formattedDescription = description.trim() === "" ? null : description;
-        const formattedWebsite = website.trim() === "" ? null : website;
-        const formattedEmail = contact_email.trim() === "" ? null : contact_email;
-        const formattedParticipatingSchools = participating_schools.trim() === "" ? null : participating_schools;
-        const formattedStartTime = start_time ? `${start_time}:00` : null;
-        const formattedStopTime = stop_time ? `${stop_time}:00` : null;
-        // numbers - need to handle NaN
-        const formattedTotalSpaces = total_spaces.trim() === "" || isNaN(total_spaces) ? null : parseInt(total_spaces, 10);
-        const formattedSpacesRemaining = spaces_remaining.trim() === "" || isNaN(spaces_remaining) ? null : parseInt(spaces_remaining, 10);
-        const formattedAgeLower = age_lower.trim() === "" || isNaN(age_lower) ? null : parseInt(age_lower, 10);
-        const formattedAgeUpper = age_upper.trim() === "" || isNaN(age_upper) ? null : parseInt(age_upper, 10);
-        const formattedCost = cost.trim() === "" || isNaN(cost) ? null : parseFloat(parseFloat(cost).toFixed(2));
-        // address strings
-        const formattedStreet1 = street_1.trim() === "" ? null : street_1;
-        const formattedStreet2 = street_2.trim() === "" ? null : street_2;
-        const formattedCity = city.trim() === "" ? null : city;
-        const formattedPostcode = postcode.trim() === "" ? null : postcode;
-
-        
         // record who added 
         const added_by_id = req.user.id;
 
@@ -49,29 +46,54 @@ router.post('/add', isAuthenticated, authoriseRoles('admin', 'supa_admin'), asyn
             INSERT INTO addresses (street_1, street_2, city, postcode) 
             VALUES ($1, $2, $3, $4) RETURNING id
         `;
-        const addressValues = [formattedStreet1, formattedStreet2, formattedCity, formattedPostcode];
+        const addressValues = [formattedData.street_1, formattedData.street_2, formattedData.city, formattedData.postcode];
         const addressResult = await pool.query(addressQuery, addressValues);
         const address_id = addressResult.rows[0].id;
 
         // Insert into activities table
         const activityQuery = `
             INSERT INTO activities_simple 
-            (title, provider_name, description, participating_schools, day, start_time, stop_time, total_spaces, spaces_remaining, cost, 
-            contact_email, target_group, age_lower, age_upper, website, address_id, added_by_id) 
+            (title, 
+            provider_name, 
+            description, 
+            participating_schools, 
+            day, 
+            start_time, 
+            stop_time, 
+            total_spaces, 
+            spaces_remaining, 
+            cost, 
+            contact_email, 
+            target_group, 
+            age_lower, 
+            age_upper, 
+            website, 
+            address_id, 
+            added_by_id) 
             VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15, $16, $17)
         `;
         const activityValues = [
-          formattedTitle, formattedProviderName, formattedDescription, formattedParticipatingSchools, day, formattedStartTime, formattedStopTime, formattedTotalSpaces, formattedSpacesRemaining, formattedCost, formattedEmail, target_group, formattedAgeLower, formattedAgeUpper, formattedWebsite, address_id, added_by_id
+          formattedData.title, formattedData.provider_name, formattedData.description, formattedData.participating_schools, formattedData.day, 
+          formattedData.start_time, formattedData.stop_time, formattedData.total_spaces, formattedData.spaces_remaining, formattedData.cost, 
+          formattedData.contact_email, formattedData.target_group, formattedData.age_lower, formattedData.age_upper, formattedData.website, 
+          address_id, added_by_id
         ];
         await pool.query(activityQuery, activityValues);
 
+        console.log("New activity added:", `${formattedData.title}`);
+        addFlashMessage(res, "success", "New activity added!"); // Success message
         res.redirect('/'); // Redirect to home page or activities list after submission
+
     } catch (error) {
-        console.error("Error adding activity:", error);
-        res.status(500).json({ success: false, message: "Internal server error" });
+
+      addFlashMessage(res, "error", "Internal server error, activity not added."); // Success message
+      console.error("Error adding activity:", error);
+      res.redirect('/'); // Redirect to home page or activities list after error
     }
 });
 
+
+// handle enrollment (simple increase/decrease for now)
 router.patch('/change-enrollment', isAuthenticated, authoriseRoles('admin', 'supa_admin'),  async (req, res) => {
     const { activity_id, action } = req.body;
   
@@ -122,7 +144,8 @@ router.patch('/change-enrollment', isAuthenticated, authoriseRoles('admin', 'sup
     }
 });
 
-  
+
+// handle loading up the update activity form with existing details
 router.get('/update/:id', isAuthenticated, authoriseRoles('admin', 'supa_admin'), async (req, res) => {
   try {
     const { id } = req.params; // Use params, NOT query
@@ -161,51 +184,122 @@ router.get('/update/:id', isAuthenticated, authoriseRoles('admin', 'supa_admin')
     const result = await pool.query(query, [id]);
 
     if (result.rows.length === 0) {
-      return res.status(404).send("Activity not found");
+      console.log(`Unable to find activity ${id} to update.`);
+      addFlashMessage(res, "error", `Activity ${id} not found!`); // error message
+      return res.redirect('/'); // Redirect to home page after error
     }
-
+    console.log("Loaded activity to update:", `${id}`);
+    addFlashMessage(res, "success", "Activity loaded!"); // Success message
     res.render("./pages/edit-activity.ejs", { activity: result.rows[0] });
 
   } catch (error) {
-    console.error("Error fetching activity:", error);
-    res.status(500).send("Internal Server Error");
+    addFlashMessage(res, "error", "Internal server error."); // error message
+    console.error("Error loading activity:", error);
+    res.redirect('/'); // Redirect to home page after error
   }
+
 });
 
 
-router.post('/update', isAuthenticated, authoriseRoles('admin', 'supa_admin'), async (req, res) => {
+// updating the selected activity with new details from the form 
+// (should be a PUT as updating data but html form doesn't handle this but no issue rn)
+router.post('/update/:id', isAuthenticated, authoriseRoles('admin', 'supa_admin'), async (req, res) => {
   try {
-    const { id, title, provider_name, website, participating_schools, description, contact_email,
-      day, start_time, stop_time, target_group, age_lower, age_upper, total_spaces, spaces_remaining, 
-      cost, street_1, street_2, city, postcode } = req.body;
+    const { id } = req.params;          // Use params, NOT query
+    const updated_by_id = req.user.id;   // record who updated 
 
+    if (!id) {
+      return res.status(400).send("Activity ID is required");
+    }
+
+    // get all the data 
+    const {
+      title, 
+      provider_name, 
+      description, 
+      participating_schools, 
+      day, 
+      start_time, 
+      stop_time, 
+      total_spaces, 
+      spaces_remaining, 
+      cost, 
+      contact_email, 
+      target_group, 
+      age_lower, 
+      age_upper, 
+      website, 
+      street_1, 
+      street_2, 
+      city, 
+      postcode
+    } = req.body;
+
+    // Format input data
+    const formattedData = formatActivityData(req.body);
+
+    // Fetch `address_id`
+    const address_id = await getAddressId(id);
+    if (!address_id) {
+        return res.status(404).send("Activity not found.");
+    }
+
+    // Update addresses table first
+    const addressQuery = `
+    UPDATE addresses 
+    SET 
+      street_1 = $1, 
+      street_2 = $2, 
+      city = $3, 
+      postcode = $4 
+    WHERE id = $5
+    `;
+
+    const addressValues = [formattedData.street_1, formattedData.street_2, formattedData.city, formattedData.postcode, address_id];
+    await pool.query(addressQuery, addressValues);
+
+    // format query to update activity in db - no need to update address_id
     const updateQuery = `
       UPDATE activities_simple
       SET 
-        title = $1, provider_name = $2, website = $3, participating_schools = $4, 
-        description = $5, contact_email = $6, day = $7, start_time = $8, stop_time = $9,
-        target_group = $10, age_lower = $11, age_upper = $12, total_spaces = $13, 
-        spaces_remaining = $14, cost = $15
-      WHERE id = $16 RETURNING *`;
+        title = $1, 
+        provider_name = $2, 
+        description = $3, 
+        participating_schools = $4, 
+        day = $5, 
+        start_time = $6, 
+        stop_time = $7, 
+        total_spaces = $8, 
+        spaces_remaining = $9, 
+        cost = $10, 
+        contact_email = $11, 
+        target_group = $12, 
+        age_lower = $13, 
+        age_upper = $14, 
+        website = $15, 
+        updated_by_id = $16,
+        last_updated = NOW()
+      WHERE id = $17 
+      `;
 
-    const result = await pool.query(updateQuery, [
-      title, provider_name, website, participating_schools, description, contact_email,
-      day, start_time, stop_time, target_group, age_lower, age_upper, total_spaces, spaces_remaining, 
-      cost, id
-    ]);
+      const activityValues = [
+        formattedData.title, formattedData.provider_name, formattedData.description, formattedData.participating_schools, formattedData.day, 
+        formattedData.start_time, formattedData.stop_time, formattedData.total_spaces, formattedData.spaces_remaining, formattedData.cost, 
+        formattedData.contact_email, formattedData.target_group, formattedData.age_lower, formattedData.age_upper, formattedData.website, 
+        updated_by_id, id
+      ];
 
-    if (result.rows.length === 0) {
-      return res.status(404).send("Activity not found.");
-    }
+    await pool.query(updateQuery, activityValues);
 
-    //res.redirect(`/manage-activity/activity?id=${id}`); // Redirect back to the edit page
-
-    res.redirect(`/activity/${id}`);
-
+    console.log("Activity updated:", `id: ${id}`);
+    addFlashMessage(res, "success", "Activity updated!"); // Success message
+    res.redirect('/'); // Redirect to home page or activities list after submission
 
   } catch (error) {
+
+    addFlashMessage(res, "error", "Internal server error, activity not updated."); // Success message
     console.error("Error updating activity:", error);
-    res.status(500).send("Internal Server Error");
+    res.redirect('/'); // Redirect to home page or activities list after error
   }
 });
 

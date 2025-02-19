@@ -6,8 +6,6 @@ document.addEventListener("DOMContentLoaded", async () => {
         return;
     }
 
-    console.log("activity id:", activityId);
-
     try {
         const response = await fetch(`${window.location.origin}/activity/api/get-data/${activityId}`);
         if (!response.ok) {
