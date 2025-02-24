@@ -74,18 +74,6 @@ button:hover {
     background-color: #0056b3;
 }
 
-/* Responsive Design */
-@media (max-width: 768px) {
-    .container {
-        width: 80%;
-    }
-}
-
-@media (max-width: 480px) {
-    .container {
-        width: 95%;
-    }
-}
 
 /* Style Dropdowns to Match Other Inputs */
 select {
