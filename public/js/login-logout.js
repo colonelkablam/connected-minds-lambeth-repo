@@ -7,7 +7,6 @@ document.addEventListener("DOMContentLoaded", function () {
   const closeModal = document.querySelector(".close");
   const loginForm = document.getElementById("loginForm");
   const errorMessage = document.getElementById("loginErrorMessage");
-  const flashContainer = document.getElementById("flashMessages");
 
   if (!loginModal || !closeModal || !loginForm) {
     console.error("Error: One or more modal elements not found.");
@@ -58,11 +57,6 @@ document.addEventListener("DOMContentLoaded", function () {
         
         // Hide modal before reloading the page
         loginModal.classList.remove("show");
-
-        // Show a success message dynamically
-        if (flashContainer) {
-          flashContainer.innerHTML = `<div class="alert alert-success">${data.message}</div>`;
-        }
 
         // Refresh page to update UI
         setTimeout(() => {

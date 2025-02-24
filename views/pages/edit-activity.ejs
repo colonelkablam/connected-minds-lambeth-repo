@@ -12,11 +12,7 @@
       </header>
 
       <!-- Flash Message Container - Always Present to Prevent Page Shift -->
-      <div id="flashContainer">
-        <span id="flashMessage" class="<%= flash.success ? 'success' : (flash.error ? 'error' : '') %>">
-          <%= flash.success || flash.error || '' %>
-        </span>
-      </div>
+      <%- include('../partials/flash-message-display.ejs') %>
 
       <main>
         <%- include('../partials/update-activity-form.ejs', { activity: activity }) %>

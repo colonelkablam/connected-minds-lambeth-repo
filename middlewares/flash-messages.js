@@ -5,21 +5,22 @@ export function setFlashMessage(req, res, next) {
   // Pass flash message to all views
   res.locals.flash = flashMessage;
 
-  // Clear flash message cookie after it's read
-  res.clearCookie("flash");
+  // Do not clear the flash message cookie after it's read - this is done in client JS
+  //res.clearCookie("flash");
 
   next();
 }
-  
+
 export function addFlashMessage(res, type, message) {
-  // Store flash message in cookie (so it persists after redirects)
   res.cookie("flash", JSON.stringify({ [type]: message }), {
-    httpOnly: false, // Allow client-side JavaScript to read it
+    httpOnly: false,
     sameSite: "strict",
-    maxAge: 5000 // Flash message disappears after 5 seconds
+    path: "/",
+    maxAge: 6000 // 6 seconds lifespan
   });
 
-  // Store in `res.locals` for immediate rendering
+  // Also store it in `res.locals` for immediate rendering
   res.locals.flash = { [type]: message };
 }
-  
+
+

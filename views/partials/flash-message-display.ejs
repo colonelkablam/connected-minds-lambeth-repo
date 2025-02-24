@@ -1,0 +1,7 @@
+<div id="flash-container">
+    <% if (locals.flash) { %>
+      <span id="flash-message" class="<%= flash.success ? 'success' : (flash.error ? 'error' : (flash.warning ? 'warning' : '')) %> ">
+        <%= flash.success || flash.error || flash.warning || '' %>
+      </span>
+    <% } %>
+  </div>

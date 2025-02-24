@@ -27,11 +27,14 @@ function createActivityCard(activity) {
     <div class="edit-buttons-box">
     ${userRole === "supa_admin" || userRole === "admin" ? `
       <span class="enroll-span">
-        <button type="button" class="btn enroll-btn" data-id="${activity.id}" onclick="updateSpaces(${activity.id}, 'decrease')">Enroll</button>
-        <button type="button" class="btn unenroll-btn" data-id="${activity.id}" onclick="updateSpaces(${activity.id}, 'increase')">Unenroll</button>
+        <button type="button" title="Enroll student" class="btn enroll-btn" data-id="${activity.id}" onclick="updateSpaces(${activity.id}, 'decrease')">Enroll</button>
+        <button type="button" title="Unenroll student" class="btn unenroll-btn" data-id="${activity.id}" onclick="updateSpaces(${activity.id}, 'increase')">Unenroll</button>
       </span>
-        <button type="button" title="EDIT"class="btn edit-btn" onclick="window.location.href = '/manage-activity/update/${activity.id}'">Edit Details</button>
+      <span class="edit-span">
+        <button type="button" title="EDIT" class="btn edit-btn" onclick="window.location.href = '/manage-activity/update/${activity.id}'">Edit Details</button>
         <button type="button" title="DELETE ACTIVITY" class="icon bin" onclick="window.location.href = '/activity/${activity.id}'">🗑️</button>
+      </span>
+
     ` : ""}
     </div>
   `;

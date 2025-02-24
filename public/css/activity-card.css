@@ -60,6 +60,19 @@
   gap: 15px;
 }
 
+.day-section {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  gap: 1rem;
+}
+
+.day-section > .day-section-title {
+  text-align: right;
+  margin: 0.5rem 0.5rem 0 0;
+  color: #02b383;
+}
+
 .activity-card {
   display: flex;
   flex-direction: column;
@@ -139,12 +152,6 @@
   opacity: 100%;
 }
 
-.activity-card .edit-buttons-box {
-  display: flex;
-  justify-content: space-between;
-  padding-top: 0.5rem;
-}
-
 /* General Button Styles */
 .activity-card .btn {
   padding: 6px 6px;
@@ -154,7 +161,22 @@
   border-radius: 6px;
   cursor: pointer;
   transition: all 0.2s ease-in-out;
-  width: 74px;
+}
+
+.activity-card .edit-buttons-box {
+  justify-content: space-between;
+}
+
+.activity-card .enroll-span {
+  display: flex;
+  gap: 0.5rem;
+  margin-left: 1rem;
+}
+
+.activity-card .edit-span {
+  display: flex;
+  margin-top: 1rem;
+  justify-content: space-between;
 }
 
 /* Enroll Button */
@@ -162,8 +184,8 @@
 .activity-card .btn.enroll-btn {
   background-color: #28a745;
   color: white;
-  margin-left: 1.0rem;
-  margin-right: 0.5rem;
+  width: 60px;
+  font-size: 12px;
 }
 
 .activity-card .btn.enroll-btn:hover {
@@ -175,6 +197,8 @@
 .activity-card .btn.unenroll-btn {
   background-color: #dc3545;
   color: white;
+  width: 60px;
+  font-size: 12px;
 }
 
 .activity-card .btn.unenroll-btn:hover {

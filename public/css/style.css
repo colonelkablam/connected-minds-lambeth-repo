@@ -62,26 +62,24 @@ header .branding h1 {
   color: #00DFA2;
 }
 
-.user-log-in {
-  margin: 0 0 0 0;
-  padding: 10px;
-  background: #00DFA2;
-  border-radius: 2px;
-  min-width: 80px;
+.user-log-in  {
+  font-size: large;
+  font-weight: 700;
   text-align: center;
-
-}
-
-.user-log-in a {
-  font-size: larger;
-  font-weight: 800;
+  padding: 10px;
+  margin: 0;
   text-decoration: none;
+  background: #00DFA2;
   color: #ffffff;
+  border-radius: 5px;
+  min-width: 90px;
   transition: color 0.3s;
+  text-decoration: none;
 }
 
 .user-log-in a:hover {
   color: #fff;
+  background-color: #00DFA2;
 }
 
 .user-log-in p {
@@ -148,7 +146,7 @@ main {
 }
 
 /* Flash Container - Prevents Layout Shifts */
-#flashContainer {
+#flash-container {
   text-align: center;
   min-height: 20px; /* Ensures space is always reserved */
   font-size: 16px;
@@ -157,24 +155,25 @@ main {
 }
 
 /* Flash Message - Hidden by Default */
-#flashMessage {
-  opacity: 0; /* Starts hidden */
-  transition: opacity 0.5s ease-in-out;
-}
-
-/* Make Message Visible */
-#flashMessage.show {
-  opacity: 1;
+#flash-message {
+  visibility: hidden;
+  opacity: 0;
+  transition: opacity 0.5s ease-in-out, visibility 0.5s ease-in-out;
 }
 
 /* Success Message - Green */
-#flashMessage.success {
+#flash-message.success {
   color: #28a745;
 }
 
 /* Error Message - Red */
-#flashMessage.error {
+#flash-message.error {
   color: #dc3545;
+}
+
+/* Warning Message - yellow */
+#flash-message.warning {
+  color: #c99808;
 }
 
 /* Footer Styling */
