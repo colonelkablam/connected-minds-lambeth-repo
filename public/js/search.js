@@ -65,8 +65,6 @@ async function performSearch(searchObject) {
   const hasSearchText = searchObject.searchText && searchObject.searchText.trim().length > 2;
   const filtersEnabled = searchObject.filtersEnabled ? true : false; // Ensure it's properly checked
 
-  console.log("search object:", filtersEnabled, searchObject.filtersEnabled);
-
   // If filters are NOT enabled AND no valid search text is provided, show a warning
   if (!filtersEnabled && !hasSearchText && searchObject.searchQuery !== "") {
     showFlashMessage("Please use at least 3 characters to search.", "warning");

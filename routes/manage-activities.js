@@ -304,4 +304,45 @@ router.post('/update/:id', isAuthenticated, authoriseRoles('admin', 'supa_admin'
 });
 
 
+// Delete an activity (Only for admin and supa_admin roles)
+router.delete('/delete/:id', isAuthenticated, authoriseRoles('admin', 'supa_admin'), async (req, res) => {
+  try {
+      const { id } = req.params; // Get activity ID from params
+
+      if (!id) {
+          return res.status(400).json({ success: false, message: "Activity ID is required" });
+      }
+
+      // Fetch address ID before deleting activity
+      const activityQuery = `SELECT address_id FROM activities_simple WHERE id = $1`;
+      const activityResult = await pool.query(activityQuery, [id]);
+
+      if (activityResult.rows.length === 0) {
+          return res.status(404).json({ success: false, message: "Activity not found" });
+      }
+
+      const address_id = activityResult.rows[0].address_id;
+
+      // Delete the activity
+      const deleteActivityQuery = `DELETE FROM activities_simple WHERE id = $1`;
+      await pool.query(deleteActivityQuery, [id]);
+
+      // Delete the associated address (optional: if not used by another activity)
+      if (address_id) {
+          const deleteAddressQuery = `DELETE FROM addresses WHERE id = $1`;
+          await pool.query(deleteAddressQuery, [address_id]);
+      }
+
+      console.log(`Activity ${id} deleted successfully`);
+      addFlashMessage(res, "success", "Activity deleted successfully!"); // Flash message
+      return res.json({ success: true, message: "Activity deleted successfully" });
+
+  } catch (error) {
+      console.error("Error deleting activity:", error);
+      addFlashMessage(res, "error", "Internal server error, activity not deleted."); // Flash message
+      return res.status(500).json({ success: false, message: "Internal server error" });
+  }
+});
+
+
 export default router;

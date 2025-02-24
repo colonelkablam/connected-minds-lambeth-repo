@@ -2,6 +2,7 @@
 function createActivityCard(activity) {
   const li = document.createElement("li");
   li.classList.add("activity-card");
+  li.setAttribute("id", `activity-${activity.id}`);
   li.setAttribute("data-id", activity.id);
   li.setAttribute("data-spaces", activity.spaces_remaining);
 
@@ -32,7 +33,7 @@ function createActivityCard(activity) {
       </span>
       <span class="edit-span">
         <button type="button" title="EDIT" class="btn edit-btn" onclick="window.location.href = '/manage-activity/update/${activity.id}'">Edit Details</button>
-        <button type="button" title="DELETE ACTIVITY" class="icon bin" onclick="window.location.href = '/activity/${activity.id}'">🗑️</button>
+        <button type="button" title="DELETE ACTIVITY" class="icon bin" onclick="deleteActivity(${activity.id})">🗑️</button>
       </span>
 
     ` : ""}
