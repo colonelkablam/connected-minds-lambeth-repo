@@ -74,7 +74,7 @@ function formatActivityDetails(activity) {
 
           <p><strong>Dates:</strong> 
             <span class="text-green">
-              ${activity.start_date ? `${activity.start_date}` : ` - `} to ${activity.stop_date ? `${activity.stop_date}` : ` - `}
+              ${activity.start_date ? formatDate(activity.start_date) : ` - `} to ${activity.stop_date ? formatDate(activity.stop_date) : ` - `}
             </span>
           </p>
 
@@ -93,5 +93,14 @@ function formatActivityDetails(activity) {
           </p>
         </span>
     `;
+}
+
+function formatDate(dateString) {
+  if (!dateString) return ""; // Handle empty date
+
+  const date = new Date(dateString);
+  if (isNaN(date)) return dateString; // If invalid date, return original string
+
+  return new Intl.DateTimeFormat("en-GB", { day: "2-digit", month: "2-digit", year: "2-digit" }).format(date);
 }
 

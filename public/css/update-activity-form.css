@@ -23,13 +23,16 @@ label {
 }
 
 /* Form Inputs */
-input, textarea {
+input, textarea, select {
     width: 100%;
     padding: 10px;
     margin-bottom: 10px;
     border: 1px solid #ccc;
     border-radius: 5px;
     font-size: 16px;
+    background-color: white;
+    appearance: none; /* Removes default browser styling */
+    cursor: pointer;
 }
 
 input.smaller {
@@ -78,14 +81,6 @@ button:hover {
 /* Style Dropdowns to Match Other Inputs */
 select {
     width: 130px;
-    padding: 10px;
-    margin-bottom: 10px;
-    border: 1px solid #ccc;
-    border-radius: 5px;
-    font-size: 16px;
-    background-color: white;
-    appearance: none; /* Removes default browser styling */
-    cursor: pointer;
 }
 
 /* Ensure Dropdowns and Inputs Look Similar */
@@ -109,12 +104,20 @@ select {
     padding-right: 30px; /* Space for dropdown arrow */
 }
 
-/* Adjust Select Dropdown for Mobile */
-@media (max-width: 768px) {
-    select {
-        font-size: 14px;
-        padding: 8px;
-    }
+.pair-container {
+    display: flex;
+    align-items: center;
+    gap: 10px; /* Adjust space between fields */
+}
+
+.pair-field {
+    display: flex;
+    flex-direction: column;
+}
+
+.pair-separator {
+    padding-top: 1rem;
+    font-size: 1rem;
 }
 
 #postcode {

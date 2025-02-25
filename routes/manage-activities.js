@@ -16,24 +16,6 @@ router.get('/add', isAuthenticated, authoriseRoles('admin', 'supa_admin'), (req,
 // Handle adding a new activity
 router.post('/add', isAuthenticated, authoriseRoles('admin', 'supa_admin'), async (req, res) => {
     try {
-        const {
-            title, 
-            provider_name, 
-            description, 
-            participating_schools, 
-            day, 
-            start_time, 
-            stop_time, 
-            total_spaces, 
-            spaces_remaining, 
-            cost, 
-            contact_email, 
-            target_group, 
-            age_lower, 
-            age_upper, 
-            website, 
-            street_1, street_2, city, postcode
-        } = req.body;
 
         // Format input data
         const formattedData = formatActivityData(req.body);
@@ -57,9 +39,11 @@ router.post('/add', isAuthenticated, authoriseRoles('admin', 'supa_admin'), asyn
             provider_name, 
             description, 
             participating_schools, 
-            day, 
+            day,
+            start_date,
+            stop_date,
             start_time, 
-            stop_time, 
+            stop_time,
             total_spaces, 
             spaces_remaining, 
             cost, 
@@ -70,12 +54,12 @@ router.post('/add', isAuthenticated, authoriseRoles('admin', 'supa_admin'), asyn
             website, 
             address_id, 
             added_by_id) 
-            VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15, $16, $17)
+            VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15, $16, $17, $18, $19)
         `;
         const activityValues = [
           formattedData.title, formattedData.provider_name, formattedData.description, formattedData.participating_schools, formattedData.day, 
-          formattedData.start_time, formattedData.stop_time, formattedData.total_spaces, formattedData.spaces_remaining, formattedData.cost, 
-          formattedData.contact_email, formattedData.target_group, formattedData.age_lower, formattedData.age_upper, formattedData.website, 
+          formattedData.start_date, formattedData.stop_date, formattedData.start_time, formattedData.stop_time, formattedData.total_spaces, formattedData.spaces_remaining, 
+          formattedData.cost, formattedData.contact_email, formattedData.target_group, formattedData.age_lower, formattedData.age_upper, formattedData.website, 
           address_id, added_by_id
         ];
         await pool.query(activityQuery, activityValues);
@@ -162,7 +146,9 @@ router.get('/update/:id', isAuthenticated, authoriseRoles('admin', 'supa_admin')
       a.participating_schools,
       a.title, 
       a.description, 
-      a.day, 
+      a.day,
+      a.start_date,
+      a.stop_date,
       a.start_time, 
       a.stop_time,
       a.address_id, 
@@ -183,14 +169,22 @@ router.get('/update/:id', isAuthenticated, authoriseRoles('admin', 'supa_admin')
 
     const result = await pool.query(query, [id]);
 
+    let activity = result.rows[0];
+
     if (result.rows.length === 0) {
       console.log(`Unable to find activity ${id} to update.`);
       addFlashMessage(res, "error", `Activity ${id} not found!`); // error message
       return res.redirect('/'); // Redirect to home page after error
     }
+
+    // Convert `YYYY-MM-DD` format to ensure it's correctly formatted for `<input type="date">`
+    activity.start_date = activity.start_date ? activity.start_date.toISOString().split("T")[0] : "";
+    activity.stop_date = activity.stop_date ? activity.stop_date.toISOString().split("T")[0] : "";
+
     console.log("Loaded activity to update:", `${id}`);
+
     addFlashMessage(res, "success", "Activity loaded!"); // Success message
-    res.render("./pages/edit-activity.ejs", { activity: result.rows[0] });
+    res.render("./pages/edit-activity.ejs", { activity: activity });
 
   } catch (error) {
     addFlashMessage(res, "error", "Internal server error."); // error message
@@ -211,29 +205,6 @@ router.post('/update/:id', isAuthenticated, authoriseRoles('admin', 'supa_admin'
     if (!id) {
       return res.status(400).send("Activity ID is required");
     }
-
-    // get all the data 
-    const {
-      title, 
-      provider_name, 
-      description, 
-      participating_schools, 
-      day, 
-      start_time, 
-      stop_time, 
-      total_spaces, 
-      spaces_remaining, 
-      cost, 
-      contact_email, 
-      target_group, 
-      age_lower, 
-      age_upper, 
-      website, 
-      street_1, 
-      street_2, 
-      city, 
-      postcode
-    } = req.body;
 
     // Format input data
     const formattedData = formatActivityData(req.body);
@@ -266,26 +237,28 @@ router.post('/update/:id', isAuthenticated, authoriseRoles('admin', 'supa_admin'
         provider_name = $2, 
         description = $3, 
         participating_schools = $4, 
-        day = $5, 
-        start_time = $6, 
-        stop_time = $7, 
-        total_spaces = $8, 
-        spaces_remaining = $9, 
-        cost = $10, 
-        contact_email = $11, 
-        target_group = $12, 
-        age_lower = $13, 
-        age_upper = $14, 
-        website = $15, 
-        updated_by_id = $16,
+        day = $5,
+        start_date = $6,
+        stop_date = $7,
+        start_time = $8, 
+        stop_time = $9, 
+        total_spaces = $10, 
+        spaces_remaining = $11, 
+        cost = $12, 
+        contact_email = $13, 
+        target_group = $14, 
+        age_lower = $15, 
+        age_upper = $16, 
+        website = $17, 
+        updated_by_id = $18,
         last_updated = NOW()
-      WHERE id = $17 
+      WHERE id = $19 
       `;
 
       const activityValues = [
         formattedData.title, formattedData.provider_name, formattedData.description, formattedData.participating_schools, formattedData.day, 
-        formattedData.start_time, formattedData.stop_time, formattedData.total_spaces, formattedData.spaces_remaining, formattedData.cost, 
-        formattedData.contact_email, formattedData.target_group, formattedData.age_lower, formattedData.age_upper, formattedData.website, 
+        formattedData.start_date, formattedData.stop_date, formattedData.start_time, formattedData.stop_time, formattedData.total_spaces, formattedData.spaces_remaining,
+        formattedData.cost, formattedData.contact_email, formattedData.target_group, formattedData.age_lower, formattedData.age_upper, formattedData.website, 
         updated_by_id, id
       ];
 

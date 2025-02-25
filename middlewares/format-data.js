@@ -13,6 +13,8 @@ export function formatActivityData(data) {
 
         // Time Formatting
         day: data.day.trim(), // should be a string day of the week
+        start_date: !data.start_date || data.start_date === "" ? null : data.start_date,
+        stop_date: !data.stop_date || data.stop_date === "" ? null : data.stop_date,
         start_time: data.start_time ? `${data.start_time}:00` : null,
         stop_time: data.stop_time ? `${data.stop_time}:00` : null,
 
