@@ -20,6 +20,20 @@ export async function getAddressId(activityId) {
     }
 }
 
+// Fetches a single activity by ID
+export const getActivityById = async (id) => {
+    const query = `      
+      SELECT ${ACTIVITY_SELECT_FIELDS}
+      FROM activities_simple a
+      LEFT JOIN addresses addr ON a.address_id = addr.id
+      WHERE a.id = $1
+    `;
+  
+    const { rows } = await pool.query(query, [id]);
+    console.log("from getActivityById:", rows);
+    return rows.length > 0 ? rows[0] : null; // Return activity or null
+  };
+
 
 // Builds the dynamic SQL query and parameters for activity search.
 export const buildActivitySearchQuery = (searchData) => {

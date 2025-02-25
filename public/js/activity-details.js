@@ -8,15 +8,25 @@ document.addEventListener("DOMContentLoaded", async () => {
 
     try {
         const response = await fetch(`${window.location.origin}/activity/api/get-data/${activityId}`);
+    
         if (!response.ok) {
-            throw new Error("Failed to fetch activity");
+            throw new Error(`Failed to fetch activity. Status: ${response.status}`);
         }
-        
-        const activity = await response.json();
 
-        document.getElementById("activity-title").innerText = activity.title;
+        const data = await response.json(); // Get the full response
 
-        // Initialize Map
+        // Extract the activity object
+        if (!data.success || !data.activity) {
+            throw new Error("API returned invalid data format");
+        }
+
+        const activity = data.activity; // Extracted activity data
+
+        // Update Title
+        const titleElement = document.getElementById("activity-title");
+        if (titleElement) titleElement.innerText = activity.title || "No Title";
+
+        // Initialize Map if postcode exists
         function initialiseMap(postcode) {
             fetch(`https://nominatim.openstreetmap.org/search?format=json&q=${postcode}, UK`)
                 .then(response => response.json())
@@ -33,7 +43,10 @@ document.addEventListener("DOMContentLoaded", async () => {
                             .bindPopup(`Location: ${postcode}`)
                             .openPopup();
                     } else {
-                        document.getElementById("activity-map").innerHTML = "<p>Location not found</p>";
+                        const mapElement = document.getElementById("activity-map");
+                        if (mapElement) {
+                            mapElement.innerHTML = "<p>Location not found</p>";
+                        }
                     }
                 });
         }
@@ -42,11 +55,13 @@ document.addEventListener("DOMContentLoaded", async () => {
             initialiseMap(activity.postcode);
         }
 
-        // add to single view description
-        document.getElementById("activity-description").innerText = activity.description;
+        // Update Description
+        const descriptionElement = document.getElementById("activity-description");
+        if (descriptionElement) descriptionElement.innerText = activity.description || "No description available";
 
-        // get details box content
-        document.getElementById("details-container").innerHTML = formatActivityDetails(activity);
+        // Update Details Box
+        const detailsContainer = document.getElementById("details-container");
+        if (detailsContainer) detailsContainer.innerHTML = formatActivityDetails(activity);
 
     } catch (error) {
         console.error("Error fetching activity details:", error);

@@ -1,5 +1,4 @@
 import express from 'express';
-import pool from '../database/db.js'; // Import the database connection
 import { getSearchedActivities, getPinnedActivities } from '../database/activity-queries.js';
 
 const router = express.Router();
