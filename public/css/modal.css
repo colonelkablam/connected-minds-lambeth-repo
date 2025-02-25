@@ -27,13 +27,12 @@
   top: -20%;
 }
 
-
-.modal-heading {
+#modal-heading {
   text-align: center;
-  color: #666;
+  color: #666 !important;
 }
 
-#loginErrorMessage {
+#modal-message {
   color: red;
   text-align: center;
   min-height: 20px; /* Adjust height based on expected message size */
@@ -91,6 +90,7 @@
   font-size: 20px;
   color: #999;
 }
+
 .modal .close:hover {
   color: black;
 }

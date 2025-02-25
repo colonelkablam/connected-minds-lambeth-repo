@@ -2,15 +2,15 @@ document.addEventListener("DOMContentLoaded", function () {
   console.log("DOM fully loaded, setting up modal listeners...");
 
   // **MODAL ELEMENTS**
-  const genericModal = document.getElementById("genericModal");
-  const modalHeading = document.getElementById("modalHeading");
-  const modalMessage = document.getElementById("modalMessage");
-  const modalForm = document.getElementById("modalForm");
-  const modalInputs = document.getElementById("modalInputs");
-  const modalSubmitButton = document.getElementById("modalSubmitButton");
-  const modalActions = document.getElementById("modalActions");
-  const modalConfirmButton = document.getElementById("modalConfirmButton");
-  const modalCancelButton = document.getElementById("modalCancelButton");
+  const genericModal = document.getElementById("generic-modal");
+  const modalHeading = document.getElementById("modal-heading");
+  const modalMessage = document.getElementById("modal-message");
+  const modalForm = document.getElementById("modal-form");
+  const modalInputs = document.getElementById("modal-inputs");
+  const modalSubmitButton = document.getElementById("modal-submit-button");
+  const modalActions = document.getElementById("modal-actions");
+  const modalConfirmButton = document.getElementById("modal-confirm-button");
+  const modalCancelButton = document.getElementById("modal-cancel-button");
   const closeModal = document.querySelector(".close");
 
   // **SHOW MODAL FUNCTION**
@@ -76,7 +76,7 @@ document.addEventListener("DOMContentLoaded", function () {
   document.body.addEventListener("click", function (event) {
     
     // LOGIN BUTTON CLICKED
-    if (event.target.id === "loginButton") {
+    if (event.target.id === "login-button") {
       event.preventDefault();
       showModal({
         title: "Login",
@@ -112,7 +112,7 @@ document.addEventListener("DOMContentLoaded", function () {
     } 
     
     // DELETE BUTTON CLICKED
-    else if (event.target.classList.contains("deleteButton")) {
+    else if (event.target.classList.contains("delete-button")) {
       const itemId = event.target.getAttribute("data-id");
       showModal({
         title: "Confirm Deletion",
@@ -140,7 +140,7 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 
     // LOGOUT BUTTON CLICKED
-    else if (event.target.id === "logoutButton") {
+    else if (event.target.id === "logout-button") {
       event.preventDefault(); // Prevent default link behavior
       console.log("Logout button clicked...");
 

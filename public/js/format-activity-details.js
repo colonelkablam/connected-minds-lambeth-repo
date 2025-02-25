@@ -4,18 +4,7 @@ function formatActivityDetails(activity) {
     }
 
     // formatting for colour highlights on page for FULL/TBC/NA etc
-    let availabilityClass = "text-green";
-    let percentage = activity.total_spaces > 0 ? (activity.spaces_remaining / activity.total_spaces) * 100 : 0;
-    
-    if (activity.spaces_remaining === null || activity.total_spaces === null) {
-      availabilityClass = "text-amber";
-    } else if (activity.spaces_remaining === 0) {
-      availabilityClass = "text-red";
-    } else if (percentage <= 33) {
-      availabilityClass = "text-red";
-    } else if (percentage <= 66) {
-      availabilityClass = "text-amber";
-    }
+    const availabilityClass = getAvailabilityColour(activity.total_spaces, activity.spaces_remaining)
 
     const ageRangeText = activity.age_lower && activity.age_upper 
     ? `ages ${activity.age_lower} to ${activity.age_upper}` 
@@ -102,5 +91,22 @@ function formatDate(dateString) {
   if (isNaN(date)) return dateString; // If invalid date, return original string
 
   return new Intl.DateTimeFormat("en-GB", { day: "2-digit", month: "2-digit", year: "2-digit" }).format(date);
+}
+
+// formatting for colour highlights on page for FULL/TBC/NA etc
+function getAvailabilityColour (total, remaining) {
+  // formatting for colour highlights on page for FULL/TBC/NA etc
+  let availabilityClass = "text-green";
+  let percentage = total > 0 ? (remaining / total) * 100 : 0;
+  
+  if (remaining === null || total === null) {
+    availabilityClass = "text-amber";
+  } else if (remaining === 0) {
+    availabilityClass = "text-red";
+  } else if (percentage <= 40) {
+    availabilityClass = "text-amber";
+  }
+
+  return availabilityClass;
 }
 

@@ -6,8 +6,8 @@ export const ACTIVITY_SELECT_FIELDS = `
     a.title,
     a.description, 
     a.day,
-    TO_CHAR(a.start_date, 'DD/MM/YY') AS start_date,  -- Format start_date
-    TO_CHAR(a.stop_date, 'DD/MM/YY') AS stop_date,    -- Format stop_date
+    TO_CHAR(a.start_date, 'YYYY-MM-DD') AS start_date,  -- Format start_date
+    TO_CHAR(a.stop_date, 'YYYY-MM-DD') AS stop_date,    -- Format stop_date 
     a.start_time,
     a.stop_time,
     a.address_id,
@@ -23,4 +23,7 @@ export const ACTIVITY_SELECT_FIELDS = `
     a.age_lower,
     a.age_upper
 `;
+
+// TO_CHAR(a.start_date, 'DD/MM/YY') AS start_date,  -- Format start_date
+// TO_CHAR(a.stop_date, 'DD/MM/YY') AS stop_date,    -- Format stop_date
 
