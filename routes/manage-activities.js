@@ -3,7 +3,7 @@ import { isAuthenticated, authoriseRoles } from '../middlewares/auth-JWT.js';
 import { addFlashMessage } from '../middlewares/flash-messages.js';
 import { formatActivityData } from '../middlewares/format-data.js';
 import pool from '../database/db.js'; // Import shared database connection
-import { getAddressId } from "../database/activityQueries.js";
+import { getAddressId } from "../database/activity-queries.js";
 
 const router = express.Router();
 

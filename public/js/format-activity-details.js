@@ -68,7 +68,13 @@ function formatActivityDetails(activity) {
 
           <p><strong>Time:</strong>
             <span class="${timingClass}">
-              ${activity.start_time && activity.stop_time? `${activity.start_time.slice(0, 5)} to ${activity.stop_time.slice(0, 5)}` : 'TBC'}
+              ${activity.start_time && activity.stop_time ? `${activity.start_time.slice(0, 5)} to ${activity.stop_time.slice(0, 5)}` : 'TBC'}
+            </span>
+          </p>
+
+          <p><strong>Dates:</strong> 
+            <span class="text-green">
+              ${activity.start_date ? `${activity.start_date}` : ` - `} to ${activity.stop_date ? `${activity.stop_date}` : ` - `}
             </span>
           </p>
 
