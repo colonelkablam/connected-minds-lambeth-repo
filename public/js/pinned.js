@@ -6,10 +6,10 @@ document.addEventListener("DOMContentLoaded", () => {
 
 // **Tab Switching: Show Correct Content & Refresh Pins If Needed**
 function showTab(tab) {
-  document.getElementById("cards-container").style.display = tab === "cards" ? "block" : "none";
+  document.getElementById("cards-container").style.display = tab === "days" ? "block" : "none";
   document.getElementById("pinned-container").style.display = tab === "pinned" ? "block" : "none";
 
-  document.getElementById("cards-tab").classList.toggle("active", tab === "cards");
+  document.getElementById("days-tab").classList.toggle("active", tab === "days");
   document.getElementById("pinned-tab").classList.toggle("active", tab === "pinned");
 
   if (tab === "pinned") {

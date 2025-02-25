@@ -68,7 +68,7 @@
 }
 
 .day-section > .day-section-title {
-  text-align: right;
+  text-align: left;
   margin: 0.5rem 0.5rem 0 0;
   color: #02b383;
 }
