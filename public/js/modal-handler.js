@@ -72,95 +72,103 @@ document.addEventListener("DOMContentLoaded", function () {
     }
   });
 
-  // **EVENT LISTENER FOR LOGIN, DELETE & LOGOUT BUTTONS**
   document.body.addEventListener("click", function (event) {
-    
-    // LOGIN BUTTON CLICKED
-    if (event.target.id === "login-button") {
-      event.preventDefault();
-      showModal({
-        title: "Login",
-        message: "",
-        formFields: [
-          { id: "email", name: "email", type: "email", placeholder: "Email", required: true },
-          { id: "password", name: "password", type: "password", placeholder: "Password", required: true }
-        ],
-        submitAction: function (formData) {
-          fetch(`${window.location.origin}/user-login/login`, {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify(formData)
-          })
-          .then(response => response.json())
-          .then(data => {
-            if (data.success) {
-              console.log("Login successful!");
-              closeModalHandler();
-              setTimeout(() => window.location.reload(), 500);
-            } else {
-              modalMessage.textContent = data.message;
+    const modalType = event.target.dataset.modal; // Get modal type
+    const itemId = event.target.dataset.id; // Get item ID (if applicable)
+  
+    if (!modalType) return; // Ignore clicks that aren't related to modals
+  
+    event.preventDefault();
+  
+    // Handle different modal actions
+    switch (modalType) {
+      case "login":
+        showModal({
+          title: "Login",
+          message: "",
+          formFields: [
+            { id: "email", name: "email", type: "email", placeholder: "Email", required: true },
+            { id: "password", name: "password", type: "password", placeholder: "Password", required: true }
+          ],
+          submitAction: function (formData) {
+            fetch(`${window.location.origin}/user-login/login`, {
+              method: "POST",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify(formData)
+            })
+            .then(response => response.json())
+            .then(data => {
+              if (data.success) {
+                console.log("Login successful!");
+                closeModalHandler();
+                setTimeout(() => window.location.reload(), 500);
+              } else {
+                modalMessage.textContent = data.message;
+                modalMessage.style.color = "red";
+              }
+            })
+            .catch(error => {
+              console.error("Login Error:", error);
+              modalMessage.textContent = "Something went wrong.";
               modalMessage.style.color = "red";
-            }
-          })
-          .catch(error => {
-            console.error("Login Error:", error);
-            modalMessage.textContent = "Something went wrong.";
-            modalMessage.style.color = "red";
-          });
-        }
-      });
-    } 
-    
-    // DELETE BUTTON CLICKED
-    else if (event.target.classList.contains("delete-button")) {
-      const itemId = event.target.getAttribute("data-id");
-      showModal({
-        title: "Confirm Deletion",
-        message: "Are you sure you want to delete this item?",
-        confirmAction: function () {
-          fetch(`${window.location.origin}/delete-item/${itemId}`, { method: "DELETE" })
-          .then(response => response.json())
-          .then(data => {
-            if (data.success) {
-              console.log("Item deleted!");
-              closeModalHandler();
-              setTimeout(() => window.location.reload(), 500);
-            } else {
-              modalMessage.textContent = "Delete failed!";
+            });
+          }
+        });
+      break;
+  
+      case "delete":
+        showModal({
+          title: "Confirm Deletion",
+          message: "Are you sure you want to delete this item?",
+          confirmAction: function () {
+            fetch(`${window.location.origin}/manage-activity/delete/${itemId}`, {
+              method: "DELETE"
+            })
+            .then(response => response.json())
+            .then(data => {
+              if (data.success) {
+                console.log("Item deleted!");
+                // Remove activity card from the DOM
+                const activityElement = document.querySelector(`.activity-card[data-id='${itemId}']`);
+                if (activityElement) {
+                    activityElement.remove();
+                    console.log(`Activity ${itemId} removed from DOM.`);
+                }
+                // Close modal
+                closeModalHandler();
+              } else {
+                modalMessage.textContent = "Delete failed!";
+                modalMessage.style.color = "red";
+              }
+            })
+            .catch(error => {
+              console.error("Delete Error:", error);
+              modalMessage.textContent = "Something went wrong.";
               modalMessage.style.color = "red";
-            }
-          })
-          .catch(error => {
-            console.error("Delete Error:", error);
-            modalMessage.textContent = "Something went wrong.";
-            modalMessage.style.color = "red";
-          });
-        }
-      });
+            });
+          }
+        });
+      break;
+      
+      case "logout":
+        fetch(`${window.location.origin}/user-login/logout`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" }
+        })
+        .then(response => {
+          if (!response.ok) throw new Error("Logout failed");
+          return response.json();
+        })
+        .then(() => {
+          console.log("Logout successful, redirecting to home page...");
+          window.location.href = "/";
+        })
+        .catch(error => console.error("Logout Error:", error));
+        break;
+  
+      default:
+        console.warn("Unknown modal action:", modalType);
     }
-
-    // LOGOUT BUTTON CLICKED
-    else if (event.target.id === "logout-button") {
-      event.preventDefault(); // Prevent default link behavior
-      console.log("Logout button clicked...");
-
-      fetch(`${window.location.origin}/user-login/logout`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" }
-      })
-      .then(response => {
-        if (!response.ok) {
-          throw new Error("Logout failed");
-        }
-        return response.json();
-      })
-      .then(() => {
-        console.log("Logout successful, redirecting to home page...");
-        window.location.href = "/"; // Redirect after logout
-      })
-      .catch(error => console.error("Logout Error:", error));
-    }
-
   });
-
+  
 });

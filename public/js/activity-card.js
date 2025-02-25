@@ -33,7 +33,7 @@ function createActivityCard(activity) {
       </span>
       <span class="edit-span">
         <button type="button" title="EDIT" class="btn edit-btn" onclick="window.location.href = '/manage-activity/update/${activity.id}'">Edit Details</button>
-        <button type="button" title="DELETE ACTIVITY" class="icon bin" data-id="${activity.id} onclick="deleteActivity(${activity.id})">🗑️</button>
+        <button type="button" title="DELETE ACTIVITY" class="icon bin" data-modal = "delete" data-id="${activity.id}">🗑️</button>
       </span>
 
     ` : ""}

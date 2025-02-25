@@ -35,8 +35,14 @@
 #modal-message {
   color: red;
   text-align: center;
-  min-height: 20px; /* Adjust height based on expected message size */
+  min-height: 40px; /* Adjust height based on expected message size */
   display: block; /* Ensures it always takes up space */
+  padding: 0.5rem;
+}
+
+#modal-actions {
+  gap: 1rem;
+  padding: 0.5rem;
 }
 
 /* Style labels */
