@@ -18,8 +18,6 @@ router.get("/api/get-data/:id", async (req, res) => {
 
     const activity = await getActivityById(id);
 
-    console.log("In route:", activity);
-
     if (!activity) {
       return res.status(404).json({ success: false, message: "Activity not found" });
     }

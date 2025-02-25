@@ -30,7 +30,6 @@ export const getActivityById = async (id) => {
     `;
   
     const { rows } = await pool.query(query, [id]);
-    console.log("from getActivityById:", rows);
     return rows.length > 0 ? rows[0] : null; // Return activity or null
   };
 
