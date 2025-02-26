@@ -79,8 +79,8 @@ function formatActivityDetails(activity) {
           </p>
 
           <p><strong>Spaces Available:</strong> 
-            <span class="${availabilityClass}" id="spaces-${activity.id}">
-              ${!activity.total_spaces || !activity.spaces_remaining ? "TBC" : activity.spaces_remaining + " / " + activity.total_spaces}
+            <span id="spaces-${activity.id}">
+              ${getAvailabilityText(activity.total_spaces, activity.spaces_remaining)}
             </span>
           </p>
         </span>
@@ -98,18 +98,26 @@ function formatDate(dateString) {
 
 // formatting for colour highlights on page for FULL/TBC/NA etc
 function getAvailabilityColour (total, remaining) {
-  // formatting for colour highlights on page for FULL/TBC/NA etc
   let availabilityClass = "text-green";
-  let percentage = total > 0 ? (remaining / total) * 100 : 0;
   
   if (remaining === null || total === null) {
     availabilityClass = "text-amber";
   } else if (remaining === 0) {
     availabilityClass = "text-red";
-  } else if (percentage <= 40) {
+  } else if (remaining / total <= 0.4) {
     availabilityClass = "text-amber";
   }
 
   return availabilityClass;
+}
+
+function getAvailabilityText(total, remaining) {
+  if (remaining === null || total === null) {
+    return "TBC";
+  }
+
+  const availabilityClass = getAvailabilityColour(total, remaining);
+
+  return `<span class="${availabilityClass}"> ${remaining}</span> / ${total}`;
 }
 

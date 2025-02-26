@@ -14,10 +14,9 @@ function updateSpaces(activityId, action) {
       if (data.success) {
         // Update the UI with the new number of available spaces
         const spacesElement = document.getElementById(`spaces-${activityId}`);
-        spacesElement.textContent = `${data.spaces_remaining} / ${data.total_spaces}`;
-        spacesElement.className = getAvailabilityColour(data.total_spaces, data.spaces_remaining);
+        spacesElement.innerHTML = getAvailabilityText(data.total_spaces, data.spaces_remaining);
 
-        refreshPinnedActivityCards();
+        //refreshPinnedActivityCards(); // no need to refresh as injecting via js
 
       } else {
         alert("Error: " + data.message);
