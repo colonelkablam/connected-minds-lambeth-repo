@@ -20,7 +20,7 @@
 
 /* Search Input */
 .search-input {
-  width: 90%;
+  width: 100%;
   max-width: 800px;
   min-width: 300px;
   display: flex;
