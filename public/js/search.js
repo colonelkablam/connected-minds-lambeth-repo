@@ -81,7 +81,8 @@ async function performSearch(searchObject) {
     const data = await response.json();
 
     if (data.success) {
-      showFlashMessage(`${data.found_activities.length} activities found.`, "success");
+      const numberFound = data.found_activities.length;
+      showFlashMessage(`${numberFound} activit${numberFound == 1 ? 'y' : 'ies'} found.`, "success");
       displaySearchResults(data.found_activities);
     } else {
       console.error("Search error:", data.message);

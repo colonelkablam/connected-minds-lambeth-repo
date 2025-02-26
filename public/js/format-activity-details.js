@@ -13,6 +13,9 @@ function formatActivityDetails(activity) {
     let timingClass = "text-green";
     if (activity.start_time === null || activity.stop_time === null) { timingClass = "text-amber"; }
 
+    let dateClass = "text-green";
+    if (activity.start_date === null || activity.stop_date === null) { dateClass = "text-amber"; }
+
     // if a blank link
     if (activity.website) {
       websiteLink = activity.website;
@@ -62,7 +65,7 @@ function formatActivityDetails(activity) {
           </p>
 
           <p><strong>Dates:</strong> 
-            <span class="text-green">
+            <span class="${dateClass}">
               ${activity.start_date ? formatDate(activity.start_date) : ` - `} to ${activity.stop_date ? formatDate(activity.stop_date) : ` - `}
             </span>
           </p>
