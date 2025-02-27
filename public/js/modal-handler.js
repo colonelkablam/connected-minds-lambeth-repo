@@ -127,12 +127,13 @@ document.addEventListener("DOMContentLoaded", function () {
             .then(response => response.json())
             .then(data => {
               if (data.success) {
-                console.log("Item deleted!");
-                // Remove activity card from the DOM
-                const activityElement = document.querySelector(`.activity-card[data-id='${itemId}']`);
+                // Remove activity card using the correct ID format
+                const activityElement = document.getElementById(`activity-${itemId}`);
                 if (activityElement) {
                     activityElement.remove();
                     console.log(`Activity ${itemId} removed from DOM.`);
+                } else {
+                    console.warn(`Activity card with ID activity-${itemId} not found.`);
                 }
                 // Close modal
                 closeModalHandler();
