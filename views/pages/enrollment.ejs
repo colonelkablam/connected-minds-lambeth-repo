@@ -2,13 +2,12 @@
 <html lang="en">
 <head>
     <%- include('../partials/head.ejs') %>
-    <link rel="stylesheet" href="/css/update-activity-form.css">
-    <script src="/js/validate-update-form.js" defer></script>
-
+    <link rel="stylesheet" href="/css/enrollment-management.css">
+    <script src="/js/enrollment-panel.js" defer></script>
+    <script src="/js/format-activity-details.js" defer></script>
 </head>
 
 <body>
-  
     <div class="container">
       <header>
         <%- include('../partials/header.ejs', { user: user || null }) %>
@@ -18,7 +17,7 @@
       <%- include('../partials/flash-message-display.ejs') %>
 
       <main>
-        <%- include('../partials/update-activity-form.ejs', { activity: activity }) %>
+        <%- include('../partials/enrollment-panel.ejs') %>
       </main>
       
       <footer>
@@ -26,7 +25,6 @@
       </footer>
 
     </div>
-
 </body>
 
 </html>

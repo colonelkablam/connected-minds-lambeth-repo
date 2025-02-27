@@ -3,6 +3,15 @@ document.addEventListener("DOMContentLoaded", () => {
   setupFilterToggle(); // Handle filters visibility
 });
 
+// Detect when the page becomes visible again (user navigates back rather than re-load)
+document.addEventListener("visibilitychange", async () => {
+  if (document.visibilityState === "visible") {
+    console.log("search page re-visited - updating data");
+    await updateActivitySpaces();
+  }
+});
+
+
 // **Handles the visibility of the filters panel**
 function setupFilterToggle() {
   const filtersCheckbox = document.getElementById("filtersEnabled");
@@ -92,26 +101,24 @@ async function performSearch(searchObject) {
   }
 }
 
-
-
-// **Displays search results grouped by day**
-function displaySearchResults(activities) {
+// Displays search results grouped by day
+async function displaySearchResults(activities) {
   const searchResultsContainer = document.getElementById("search-results");
   searchResultsContainer.innerHTML = ""; // Clear previous results
 
   if (activities.length === 0) {
-    searchResultsContainer.innerHTML = "<p>No activities found.</p>";
-    return;
+      searchResultsContainer.innerHTML = "<p>No activities found.</p>";
+      return;
   }
 
   // Group activities by day of the week
   const groupedActivities = {};
   activities.forEach((activity) => {
-    const day = activity.day; // Assuming activity.day contains "Monday", "Tuesday", etc.
-    if (!groupedActivities[day]) {
-      groupedActivities[day] = [];
-    }
-    groupedActivities[day].push(activity);
+      const day = activity.day; // Assuming activity.day contains "Monday", "Tuesday", etc.
+      if (!groupedActivities[day]) {
+          groupedActivities[day] = [];
+      }
+      groupedActivities[day].push(activity);
   });
 
   // Define the correct order of days
@@ -119,21 +126,49 @@ function displaySearchResults(activities) {
 
   // Append activities in order of days
   daysOrder.forEach((day) => {
-    if (groupedActivities[day]) {
-      const daySection = document.createElement("div");
-      daySection.classList.add("day-section");
+      if (groupedActivities[day]) {
+          const daySection = document.createElement("div");
+          daySection.classList.add("day-section");
 
-      const heading = document.createElement("h2");
-      heading.classList.add("day-section-title");
-      heading.textContent = day;
-      daySection.appendChild(heading);
+          const heading = document.createElement("h2");
+          heading.classList.add("day-section-title");
+          heading.textContent = day;
+          daySection.appendChild(heading);
 
-      groupedActivities[day].forEach((activity) => {
-        const activityElement = createActivityCard(activity);
-        daySection.appendChild(activityElement);
-      });
+          groupedActivities[day].forEach((activity) => {
+              const activityElement = createActivityCard(activity);
+              daySection.appendChild(activityElement);
+          });
 
-      searchResultsContainer.appendChild(daySection);
-    }
+          searchResultsContainer.appendChild(daySection);
+      }
   });
 }
+
+
+// Updates availability in activity cards as live data
+async function updateActivitySpaces() {
+  const spaceElements = document.querySelectorAll("[id^=spaces-available-]"); // Find all elements with IDs starting with 'spaces-'
+  
+  if (spaceElements.length === 0) {
+      console.warn("No space elements found! Ensure they exist in the DOM.");
+      return;
+  }
+
+  for (const element of spaceElements) {
+      const activityId = element.id.replace("spaces-available-", ""); // Extract activity ID from the element's ID
+      
+      try {
+          const response = await fetch(`${window.location.origin}/manage-activity/api/get-enrollment-data/${activityId}`);
+          const data = await response.json();
+
+          if (data.success) {
+              element.innerHTML = getAvailabilityText(data.total_spaces, data.spaces_remaining);
+          }
+      } catch (error) {
+          console.error(`Error fetching enrollment data for ${activityId}:`, error);
+      }
+  }
+}
+
+

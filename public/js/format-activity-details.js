@@ -79,7 +79,7 @@ function formatActivityDetails(activity) {
           </p>
 
           <p><strong>Spaces Available:</strong> 
-            <span id="spaces-${activity.id}">
+            <span id="spaces-available-${activity.id}">
               ${getAvailabilityText(activity.total_spaces, activity.spaces_remaining)}
             </span>
           </p>

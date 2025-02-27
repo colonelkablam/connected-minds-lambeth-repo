@@ -1,3 +1,4 @@
+// when page is loaded
 document.addEventListener("DOMContentLoaded", async () => {
     const activityId = window.location.pathname.split("/").pop(); // Extract ID from URL
 
@@ -63,7 +64,44 @@ document.addEventListener("DOMContentLoaded", async () => {
         const detailsContainer = document.getElementById("details-container");
         if (detailsContainer) detailsContainer.innerHTML = formatActivityDetails(activity);
 
+        // Update Edit Butons Box
+        const editButtonsBox = document.getElementById("edit-buttons-box");
+        if (editButtonsBox) editButtonsBox.innerHTML = userRole === "supa_admin" || userRole === "admin" ? formatEditButtons(activity) : "";
+
     } catch (error) {
         console.error("Error fetching activity details:", error);
     }
 });
+
+// Detect when the page becomes visible again (user navigates back rather than re-load)
+document.addEventListener("visibilitychange", async () => {
+    if (document.visibilityState === "visible") {
+      console.log("individual activity page re-visited - updating data");
+      await updateActivitySpaces();
+    }
+  });
+
+// Updates availability in activity cards as live data
+async function updateActivitySpaces() {
+    const spaceElements = document.querySelectorAll("[id^=spaces-available-]"); // Find all elements with IDs starting with 'spaces-'
+    
+    if (spaceElements.length === 0) {
+        console.warn("No spaces-available elements found! Ensure they exist in the DOM.");
+        return;
+    }
+  
+    for (const element of spaceElements) {
+        const activityId = element.id.replace("spaces-available-", ""); // Extract activity ID from the element's ID
+        
+        try {
+            const response = await fetch(`${window.location.origin}/manage-activity/api/get-enrollment-data/${activityId}`);
+            const data = await response.json();
+  
+            if (data.success) {
+                element.innerHTML = getAvailabilityText(data.total_spaces, data.spaces_remaining);
+            }
+        } catch (error) {
+            console.error(`Error fetching enrollment data for ${activityId}:`, error);
+        }
+    }
+  }

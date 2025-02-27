@@ -2,9 +2,7 @@
 function createActivityCard(activity) {
   const li = document.createElement("li");
   li.classList.add("activity-card");
-  li.setAttribute("id", `activity-${activity.id}`);
-  li.setAttribute("data-id", activity.id);
-  li.setAttribute("data-spaces", activity.spaces_remaining);
+  li.setAttribute("id", `activity-${activity.id}`); // Unique ID 
 
   // Check if the activity is pinned (from localStorage)
   const pinnedActivities = JSON.parse(sessionStorage.getItem("pinnedActivities")) || [];
@@ -25,18 +23,8 @@ function createActivityCard(activity) {
       ${formatActivityDetails(activity)}
     </div>
 
-    <div class="edit-buttons-box">
-    ${userRole === "supa_admin" || userRole === "admin" ? `
-      <span class="enroll-span">
-        <button type="button" title="Enroll student" class="btn enroll-btn" data-id="${activity.id}" onclick="updateSpaces(${activity.id}, 'decrease')">Enroll</button>
-        <button type="button" title="Unenroll student" class="btn unenroll-btn" data-id="${activity.id}" onclick="updateSpaces(${activity.id}, 'increase')">Unenroll</button>
-      </span>
-      <span class="edit-span">
-        <button type="button" title="EDIT" class="btn edit-btn" onclick="window.location.href = '/manage-activity/update/${activity.id}'">Edit Details</button>
-        <button type="button" title="DELETE ACTIVITY" class="icon bin" data-modal = "delete" data-id="${activity.id}">🗑️</button>
-      </span>
-
-    ` : ""}
+    <div id="edit-buttons-box">
+    ${userRole === "supa_admin" || userRole === "admin" ? formatEditButtons(activity) : ""}
     </div>
   `;
 

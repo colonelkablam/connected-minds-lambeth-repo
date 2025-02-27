@@ -103,9 +103,47 @@ router.post("/update/:id", isAuthenticated, authoriseRoles("admin", "supa_admin"
   }
 });
 
+// GET: Load Enrollment Page
+router.get("/enrollment/:id", isAuthenticated, authoriseRoles("admin", "supa_admin"), async (req, res) => {
+    try {
+        const activity = await getActivityById(req.params.id);
+        if (!activity) {
+            addFlashMessage(res, "error", "Activity not found!");
+            return res.redirect("/");
+        }
+
+        res.render("./pages/enrollment.ejs", { activity });
+    } catch (error) {
+        console.error("Error loading activity:", error);
+        res.redirect("/");
+    }
+});
+
+// GET: Fetch Enrollment Data for an Activity
+router.get("/api/get-enrollment-data/:id", isAuthenticated, authoriseRoles("admin", "supa_admin"), async (req, res) => {
+    try {
+        const { id } = req.params;
+        const activity = await getEnrollment(id); // Fetches total_spaces & spaces_remaining
+
+        if (!activity) {
+            return res.status(404).json({ success: false, message: "Activity not found" });
+        }
+
+        res.json({
+            success: true,
+            total_spaces: activity.total_spaces,
+            spaces_remaining: activity.spaces_remaining
+        });
+
+    } catch (error) {
+        console.error("Error fetching enrollment data:", error);
+        res.status(500).json({ success: false, message: "Internal server error" });
+    }
+});
+
 
 // PATCH: Update Enrollment
-router.patch("/change-enrollment", isAuthenticated, authoriseRoles("admin", "supa_admin"), async (req, res) => {
+router.patch("/api/change-enrollment", isAuthenticated, authoriseRoles("admin", "supa_admin"), async (req, res) => {
     try {
         const { activity_id, action } = req.body;
         const activity = await getEnrollment(activity_id);

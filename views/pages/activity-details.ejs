@@ -3,14 +3,16 @@
 <head>
     <%- include('../partials/head.ejs') %>
     <link rel="stylesheet" href="/css/activity-close-up.css">
+    <link rel="stylesheet" href="/css/edit-buttons-box.css">
     <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
     <script src="https://unpkg.com/leaflet/dist/leaflet.js" defer></script>
     <script src="/js/activity-details.js" defer></script>
     <script src="/js/format-activity-details.js" defer></script>
-
+    <script src="/js/format-edit-buttons.js" defer></script>
 </head>
 
 <body>
+
     <div class="container">
       <header>
         <%- include('../partials/header.ejs', { user: user || null }) %>
@@ -32,17 +34,11 @@
             <p class="activity-description-box"><span id="activity-description"></span></p>
             
             <div id="details-container">
-              <p><strong>Provider:</strong> <span id="provider-name"></span></p>
-              <p><strong>Website:</strong> <a id="provider-website" target="_blank"></a></p>
-              <p><strong>Participating Schools:</strong> <span id="participating-schools"></span></p>
-              <br>
-              <p><strong>Location:</strong> <span id="location"></span></p>
-              <p><strong>Target Audience:</strong> <span id="target-audience" class="text-green"></span></p>
-              <p><strong>Day:</strong> <span id="day" class="text-green"></span></p>
-              <p><strong>Time:</strong> <span id="time" class="text-green"></span></p>
-              <p><strong>Contact:</strong> <a id="contact-email"></a></p>
-              <p><strong>Cost:</strong> <span id="cost"></span></p>
-              <p><strong>Spaces Available:</strong> <span id="spaces"></span></p>
+            <!-- html injected by activity-details.js (uses same details format as activity-cards) -->
+            </div>
+
+            <div id="edit-buttons-box">
+            <!-- html injected by activity-details.js (uses same details format as activity-cards) -->
             </div>
         </div>
 

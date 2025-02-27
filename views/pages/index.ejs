@@ -3,17 +3,20 @@
 <head>
     <%- include('../partials/head.ejs') %>
     <link rel="stylesheet" href="/css/search-n-found-area.css">
+    <link rel="stylesheet" href="/css/activity-card.css">
+    <link rel="stylesheet" href="/css/edit-buttons-box.css">
     <script src="/js/filters.js" defer></script>
     <script src="/js/pinned.js" defer></script>
     <script src="/js/search.js" defer></script>
     <script src="/js/activity-card.js" defer></script>
     <script src="/js/format-activity-details.js" defer></script>
-    <script src="/js/update-spaces.js" defer></script>
+    <script src="/js/format-edit-buttons.js" defer></script>
     <script src="/js/delete-activity.js"></script>
 
 </head>
 
 <body>
+
     <div class="container">
       <header>
         <%- include('../partials/header.ejs', { user: user || null }) %>
@@ -31,9 +34,7 @@
         <%- include('../partials/footer.ejs') %>
       </footer>
     </div>
-    <script>
-      const userRole = "<%= user ? user.role : 'guest' %>"; // gives js access to user role variable
-    </script>
+
 </body>
 
 </html>

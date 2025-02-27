@@ -1,4 +1,4 @@
-.single-activity-container {
+.enrollment-container {
     display: flex;
     flex-direction: column;
     width: 100%;
@@ -11,10 +11,6 @@
     gap: 1rem;
 }
 
-.single-activity-container p {
-    font-size: large;
-}
-
 .heading-box {
     display: flex;
     width: 100%;
@@ -25,6 +21,11 @@
     flex: 1;
     text-align: center;
     color: #007bff;
+}
+
+#activity-title {
+    text-align: center;
+    margin-top: 1rem;
 }
 
 .icon {
@@ -40,22 +41,13 @@
     transform: scale(1.2); /* Increases size by 20% on hover */
 }
 
-.activity-description-box {
-    border: 1px solid #ddd;
-    border-radius: 8px;
-    padding: 8px;
-    margin: 0 2rem;
-    background-color: #F0F0F0;
-}
-  
 #details-container {
     display: flex;
     flex-direction: column;    
     width: 100%;
     gap: 0.3rem;
-    margin-left: 1rem;
+    margin: 1rem 0rem;
 }
-
 
 #details-container p {
     color: rgb(90, 90, 90);
@@ -65,25 +57,61 @@
     color: rgb(0, 0, 0);
 }
 
-#details-container .lower-info {
+.details-box {
+    display: flex;
+    flex-direction: column;
+    gap: 0.2rem;
+  }
+  
+.lower-info {
     display: flex;
     flex-direction: column;
     gap: 0.2rem;
     margin: 0.5rem 0 0 0rem;
   }
-  
-#map-container {
-    width: 100%;
-    border: 2px solid #9b9b9b6b;
-    border-radius: 8px;
 
+.enrollment-container p {
+    font-size: large;
 }
-  
-#activity-map {
-    width: 100%;
-    height: 300px;
-    border-radius: 8px;
+
+#currently-enrolled h2 {
+    text-align: center;
+    margin-top: 1rem;
 }
+
+#currently-enrolled ol {
+    padding: 5%;
+    list-style: none;
+}
+
+#currently-enrolled li {
+    padding: 8px;
+    margin: 0 5%;
+    font-size: large;
+    border-bottom: 1px solid #ddd;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    cursor: pointer;
+}
+
+.enrolled {
+    font-weight: bold;
+}
+
+.empty-slot {
+    color: #999;
+    font-style: italic;
+}
+
+.remove-button {
+    border: none;
+    background: none;
+    color: red;
+    font-size: 1.0rem;
+    cursor: pointer;
+}
+
 
 .text-green { color: #01a075; font-weight: bold; }
 .text-amber { color: orange; font-weight: bold; }

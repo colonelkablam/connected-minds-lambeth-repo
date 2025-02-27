@@ -132,7 +132,7 @@
   text-align: center;
 }
 
- .icon {
+.icon {
   background: none;
   border: none;
   font-size: x-large;
@@ -150,73 +150,6 @@
 
 .activity-header-box .pin-btn.pinned {
   opacity: 100%;
-}
-
-/* General Button Styles */
-.activity-card .btn {
-  padding: 6px 6px;
-  font-size: 14px;
-  font-weight: 400;
-  border: none;
-  border-radius: 6px;
-  cursor: pointer;
-  transition: all 0.2s ease-in-out;
-}
-
-.activity-card .edit-buttons-box {
-  justify-content: space-between;
-}
-
-.activity-card .enroll-span {
-  display: flex;
-  gap: 0.5rem;
-  margin-left: 1rem;
-}
-
-.activity-card .edit-span {
-  display: flex;
-  margin-top: 1rem;
-  justify-content: space-between;
-}
-
-/* Enroll Button */
-
-.activity-card .btn.enroll-btn {
-  background-color: #28a745;
-  color: white;
-  width: 60px;
-  font-size: 12px;
-}
-
-.activity-card .btn.enroll-btn:hover {
-  background-color: #218838;
-  transform: scale(1.05);
-}
-
-/* Unenroll Button */
-.activity-card .btn.unenroll-btn {
-  background-color: #dc3545;
-  color: white;
-  width: 60px;
-  font-size: 12px;
-}
-
-.activity-card .btn.unenroll-btn:hover {
-  background-color: #c82333;
-  transform: scale(1.05);
-}
-
-/* Edit Details Button */
-.activity-card .btn.edit-btn {
-  background-color: #007bff;
-  color: white;
-  width: 90px;
-
-}
-
-.activity-card .btn.edit-btn:hover {
-  background-color: #4aa1ff;
-  transform: scale(1.05);
 }
 
 .text-green { color: #01a075; font-weight: bold; }

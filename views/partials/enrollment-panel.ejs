@@ -1,0 +1,31 @@
+<div class="enrollment-container">
+    <div class="heading-box">
+      <span class="icon" onclick="window.history.back()">⬅️</span>
+      <h1 class="title">Manage Enrollment</h1>
+      <span class="icon">🖨️</span>
+    </div>
+    <h2 class="title" id="activity-title">
+        <!-- html injected by enrollment-panel.js -->
+    </h2>
+    <div>
+        <p><strong id="spaces-info"></strong></p>
+        <br>
+        <p><strong id="enrolled-students"></strong></p>
+        <br>
+        <p>This action will trigger the enrollment process, securely capturing information about the child (with parental consent) to share with the provider.</p>
+        <br>
+        <p>It will include a unique identifier for the child so we can trace their service and outcome journey.</p>
+        <br>
+        <p class="text-green">Currently, clicking on an available slot will add a student to the activity. They can be removed by clicking the red cross.</p>
+
+        <!-- html injected by enrollment-panel.js (uses same details format as activity-cards) -->
+    </div>
+
+    <div id="currently-enrolled">
+        <h2>Currently Enrolled</h2>
+        <ol id="enrollment-list">
+            <!-- html injected by enrollment-panel.js -->
+        </ol>
+    </div>
+    
+</div>

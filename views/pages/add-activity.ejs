@@ -8,6 +8,7 @@
 </head>
 
 <body>
+
     <div class="container">
       <header>
         <%- include('../partials/header.ejs', { user: user || null }) %>
@@ -17,7 +18,8 @@
       <%- include('../partials/flash-message-display.ejs') %>
 
       <main>
-          <%- include('../partials/update-activity-form.ejs' ) %> <!-- No activity passed as new activity being made -->
+        <!-- No activity passed as new activity being made -->
+          <%- include('../partials/update-activity-form.ejs' ) %> 
       </main> 
       
       <footer>
