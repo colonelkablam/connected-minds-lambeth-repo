@@ -2,7 +2,35 @@
 
 <div class="top-header-container">
   <div class="branding">
-    <h1>Connected Minds Lambeth</h1>
+    <img src="/images/connected-minds-logo.png" alt="connected-mands logo">
+
+    <div class="branding-title">
+      <h1>Connected Minds Lambeth</h1>
+      <h2>Creative Health Pathway</h2>
+    </div>
+
+    <!-- Hamburger Menu in Top Header -->
+    <div class="hamburger-menu">
+      <p class="hamburger-menu-title">menu</p>
+      <button class="menu-toggle icon" id="menu-toggle" aria-label="Toggle Menu">
+        <svg class="hamburger-icon" viewBox="0 0 100 80" width="40" height="40">
+          <rect width="100" height="15" rx="8"></rect>
+          <rect y="30" width="100" height="15" rx="8"></rect>
+          <rect y="60" width="100" height="15" rx="8"></rect>
+        </svg>
+      </button>
+      <div class="dropdown-menu" id="dropdown-menu">
+        <a href="<%= baseUrl %>/">Search Activities</a>
+        <% if (user) { %>
+          <% if (user.role === 'supa_admin') { %>
+            <a href="<%= baseUrl %>/manage-users/add">Add User</a>
+          <% } %>
+          <% if (user.role === 'supa_admin' || user.role === 'admin') { %>
+            <a href="<%= baseUrl %>/manage-activity/add">Add Activity</a>
+          <% } %>
+        <% } %>
+      </div>
+    </div>
   </div>
   
   <!-- Login Button -->
@@ -16,19 +44,6 @@
   <% } %>
   </div>
 </div>
-
-<!-- Nav bar -->
-<nav class="navbar">
-  <a href="<%= baseUrl %>/">Search Activities</a>
-  <% if (user) { %>
-    <% if (user.role === 'supa_admin') { %>
-      <a href="<%= baseUrl %>/manage-users/add">Add User</a>
-      <% } %>
-    <% if (user.role === 'supa_admin' || user.role === 'admin') { %>
-      <a href="<%= baseUrl %>/manage-activity/add">Add Activity</a>
-      <% } %>
-  <% } %>
-</nav>
 
 <!-- Include the modal partial -->
 <%- include("./modal.ejs") %>

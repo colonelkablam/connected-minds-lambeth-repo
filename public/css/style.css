@@ -7,11 +7,23 @@
   padding: 0;
 }
 
+:root {
+  --primary-colour: #03c793;
+  --secondary-colour: #0079ff;
+  --primary-background-colour: #fafafa;
+  --secondary-background-colour: #e2e2e2;
+  --primary-title-colour: #6d6c6c;
+  --primary-button-colour: #03c793;
+  --primary-button-fade-colour: #03c7939d;
+  --primary-button-text-colour: #ffffff;
+}
+
+
 /* General Reset */
 body {
   margin: 0;
   font-family: "Ubuntu", Arial, sans-serif;
-  background-color: #F6F1F1;
+  background-color: var(--primary-background-colour);
 }
 
 /* Main container Wrapper */
@@ -22,120 +34,158 @@ body {
 
 /* Header Styling */
 header {
-  background: #0079FF;
-  color: #fff;
+  background: var(--secondary-background-colour);
+  color: var(--primary-title-colour);
   padding: 1rem 2rem; /* Adjust padding to avoid nested .container conflicts */
-  margin: 0 ;
+  margin: 0;
   justify-content: space-between;
   align-items: center;
-  flex-wrap: wrap;
 }
 
 .top-header-container {
-  display: flex;
+  display: inline;
   justify-content: space-between;
   align-items: center;
-  width: 100%;
+  width: 800px;
   gap: 1.0rem;
 }
 
 /* Branding Section */
+header .branding img {
+  min-width: 8rem;
+  height: 6rem;
+  margin-right: 1rem;
+}
+
+header .branding {
+  display: flex;
+  align-items: center;
+}
+
 header .branding h1 {
-  font-size: 2.0rem;
+  font-size: 1.8rem;
 }
 
 /* Log in area */
 .user-log-in-container {
   display: flex;
-  gap: 2rem;
-  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-top: 2rem;
 }
 
 .user-welcome {
+  display: flex;
   font-size: larger;
   font-weight: 800;
   text-decoration: none;
-  color: #ffffff;
+  color: var(--primary-title-colour);
+  align-items: center;
+  gap: 1rem;
 }
 
 .user-welcome .user-name {
-  color: #00DFA2;
+  color: var(--primary-colour);
 }
 
 .user-log-in  {
   font-size: large;
   font-weight: 700;
   text-align: center;
-  padding: 10px;
+  padding: 4px;
   margin: 0;
   text-decoration: none;
-  background: #00DFA2;
-  color: #ffffff;
+  background: var(--primary-button-colour);
+  color: var(--primary-button-text-colour);
   border-radius: 5px;
   min-width: 90px;
   transition: color 0.3s;
   text-decoration: none;
+  transition: background 0.3s;
 }
 
-.user-log-in a:hover {
+.user-log-in:hover {
   color: #fff;
-  background-color: #00DFA2;
+  background-color: var(--primary-button-fade-colour);
 }
 
 .user-log-in p {
   font-size: larger;
   font-weight: 800;
   text-decoration: none;
-  color: #00DFA2;
+  color: var(--primary-colour);
   transition: color 0.3s;
   justify-items: center;
 }
 
-@media screen and (max-width: 650px) {
 
-  header {
-    padding: 0.5rem;
-  }
-  .top-header-container {
-    flex-direction: column;
-    align-items: flex-start;
-  }
-
-  .user-log-in-container {
-    order: -1; /* Moves it to the top */
-    justify-content: space-between;
-    width: 100%;
-  }
-}
-
-
-/* Navbar Styling */
-.navbar {
+/* Positioning the menu in the top header */
+.hamburger-menu {
   display: flex;
-  gap: 2rem;
-  margin-top: 1rem;
+  flex-direction: column; /* Stack items vertically */
+  align-items: center; /* Center-align horizontally */
+  gap: 5px; /* Space between text and icon */
+  position: absolute;
+  top: 2rem;
+  right: 2rem;
 }
 
-.navbar ul {
-  list-style: none;
+.hamburger-menu-title {
+  font-size: 16px;
+  font-weight: bold;
+  color: #333;
   margin: 0;
+  text-align: center;
+}
+
+/* Style the SVG hamburger icon */
+.menu-toggle {
+  background: none;
+  border: none;
+  cursor: pointer;
   padding: 0;
   display: flex;
-  gap: 1rem;
+  align-items: center;
 }
 
-.navbar ul li a {
-  color: #AFD3E2;
+.hamburger-icon {
+  width: 2.5rem;
+  height: auto;
+  fill: #333;
+}
+
+/* Dropdown menu styles */
+.dropdown-menu {
+  display: none;
+  position: absolute;
+  right: 0;
+  top: 40px;
+  background: white;
+  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+  border-radius: 5px;
+  overflow: hidden;
+  z-index: 1000;
+  width: 200px;
+  flex-direction: column;
+}
+
+/* Show dropdown when active */
+.dropdown-menu.active {
+  display: flex;
+}
+
+/* Style dropdown links */
+.dropdown-menu a {
+  display: block;
+  padding: 10px 15px;
   text-decoration: none;
-  font-size: larger;
-  font-weight: 400;
-  transition: color 0.3s;
+  color: #333;
+  transition: background 0.3s;
 }
 
-.navbar ul li a:hover {
-  color: #00DFA2;
+.dropdown-menu a:hover {
+  background: #f4f4f4;
 }
-
 
 /* Main Content Styling */
 main {
@@ -189,4 +239,51 @@ footer {
 footer p {
   font-size: medium;
   font-weight: 800;
+}
+
+@media screen and (max-width: 650px) {
+
+  header {
+    padding: 1rem 0.5rem 0.5rem 0.5rem;
+  }
+
+  /* Branding Section */
+  header .branding img {
+    min-width: 3rem;
+    height: 2.2rem;
+    margin-right: 0.6rem;
+  }
+
+  header .branding h1 {
+    font-size: 1.2rem;
+  }
+
+  header .branding h2 {
+    font-size: 1rem;
+  }
+
+  .user-welcome {
+    font-size: 1rem;
+    font-weight: 500;
+    gap: 0.5rem;
+  }
+  
+  .user-log-in  {
+    font-size: 1rem;
+    font-weight: 500;
+  }
+  
+  .hamburger-menu {
+    position: absolute;
+    top: 1.5rem;
+    right: 0.5rem;
+  }
+
+  .hamburger-icon {
+    width: 2rem;
+  }
+
+  .hamburger-menu-title {
+    display: none;
+  }
 }
