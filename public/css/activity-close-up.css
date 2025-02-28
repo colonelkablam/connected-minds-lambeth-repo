@@ -53,7 +53,7 @@
     flex-direction: column;    
     width: 100%;
     gap: 0.3rem;
-    margin-left: 1rem;
+    padding: 0 1rem;
 }
 
 
@@ -88,4 +88,15 @@
 .text-green { color: #01a075; font-weight: bold; }
 .text-amber { color: orange; font-weight: bold; }
 .text-red { color: red; font-weight: bold; }
+
+@media screen and (max-width: 650px) {
+    #details-container {
+
+        padding: 0 0;
+    }
+
+    .activity-description-box {
+        margin: 0;
+    }
+  }
   

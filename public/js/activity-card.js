@@ -10,9 +10,9 @@ function createActivityCard(activity) {
 
   li.innerHTML = `
     <div class="activity-header-box">
-      <button class="icon" onclick="window.location.href = '/activity/${activity.id}'">🗺️</button>
+      <button class="icon" title="View map and details" onclick="window.location.href = '/activity/${activity.id}'">🗺️</button>
       <h3>${activity.title}</h3>
-      <button class="icon pin-btn ${isPinned ? 'pinned' : ''}" data-id="${activity.id}" onclick="togglePin(this)">📌</button>
+      <button class="icon pin-btn ${isPinned ? 'pinned' : ''}" data-id="${activity.id}" title="Toggle pin" onclick="togglePin(this)">📌</button>
     </div>
 
     <div class=decription-box>

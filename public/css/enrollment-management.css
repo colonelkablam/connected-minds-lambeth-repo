@@ -26,6 +26,7 @@
 #activity-title {
     text-align: center;
     margin-top: 1rem;
+    font-style: italic;
 }
 
 .icon {
@@ -41,34 +42,41 @@
     transform: scale(1.2); /* Increases size by 20% on hover */
 }
 
-#details-container {
-    display: flex;
-    flex-direction: column;    
-    width: 100%;
-    gap: 0.3rem;
-    margin: 1rem 0rem;
+.details-container {
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    padding: 0.2rem;
+    background-color: #F0F0F0;
+    margin: auto;
 }
 
-#details-container p {
-    color: rgb(90, 90, 90);
+.details-container p {
+    display: flex;
+    align-items: center;
+    white-space: nowrap; /* Prevents text from wrapping */
+    margin-bottom: 0.2rem;
+
 }
 
-#details-container strong {
-    color: rgb(0, 0, 0);
+.details-container p:last-child {
+    margin-bottom: 0;
 }
 
-.details-box {
-    display: flex;
-    flex-direction: column;
-    gap: 0.2rem;
-  }
-  
-.lower-info {
-    display: flex;
-    flex-direction: column;
-    gap: 0.2rem;
-    margin: 0.5rem 0 0 0rem;
-  }
+.details-container span {
+    min-width: 8rem;
+}
+
+.detail-title {
+    display: inline-block;
+    min-width: 7rem;
+    text-align: right;
+    margin-right: 1rem;
+    font-weight: bold; /* Optional: Makes labels more readable */
+}
+
+.info-text {
+    padding: 0 5%;
+}
 
 .enrollment-container p {
     font-size: large;

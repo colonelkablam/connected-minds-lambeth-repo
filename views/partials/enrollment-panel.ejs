@@ -7,17 +7,19 @@
     <h2 class="title" id="activity-title">
         <!-- html injected by enrollment-panel.js -->
     </h2>
-    <div>
-        <p><strong id="spaces-info"></strong></p>
+    <div class="details-container">
+        <p><span class="detail-title">Day:</span><span id="day"></span></p>
+        <p><span class="detail-title">Dates:</span><span id="dates"></span></p>
+        <p><span class="detail-title">Times:</span><span id="timing"></span></p>
+        <p><span class="detail-title">Total spaces:</span><span id="spaces-info"></span></p>
+        <p><span class="detail-title">Num. Enrolled:</span><span id="enrolled-students"></span></p>
+    </div>
+    <div class="info-text">
+        <p>Interacting with the below list will trigger the enrollment process, securely capturing information about the child (with parental consent) to share with the provider.</p>
         <br>
-        <p><strong id="enrolled-students"></strong></p>
+        <p>Only minimal relavent information will be stored, used to create a unique identifier for the child so we can trace their service and outcome journey.</p>
         <br>
-        <p>This action will trigger the enrollment process, securely capturing information about the child (with parental consent) to share with the provider.</p>
-        <br>
-        <p>It will include a unique identifier for the child so we can trace their service and outcome journey.</p>
-        <br>
-        <p class="text-green">Currently, clicking on an available slot will add a student to the activity. They can be removed by clicking the red cross.</p>
-
+        <p class="text-green">Currently, clicking on an available slot will add a 'student' to the activity. They can be unenrolled by clicking the red cross.</p>
         <!-- html injected by enrollment-panel.js (uses same details format as activity-cards) -->
     </div>
 

@@ -3,23 +3,28 @@
     padding: 10px 10px;
     font-size: 14px;
     font-weight: 600;
-    width: 10rem;
+    max-width: 10rem;
+
     border: none;
     border-radius: 6px;
     cursor: pointer;
     transition: all 0.2s ease-in-out;
+
+    flex: 1;
 }
   
 #edit-buttons-box {
     display: flex; 
     flex-direction: column;  /* Ensures vertical stacking */
     gap: 0.4rem;
-    padding-left: 1rem;
+    padding-left: 0.5rem;
 }
 
-.enroll-span {
+.button-span {
     display: flex;
-    justify-content: left;
+    width: 80%;
+    gap: 0.4rem;
+    min-width: 220px;
 }
   
 .edit-span {
@@ -27,8 +32,7 @@
     justify-content: space-between;
 }
   
-  /* Enroll Button */
-  
+/* Enroll Button */
 .btn.enroll-btn {
     background-color: #02c490;
     color: white;
@@ -38,19 +42,6 @@
     background-color: rgba(42, 226, 177, 0.651);
     transform: scale(1.05);
   }
-  
-/* Unenroll Button */
-.btn.unenroll-btn {
-    background-color: #dc3545;
-    color: white;
-    width: 60px;
-    font-size: 12px;
-}
-  
-.btn.unenroll-btn:hover {
-    background-color: #c82333;
-    transform: scale(1.05);
-}
   
 /* Edit Details Button */
 .btn.edit-btn {
