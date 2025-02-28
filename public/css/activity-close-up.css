@@ -85,9 +85,9 @@
     border-radius: 8px;
 }
 
-.text-green { color: #01a075; font-weight: bold; }
-.text-amber { color: orange; font-weight: bold; }
-.text-red { color: red; font-weight: bold; }
+.text-green { color: #01a075; font-weight: 500; }
+.text-amber { color: orange; font-weight: 500; }
+.text-red { color: red; font-weight: 500; }
 
 @media screen and (max-width: 650px) {
     #details-container {

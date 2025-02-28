@@ -49,14 +49,14 @@ document.addEventListener("DOMContentLoaded", async () => {
         const times = document.getElementById("timing");
         const startTime = activity.start_time;
         const stopTime = activity.stop_time;
-        const timeText = startTime && stopTime ? `${startTime.slice(0, 5)} to ${stopTime.slice(0, 5)}` : "not found";
+        const timeText = startTime && stopTime ? `${startTime.slice(0, 5)} - ${stopTime.slice(0, 5)}` : "TBC";
         if (times) times.innerText = timeText || "not found";
 
         // Update Activity dates
         const dates = document.getElementById("dates");
         const startDate = activity.start_date;
         const stopDate = activity.stop_date;
-        const dateText = startDate && stopDate ? `${formatDate(startDate)} - ${formatDate(startDate)}` : "not found";
+        const dateText = startDate && stopDate ? `${formatDate(startDate)} - ${formatDate(startDate)}` : "TBC";
         if (dates) dates.innerText = dateText || "not found";
 
 
@@ -74,10 +74,15 @@ document.addEventListener("DOMContentLoaded", async () => {
 
 function renderEnrollmentInfo(spacesRemaining, totalSpaces) {
     const spacesInfo = document.getElementById("spaces-info");
-    if (spacesInfo) spacesInfo.innerText = totalSpaces || "No info available";
+    if (spacesInfo) spacesInfo.innerText = totalSpaces || "TBC";
     const numberEnrolled = document.getElementById("enrolled-students");
-    if (numberEnrolled) numberEnrolled.innerText = (totalSpaces - spacesRemaining) || "No info available";
-}
+    if (numberEnrolled) {
+        if (totalSpaces != null && spacesRemaining != null) {
+            numberEnrolled.innerText = totalSpaces - spacesRemaining;
+        } else {
+            numberEnrolled.innerText = "TBC";
+        }
+    }}
 
 function updateSearchResultsSpaces(activityId, newSpacesRemaining) {
     const activityCard = document.querySelector(`[data-activity-id="${activityId}"]`);
@@ -91,7 +96,10 @@ function updateSearchResultsSpaces(activityId, newSpacesRemaining) {
 
 function renderEnrollmentList(spacesRemaining, totalSpaces) {
     const list = document.getElementById("enrollment-list");
-    if (!list) return;
+    if (!list || spacesRemaining == null || totalSpaces == null) {
+        list.innerHTML = "Unable to display list as no enrollment info available!"; // Clear existing list
+        return;
+    }
 
     list.innerHTML = ""; // Clear existing list
 

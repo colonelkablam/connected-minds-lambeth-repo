@@ -3,9 +3,6 @@ function formatActivityDetails(activity) {
         return '<span class="text-amber">Details not available</span>';
     }
 
-    // formatting for colour highlights on page for FULL/TBC/NA etc
-    const availabilityClass = getAvailabilityColour(activity.total_spaces, activity.spaces_remaining)
-
     const ageRangeText = activity.age_lower && activity.age_upper 
     ? `ages ${activity.age_lower} to ${activity.age_upper}` 
     : `<span class="text-amber">age range TBC</span>`;
@@ -60,15 +57,18 @@ function formatActivityDetails(activity) {
 
           <p><strong>Time:</strong>
             <span class="${timingClass}">
-              ${activity.start_time && activity.stop_time ? `${activity.start_time.slice(0, 5)} to ${activity.stop_time.slice(0, 5)}` : 'TBC'}
+              ${activity.start_time && activity.stop_time ? `${activity.start_time.slice(0, 5)} - ${activity.stop_time.slice(0, 5)}` : 'TBC'}
             </span>
           </p>
 
           <p><strong>Dates:</strong> 
-            <span class="${dateClass}">
-              ${activity.start_date ? formatDate(activity.start_date) : ` - `} to ${activity.stop_date ? formatDate(activity.stop_date) : ` - `}
-            </span>
+              <span class="${dateClass}">
+                  ${activity.start_date || activity.stop_date 
+                      ? `${activity.start_date ? formatDate(activity.start_date) : ''} - ${activity.stop_date ? formatDate(activity.stop_date) : ''}` 
+                      : 'TBC'}
+              </span>
           </p>
+
 
           <p><strong>Contact:</strong>
             ${activity.contact_email ? `${activity.contact_email}` : 'Not given'}

@@ -48,7 +48,7 @@ router.post('/login', async (req, res) => {
         role: user.role 
       },
       process.env.JWT_SECRET,
-      { expiresIn: "1h" } // Token expires in 1 hour
+      { expiresIn: "2h" } // Token expires in 1 hour
     );
 
     // Store token in an HTTP-only cookie

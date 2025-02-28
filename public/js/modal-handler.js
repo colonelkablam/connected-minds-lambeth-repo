@@ -127,6 +127,12 @@ document.addEventListener("DOMContentLoaded", function () {
             .then(response => response.json())
             .then(data => {
               if (data.success) {
+                // Check if we're on a single activity page
+                if (window.location.pathname.includes(`/activity/${itemId}`)) {
+                  console.log(`Going back to activities list...`);
+                  window.location.href = "/";
+                }
+               
                 // Remove activity card using the correct ID format
                 const activityElement = document.getElementById(`activity-${itemId}`);
                 if (activityElement) {
@@ -135,6 +141,17 @@ document.addEventListener("DOMContentLoaded", function () {
                 } else {
                     console.warn(`Activity card with ID activity-${itemId} not found.`);
                 }
+
+                // Remove from pinned activities in sessionStorage
+                let pinned = JSON.parse(sessionStorage.getItem("pinnedActivities")) || [];
+                if (pinned.includes(itemId)) {
+                    pinned = pinned.filter(id => id !== itemId);
+                    sessionStorage.setItem("pinnedActivities", JSON.stringify(pinned));
+                    console.log(`Activity ${itemId} unpinned.`);
+                    refreshPinnedActivityCards();  // Refresh the pinned tab (remove unpinned items)
+                    updatePinnedCount();
+                } 
+
                 // Close modal
                 closeModalHandler();
               } else {
