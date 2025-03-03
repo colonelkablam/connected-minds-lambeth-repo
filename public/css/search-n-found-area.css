@@ -25,6 +25,7 @@
   min-width: 300px;
   display: flex;
 }
+
 .search-buttons-box {
   display: flex;
   justify-content: center; /* Align horizontally */

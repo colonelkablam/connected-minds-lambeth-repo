@@ -13,6 +13,11 @@
   border-radius: 4px;
   position: relative;
   width: 86px;
+  transition: background 0.3s ease-in-out;
+}
+
+.tab-btn:hover {
+  background: var(--secondary-button-fade-colour);
 }
 
 .tab-btn.active {
@@ -24,9 +29,9 @@
 .tab-btn.clear-pins {
   margin-left: auto;
   background: var(--red-button-colour);
-  transition: background 0.2s ease-in-out;
   color: var(--primary-button-text-colour);
   font-weight: bold;
+  transition: background 0.2s ease-in-out;
 }
 
 #pinned-numbers {
@@ -135,18 +140,52 @@
   border: none;
   font-size: x-large;
   cursor: pointer;
-  transition: transform 0.2s ease-in-out;
+  transition: transform 0.3s ease-in-out;
 }
 
  .icon:hover {
   transform: scale(1.2);
 }
 
-.activity-header-box .pin-btn {
-  opacity: 30%;
+.delete-icon {
+  width: 2rem;
+  height: auto;
+  stroke: var(--menu-button-colour);
+  transition: stroke 0.3s ease-in-out;
 }
 
-.activity-header-box .pin-btn.pinned {
+.icon:hover .delete-icon {
+  stroke: var(--red-button-colour);
+}
+
+.map-icon {
+  width: 2rem;
+  height: auto;
+  stroke: var(--menu-button-colour);
+  transition: stroke 0.3s ease-in-out;
+}
+
+.icon:hover .map-icon {
+  stroke: var(--secondary-colour);
+}
+
+.pin-icon {
+  width: 2rem;
+  height: auto;
+  stroke: var(--menu-button-colour);
+}
+
+
+.activity-header-box .pin-btn .pin-icon{
+  opacity: 30%;
+  stroke: var(--menu-button-colour);
+  fill: none;
+
+}
+
+.activity-header-box .pin-btn.pinned .pin-icon{
   opacity: 100%;
+  stroke: var(--red-button-colour);
+  fill: var(--red-button-colour);
 }
   

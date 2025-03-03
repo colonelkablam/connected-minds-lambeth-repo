@@ -57,9 +57,9 @@ textarea {
 button {
     width: 100%;
     padding: 12px;
-    background-color: #007bff;
+    background-color: var(--primary-button-colour);
     border: none;
-    color: white;
+    color: var(--primary-button-text-colour);
     font-size: 18px;
     cursor: pointer;
     border-radius: 5px;
@@ -67,16 +67,20 @@ button {
     flex: 3;
 }
 
+button:hover {
+    background-color: var(--primary-button-fade-colour);
+}
+
 button.cancel {
     margin-left: 1rem;;
-    background-color: #dc3545;
+    background-color: var(--red-button-colour);
+    color: var(--primary-button-text-colour);
     flex: 1;
 }
 
-button:hover {
-    background-color: #0056b3;
+button.cancel:hover {
+    background-color: var(--red-button-fade-colour);
 }
-
 
 /* Style Dropdowns to Match Other Inputs */
 select {

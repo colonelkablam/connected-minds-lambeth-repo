@@ -24,7 +24,7 @@
 .heading-box .title {
     flex: 1;
     text-align: center;
-    color: #007bff;
+    color: var(--primary-title-colour);
 }
 
 .icon {
@@ -33,11 +33,39 @@
     text-align: center;
     font-size: x-large;
     cursor: pointer;
-    transition: transform 0.2s ease-in-out; /* Smooth transition effect */
+    transition: transform 0.3s ease-in-out;
 }
 
 .icon:hover {
-    transform: scale(1.2); /* Increases size by 20% on hover */
+    transform: scale(1.2);
+}
+
+.go-back-icon {
+    width: 2.5rem;
+    height: auto;
+    stroke: var(--menu-button-colour);
+    transition: stroke 0.3s ease-in-out;
+}
+  
+.icon:hover .go-back-icon {
+    stroke: var(--secondary-colour);
+}
+
+.printer-icon {
+    width: 2.0rem;
+    height: auto;
+    stroke: var(--menu-button-colour);
+}
+
+.delete-icon {
+    width: 2rem;
+    height: auto;
+    stroke: var(--menu-button-colour);
+    transition: stroke 0.3s ease-in-out;
+}
+
+.icon:hover .delete-icon {
+    stroke: var(--red-button-colour);
 }
 
 .activity-description-box {

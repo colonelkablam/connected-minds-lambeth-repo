@@ -8,8 +8,7 @@
     border: none;
     border-radius: 6px;
     cursor: pointer;
-    transition: all 0.2s ease-in-out;
-
+    transition: all 0.3s ease-in-out;
     flex: 1;
 }
   
@@ -40,7 +39,7 @@
   
 .btn.enroll-btn:hover {
     background-color: var(--primary-button-fade-colour);
-    transform: scale(1.05);
+    /* transform: scale(1.05); */
   }
   
 /* Edit Details Button */
@@ -51,5 +50,5 @@
   
 .btn.edit-btn:hover {
     background-color: var(--secondary-button-fade-colour);
-    transform: scale(1.05);
+    /* transform: scale(1.05); */
 }

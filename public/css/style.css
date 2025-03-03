@@ -147,7 +147,7 @@ header .branding h1 {
   gap: 5px; /* Space between text and icon */
   position: absolute;
   top: 1rem;
-  right: 3.5rem;
+  right: 3rem;
 }
 
 .hamburger-menu-title {
