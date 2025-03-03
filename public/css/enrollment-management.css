@@ -31,9 +31,14 @@
 }
 
 .go-back-icon {
-    width: 3rem;
+    width: 2.5rem;
     height: auto;
     stroke: var(--menu-button-colour);
+    transition: stroke 0.3s ease-in-out;
+}
+  
+.icon:hover .go-back-icon {
+    stroke: var(--secondary-colour);
 }
 
 .icon {
