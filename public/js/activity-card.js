@@ -2,7 +2,7 @@
 function createActivityCard(activity) {
   const li = document.createElement("li");
   li.classList.add("activity-card");
-  li.setAttribute("id", `activity-${activity.id}`); // Unique ID 
+  li.setAttribute("id", `${activity.id}`); // Unique ID 
 
   // Check if the activity is pinned (from localStorage)
   const pinnedActivities = JSON.parse(sessionStorage.getItem("pinnedActivities")) || [];

@@ -12,12 +12,32 @@
   --secondary-colour: #0079ff;
   --primary-background-colour: #fafafa;
   --secondary-background-colour: #e2e2e2;
+
   --primary-title-colour: #6d6c6c;
+  --secondary-title-colour: #0079ff;
+
+  
   --primary-button-colour: #03c793;
-  --primary-button-fade-colour: #03c7939d;
+  --primary-button-fade-colour: #03c7936e;
   --primary-button-text-colour: #ffffff;
+  --secondary-button-colour: #0079ff;
+  --secondary-button-fade-colour: #0077ff6e;
+  --secondary-button-text-colour: #ffffff;
+  --red-button-colour: #ff0000b7; 
+  --red-button-fade-colour: #ff000065;
+  
+  --menu-button-colour: #3d3d3d;
+
+  --flash-message-success: #28a745;
+  --flash-message-warning: #c99808;
+  --flash-message-error: #dc3545;
+
+  --display-view-width: 800px;
 }
 
+.text-green { color: #01a075; font-weight: 600; }
+.text-amber { color: orange; font-weight: 600; }
+.text-red { color: red; font-weight: 600; }
 
 /* General Reset */
 body {
@@ -46,7 +66,7 @@ header {
   display: inline;
   justify-content: space-between;
   align-items: center;
-  width: 800px;
+  width: var(--display-view-width);
   gap: 1.0rem;
 }
 
@@ -71,7 +91,7 @@ header .branding h1 {
   display: flex;
   justify-content: space-between;
   gap: 1rem;
-  margin-top: 2rem;
+  margin-top: 1.5rem;
 }
 
 .user-welcome {
@@ -105,7 +125,7 @@ header .branding h1 {
 }
 
 .user-log-in:hover {
-  color: #fff;
+  color: var(--primary-button-text-colour);
   background-color: var(--primary-button-fade-colour);
 }
 
@@ -126,14 +146,14 @@ header .branding h1 {
   align-items: center; /* Center-align horizontally */
   gap: 5px; /* Space between text and icon */
   position: absolute;
-  top: 2rem;
-  right: 2rem;
+  top: 1rem;
+  right: 3.5rem;
 }
 
 .hamburger-menu-title {
   font-size: 16px;
   font-weight: bold;
-  color: #333;
+  color: var(--menu-button-colour);
   margin: 0;
   text-align: center;
 }
@@ -149,9 +169,9 @@ header .branding h1 {
 }
 
 .hamburger-icon {
-  width: 2.5rem;
+  width: 3rem;
   height: auto;
-  fill: #333;
+  stroke: var(--menu-button-colour);
 }
 
 /* Dropdown menu styles */
@@ -179,12 +199,12 @@ header .branding h1 {
   display: block;
   padding: 10px 15px;
   text-decoration: none;
-  color: #333;
+  color: var(--menu-button-colour);
   transition: background 0.3s;
 }
 
 .dropdown-menu a:hover {
-  background: #f4f4f4;
+  background: #d4d3d3;
 }
 
 /* Main Content Styling */
@@ -200,7 +220,7 @@ main {
   text-align: center;
   min-height: 20px; /* Ensures space is always reserved */
   font-size: 16px;
-  font-weight: bold;
+  font-weight: 600;
   margin-top: 10px;
 }
 
@@ -213,17 +233,17 @@ main {
 
 /* Success Message - Green */
 #flash-message.success {
-  color: #28a745;
+  color: var(--flash-message-success);
 }
 
 /* Error Message - Red */
 #flash-message.error {
-  color: #dc3545;
+  color: var(--flash-message-error);
 }
 
 /* Warning Message - yellow */
 #flash-message.warning {
-  color: #c99808;
+  color: var(--flash-message-warning);
 }
 
 /* Footer Styling */
@@ -270,17 +290,17 @@ footer p {
   
   .user-log-in  {
     font-size: 1rem;
-    font-weight: 500;
+    font-weight: 600;
   }
   
   .hamburger-menu {
     position: absolute;
     top: 1.5rem;
-    right: 0.5rem;
+    right: 1rem;
   }
 
   .hamburger-icon {
-    width: 2rem;
+    width: 1.7rem;
   }
 
   .hamburger-menu-title {

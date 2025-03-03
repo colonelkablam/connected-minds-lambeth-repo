@@ -13,11 +13,7 @@
     <div class="hamburger-menu">
       <p class="hamburger-menu-title">menu</p>
       <button class="menu-toggle icon" id="menu-toggle" aria-label="Toggle Menu">
-        <svg class="hamburger-icon" viewBox="0 0 100 80" width="40" height="40">
-          <rect width="100" height="15" rx="8"></rect>
-          <rect y="30" width="100" height="15" rx="8"></rect>
-          <rect y="60" width="100" height="15" rx="8"></rect>
-        </svg>
+        <%- include('./menu-icon-svg.ejs') %>
       </button>
       <div class="dropdown-menu" id="dropdown-menu">
         <a href="<%= baseUrl %>/">Search Activities</a>
@@ -39,7 +35,7 @@
     <p class="user-welcome">logged in as : <span class="user-name"><%= user.username %> - <%= user.role %></span></p>
     <a href="#" id="logout-button" data-modal="logout" class="user-log-in">Log Out</a>
   <% } else { %>
-    <p class="user-welcome">logged in as : <span class="user-name">guest</span></p>
+    <p class="user-welcome">Using site as : <span class="user-name">guest</span></p>
     <a href="#" id="login-button" data-modal="login" class="user-log-in">Log in</a>
   <% } %>
   </div>

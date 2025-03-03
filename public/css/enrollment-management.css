@@ -20,13 +20,15 @@
 .heading-box .title {
     flex: 1;
     text-align: center;
-    color: #007bff;
+    color: var(--primary-title-colour);
 }
 
 #activity-title {
     text-align: center;
     margin-top: 1rem;
     font-style: italic;
+    color: var(--secondary-title-colour);
+
 }
 
 .icon {
@@ -85,6 +87,7 @@
 #currently-enrolled h2 {
     text-align: center;
     margin-top: 1rem;
+    color: var(--primary-title-colour);
 }
 
 #currently-enrolled ol {
@@ -120,8 +123,4 @@
     cursor: pointer;
 }
 
-
-.text-green { color: #01a075; font-weight: bold; }
-.text-amber { color: orange; font-weight: bold; }
-.text-red { color: red; font-weight: bold; }
   

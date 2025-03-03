@@ -88,7 +88,7 @@ function updateSearchResultsSpaces(activityId, newSpacesRemaining) {
     const activityCard = document.querySelector(`[data-activity-id="${activityId}"]`);
     if (!activityCard) return;
 
-    const spacesElement = activityCard.querySelector(".spaces-remaining"); // Update this selector based on your structure
+    const spacesElement = activityCard.querySelector(".spaces-remaining"); 
     if (spacesElement) {
         spacesElement.textContent = `Spaces Available: ${newSpacesRemaining}`;
     }

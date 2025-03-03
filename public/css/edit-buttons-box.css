@@ -34,22 +34,22 @@
   
 /* Enroll Button */
 .btn.enroll-btn {
-    background-color: #02c490;
-    color: white;
+    background-color: var(--primary-button-colour);
+    color: var(--primary-button-text-colour);
 }
   
 .btn.enroll-btn:hover {
-    background-color: rgba(42, 226, 177, 0.651);
+    background-color: var(--primary-button-fade-colour);
     transform: scale(1.05);
   }
   
 /* Edit Details Button */
 .btn.edit-btn {
-    background-color: #007bff;
-    color: white;
+    background-color: var(--secondary-button-colour);
+    color: var(--secondary-button-text-colour);
 }
   
 .btn.edit-btn:hover {
-    background-color: #4aa1ff;
+    background-color: var(--secondary-button-fade-colour);
     transform: scale(1.05);
 }

@@ -15,7 +15,7 @@ function showTab(tab) {
   if (tab === "pinned") {
     refreshPinnedActivityCards(); // Refresh pinned list when switching to pinned tab
   } else {
-    refreshSearchResultPins(); // Ensure "Cards" tab reflects correct pin states
+    refreshSearchResultPins(); // Ensure "Days" tab reflects correct pin states
   }
 }
 
@@ -75,7 +75,7 @@ function refreshSearchResultPins() {
 
   // Update pin button states in the "Days" view
   document.querySelectorAll(".activity-card").forEach((card) => {
-      const activityId = card.getAttribute("data-id");
+      const activityId = card.getAttribute("id");
       const pinButton = card.querySelector(".pin-btn");
 
       if (pinButton) {

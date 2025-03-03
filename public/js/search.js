@@ -14,7 +14,7 @@ document.addEventListener("visibilitychange", async () => {
 
 // **Handles the visibility of the filters panel**
 function setupFilterToggle() {
-  const filtersCheckbox = document.getElementById("filtersEnabled");
+  const filtersCheckbox = document.getElementById("filters-enabled");
   const filtersPanel = document.getElementById("filters-panel");
 
   if (!filtersCheckbox || !filtersPanel) return;
@@ -72,8 +72,8 @@ function getFormDataAsObject(form) {
 async function performSearch(searchObject) {
   // Ensure searchText exists before checking length
   const hasSearchText = searchObject.searchText && searchObject.searchText.trim().length > 2;
-  const filtersEnabled = searchObject.filtersEnabled ? true : false; // Ensure it's properly checked
-
+  const filtersEnabled = searchObject.filtersEnabled === "true";
+  
   // If filters are NOT enabled AND no valid search text is provided, show a warning
   if (!filtersEnabled && !hasSearchText && searchObject.searchQuery !== "") {
     showFlashMessage("Please use at least 3 characters to search.", "warning");
@@ -93,6 +93,7 @@ async function performSearch(searchObject) {
       const numberFound = data.found_activities.length;
       showFlashMessage(`${numberFound} activit${numberFound == 1 ? 'y' : 'ies'} found.`, "success");
       displaySearchResults(data.found_activities);
+      showTab("days")
     } else {
       console.error("Search error:", data.message);
     }
