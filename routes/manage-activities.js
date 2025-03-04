@@ -120,7 +120,7 @@ router.get("/enrollment/:id", isAuthenticated, authoriseRoles("admin", "supa_adm
 });
 
 // GET: Fetch Enrollment Data for an Activity
-router.get("/api/get-enrollment-data/:id", isAuthenticated, authoriseRoles("admin", "supa_admin"), async (req, res) => {
+router.get("/api/get-enrollment-data/:id", async (req, res) => {
     try {
         const { id } = req.params;
         const activity = await getEnrollment(id); // Fetches total_spaces & spaces_remaining
