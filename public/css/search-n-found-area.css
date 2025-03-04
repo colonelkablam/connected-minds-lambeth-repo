@@ -47,6 +47,13 @@
   margin-right: 1rem;
   flex: 1;
 }
+
+#searchText::placeholder {
+  color: darkgray;
+  opacity: 1; /* Ensures full visibility in some browsers */
+}
+
+
 .search-input input:focus {
   border: 2px solid var(--secondary-button-colour);
   outline: none; /* Removes default browser outline */
@@ -92,15 +99,15 @@
   border: 0;
   border-radius: 50%;
   right: 17rem;
-  top: 0.55rem;
+  top: 0.65rem;
   color: grey;
   font-weight: bold;
-  width: 1.5rem;
-  height: 1.5rem;
+  width: 1.3rem;
+  height: 1.3rem;
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 0.9rem;
+  font-size: 0.8rem;
   cursor: pointer;
   transition: background 0.3s ease-in-out;
 }
