@@ -172,4 +172,9 @@ async function updateActivitySpaces() {
   }
 }
 
+function clearSearch(event) {
+  event.preventDefault(); // Prevents form submission
+  document.getElementById("searchText").value = ""; // Clears the input field
+}
+
 
