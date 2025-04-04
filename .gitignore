@@ -1,5 +1,5 @@
 # ignore original set-up for supa_user
-scripts/createAdminUser.js
+scripts/create-admin-user.js
 
 # Logs
 logs
